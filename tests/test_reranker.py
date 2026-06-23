@@ -1,6 +1,6 @@
 """Tests for Reranker using FlagReranker from FlagEmbedding."""
 import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
+from unittest.mock import MagicMock, patch
 
 from knowledge_hub.config import Settings
 from knowledge_hub.retrieval.reranker import Reranker
@@ -113,19 +113,6 @@ async def test_rerank_graceful_degradation_on_exception(reranker):
     assert len(results) == 2
     assert results[0]["score"] == 0.6  # Original score preserved
     assert results[1]["score"] == 0.5
-
-
-@pytest.mark.asyncio
-async def test_rerank_graceful_degregation_on_oom(settings):
-    """When FlagReranker raises OOM during initialization, graceful handling."""
-    with patch("knowledge_hub.retrieval.reranker.FlagReranker") as MockReranker:
-        MockReranker.side_effect = RuntimeError("CUDA out of memory")
-
-        # Should not crash - reranker created but model loading failed
-        # We need to decide: fail fast or defer to runtime?
-        # Per the task: graceful degradation, so init should succeed
-        # Let's test runtime degradation instead
-        pass
 
 
 @pytest.mark.asyncio

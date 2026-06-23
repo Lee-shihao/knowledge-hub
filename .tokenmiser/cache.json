@@ -1,0 +1,284 @@
+{
+  "version": "1",
+  "generatedAt": "2026-06-23T15:52:32.407Z",
+  "entries": {
+    "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
+      "mtime": 1782208331156.763,
+      "size": 191,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "temp_storage_dir"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/__init__.py": {
+      "mtime": 1782204687321.0183,
+      "size": 0,
+      "symbols": {
+        "purpose": null,
+        "exports": [],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_config.py": {
+      "mtime": 1782228151834.3809,
+      "size": 1315,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "test_settings_defaults",
+          "test_settings_from_env"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/config.py": {
+      "mtime": 1782227907089.3994,
+      "size": 1081,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "Settings"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_schemas.py": {
+      "mtime": 1782208758850.795,
+      "size": 1864,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "test_chunk_metadata_creation",
+          "test_chunk_metadata_defaults",
+          "test_document_chunk_excludes_embeddings",
+          "test_query_input_defaults",
+          "test_query_result_structure"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/schemas.py": {
+      "mtime": 1782209386298.5981,
+      "size": 891,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "ChunkMetadata",
+          "DocumentChunk",
+          "QueryInput",
+          "ChunkResult",
+          "QueryResult"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_metadata.py": {
+      "mtime": 1782211058007.2107,
+      "size": 2027,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "settings",
+          "metadata_mgr",
+          "test_upsert_and_get_hash",
+          "test_get_hash_missing",
+          "test_list_sources",
+          "test_remove",
+          "test_orphan_cleanup"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/metadata.py": {
+      "mtime": 1782218672055.9382,
+      "size": 3181,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "SourceMetadataManager"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_vector_store.py": {
+      "mtime": 1782220142371.4915,
+      "size": 6821,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "make_chunk_id",
+          "settings",
+          "vector_store",
+          "test_ensure_collection",
+          "test_upsert_and_count",
+          "test_upsert_idempotent",
+          "test_delete_by_source",
+          "test_hybrid_search_no_filter",
+          "test_hybrid_search_with_source_filter",
+          "test_hybrid_search_with_tag_filter"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/vector_store.py": {
+      "mtime": 1782219265903.5425,
+      "size": 4940,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "QdrantVectorStore"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_embedder.py": {
+      "mtime": 1782228105021.9272,
+      "size": 10510,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "settings",
+          "embedder",
+          "test_embed_query_returns_dense_and_sparse",
+          "test_embed_texts_batch",
+          "test_batch_size_persistence",
+          "test_reset_batch_size",
+          "test_embed_query_mocked",
+          "test_embed_texts_splits_into_batches",
+          "test_encode_batch_success",
+          "test_encode_batch_oom_detection"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/embedder.py": {
+      "mtime": 1782228041896.7563,
+      "size": 5353,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "OOMError",
+          "FlagEmbeddingEmbedder"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_chunker.py": {
+      "mtime": 1782225704208.8354,
+      "size": 7192,
+      "symbols": {
+        "purpose": "Tests for SemanticChunker — heading-aware document chunking.",
+        "exports": [
+          "make_doc",
+          "test_chunker_produces_chunks",
+          "test_chunker_short_document",
+          "test_chunker_heading_path_in_metadata",
+          "test_chunk_id_deterministic",
+          "test_chunk_id_differs_for_different_source",
+          "test_heading_chain_resets_correctly",
+          "test_overlap_keeps_last_paragraph",
+          "test_hard_split_oversized_paragraph",
+          "test_empty_document"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/chunker.py": {
+      "mtime": 1782225668759.5361,
+      "size": 6652,
+      "symbols": {
+        "purpose": "SemanticChunker — heading-aware document chunking for embedding.",
+        "exports": [
+          "SemanticChunker"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_loaders.py": {
+      "mtime": 1782229771276.8225,
+      "size": 2093,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "test_compute_hash",
+          "test_load_markdown_file",
+          "test_load_text_file",
+          "test_load_nonexistent_file",
+          "test_large_file_warning",
+          "test_file_too_large_rejected",
+          "test_unsupported_suffix_skipped",
+          "test_supported_suffixes"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/loaders.py": {
+      "mtime": 1782229950726.0007,
+      "size": 1931,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "DocumentLoader"
+        ],
+        "language": "python"
+      }
+    }
+  }
+}

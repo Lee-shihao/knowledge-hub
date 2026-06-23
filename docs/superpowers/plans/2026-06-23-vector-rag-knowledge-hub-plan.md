@@ -6,7 +6,7 @@
 
 **Architecture:** Layered Python package — ingestion pipeline (load→chunk→embed→store), retrieval engine (hybrid search→rerank), MCP server (FastMCP with Bearer auth), CLI (click). Each layer has clean interfaces and can be tested independently.
 
-**Tech Stack:** Python 3.12+, uv, LlamaIndex, Qdrant 1.12+, Ollama (bge-m3, bge-reranker), FastMCP 2.x, pydantic-settings, structlog, pytest + testcontainers
+**Tech Stack:** Python 3.12+, uv, LlamaIndex, Qdrant 1.12+, FlagEmbedding (bge-m3, bge-reranker-v2-m3), FastMCP 2.x, pydantic-settings, structlog, pytest + testcontainers
 
 ## Global Constraints
 
@@ -21,6 +21,8 @@
 - Bearer token auth required when MCP_HOST != 127.0.0.1
 - Reranker failure → graceful degradation (return un-reranked results)
 - GPU OOM → auto-degrade batch_size, persist, manual reset via CLI
+- **Virtual environment**: All `uv` and `python`/`pytest` commands MUST be run inside the project's virtual environment at `.venv/`. Activate with `source .venv/bin/activate` before running any Python command, or prefix commands with `.venv/bin/python` and `.venv/bin/pytest`.
+- **FlagEmbedding (not Ollama)**: The project uses FlagEmbedding's `BGEM3FlagModel` and `FlagReranker` directly, NOT Ollama. The embedder class is `FlagEmbeddingEmbedder` (not `OllamaEmbedder`). There is no `OLLAMA_BASE_URL` config field. Models auto-download from HuggingFace on first use.
 
 ---
 

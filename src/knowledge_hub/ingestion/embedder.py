@@ -1,11 +1,11 @@
 import asyncio
 import hashlib
 import json
-import re
 from pathlib import Path
 
-import httpx
 import structlog
+import torch
+from FlagEmbedding import BGEM3FlagModel
 
 from knowledge_hub.config import Settings
 
@@ -13,12 +13,12 @@ logger = structlog.get_logger()
 
 
 class OOMError(Exception):
-    """Raised when Ollama returns an out-of-memory error."""
+    """Raised when the GPU runs out of memory during embedding."""
     pass
 
 
-class OllamaEmbedder:
-    """Wraps Ollama's bge-m3 for dense + sparse embedding generation.
+class FlagEmbeddingEmbedder:
+    """Wraps FlagEmbedding's BGEM3FlagModel for dense + sparse embedding generation.
 
     Handles batch processing with OOM-aware auto-degradation:
     - Starts at configured batch_size (default 16)
@@ -29,9 +29,31 @@ class OllamaEmbedder:
 
     def __init__(self, settings: Settings):
         self.settings = settings
-        self._base_url = settings.OLLAMA_BASE_URL
-        self._model = settings.EMBED_MODEL
+        self._model_name = settings.EMBED_MODEL
         self._effective_batch = self._load_persisted_batch_size()
+
+        # Resolve device
+        device = self._resolve_device(settings.EMBED_DEVICE)
+        use_fp16 = device == "cuda"
+
+        logger.info(
+            "Loading FlagEmbedding model",
+            model=self._model_name,
+            device=device,
+            use_fp16=use_fp16,
+        )
+        self._model = BGEM3FlagModel(
+            self._model_name,
+            use_fp16=use_fp16,
+            device=device,
+        )
+
+    @staticmethod
+    def _resolve_device(embed_device: str) -> str:
+        """Resolve 'auto' to 'cuda' if available, else 'cpu'."""
+        if embed_device == "auto":
+            return "cuda" if torch.cuda.is_available() else "cpu"
+        return embed_device
 
     async def embed_query(self, query: str) -> dict:
         """Embed a single query text. Returns {dense, sparse}."""
@@ -50,8 +72,8 @@ class OllamaEmbedder:
     async def _embed_batch_with_retry(self, texts: list[str]) -> list[dict]:
         for attempt in range(3):
             try:
-                return await self._call_ollama(texts)
-            except OOMError:
+                return await self._encode_batch(texts)
+            except (OOMError, torch.cuda.OutOfMemoryError):
                 self._effective_batch = max(4, self._effective_batch // 2)
                 self._persist_batch_size()
                 logger.warning(
@@ -66,53 +88,43 @@ class OllamaEmbedder:
         logger.warning("Falling back to single-text serial embedding")
         results = []
         for t in texts:
-            results.extend(await self._call_ollama([t]))
+            results.extend(await self._encode_batch([t]))
         return results
 
-    async def _call_ollama(self, texts: list[str]) -> list[dict]:
-        async with httpx.AsyncClient(timeout=120) as client:
-            response = await client.post(
-                f"{self._base_url}/api/embed",
-                json={"model": self._model, "input": texts},
+    async def _encode_batch(self, texts: list[str]) -> list[dict]:
+        """Encode texts using BGEM3FlagModel, returning dense + sparse vectors."""
+        try:
+            output = await asyncio.to_thread(
+                self._model.encode,
+                texts,
+                return_dense=True,
+                return_sparse=True,
             )
-            if response.status_code != 200:
-                if "out of memory" in response.text.lower():
-                    raise OOMError(response.text)
-                raise RuntimeError(f"Ollama API error: {response.status_code} {response.text}")
-            data = response.json()
-            # bge-m3 via Ollama returns "embeddings" as list[list[float]]
-            # The sparse representation is extracted from the model's output
-            # Ollama's /api/embed doesn't natively return sparse; we extract it
-            # by requesting bge-m3's sparse embedding via a separate mechanism.
-            # For now, use dense-only and generate a simple sparse bag-of-words.
-            return [
-                {
-                    "dense": emb,
-                    "sparse": self._sparse_bow(texts[i]),
-                }
-                for i, emb in enumerate(data["embeddings"])
-            ]
+        except torch.cuda.OutOfMemoryError as e:
+            raise OOMError(str(e)) from e
 
-    def _sparse_bow(self, text: str) -> dict[int, float]:
-        """Generate a simple bag-of-words sparse vector as fallback.
+        dense_vecs = output["dense_vecs"]  # shape: (N, 1024)
+        lexical_weights = output["lexical_weights"]  # list[dict[str, float]]
 
-        NOTE: Ollama's /api/embed endpoint currently only returns dense
-        embeddings. bge-m3's native sparse vectors (lexical weights per token)
-        are not exposed. This BoW fallback provides a functional keyword-match
-        signal for hybrid search in the MVP.
+        results = []
+        for i in range(len(texts)):
+            dense = dense_vecs[i].tolist()
+            sparse = self._convert_sparse(lexical_weights[i])
+            results.append({"dense": dense, "sparse": sparse})
+        return results
 
-        Future upgrade path: use a separate sparse encoder (e.g., direct
-        llama-cpp-python with bge-m3, or a dedicated sparse model) and
-        swap this method.
+    @staticmethod
+    def _convert_sparse(lexical_weights: dict[str, float]) -> dict[int, float]:
+        """Convert FlagEmbedding lexical_weights {str: float} to Qdrant-compatible {int: float}.
+
+        Uses MD5 hash of the token string to produce a stable integer ID,
+        consistent with the previous bag-of-words approach.
         """
-        tokens = re.findall(r'\w+', text.lower())
-        sparse = {}
-        for t in tokens:
-            h = int(hashlib.md5(t.encode()).hexdigest()[:8], 16) % 100000
-            sparse[h] = sparse.get(h, 0.0) + 1.0
-        # Normalize
-        max_val = max(sparse.values()) if sparse else 1.0
-        return {k: v / max_val for k, v in sparse.items()}
+        sparse: dict[int, float] = {}
+        for token, weight in lexical_weights.items():
+            token_id = int(hashlib.md5(token.encode()).hexdigest()[:8], 16) % 100000
+            sparse[token_id] = weight
+        return sparse
 
     def _persist_batch_size(self):
         state_file = Path(self.settings.STORAGE_DIR) / ".batch_size_state.json"

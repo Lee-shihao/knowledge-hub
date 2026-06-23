@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     MCP_AUTH_TOKEN: str | None = None
     MCP_ALLOWED_IPS: list[str] = []
 
-    # Ollama
-    OLLAMA_BASE_URL: str = "http://localhost:11434"
-    EMBED_MODEL: str = "bge-m3"
-    RERANK_MODEL: str = "bge-reranker"
+    # Embedding models (FlagEmbedding HuggingFace IDs)
+    EMBED_MODEL: str = "BAAI/bge-m3"
+    RERANK_MODEL: str = "BAAI/bge-reranker-v2-m3"
+    EMBED_DEVICE: Literal["auto", "cpu", "cuda"] = "auto"
 
     # Qdrant
     QDRANT_URL: str = "http://localhost:6333"

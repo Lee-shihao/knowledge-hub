@@ -4,6 +4,1459 @@
   "graph": {},
   "nodes": [
     {
+      "label": "knowledge-hub",
+      "file_type": "code",
+      "type": "package",
+      "ecosystem": "python",
+      "source_file": "pyproject.toml",
+      "source_location": "L1",
+      "version": "0.1.0",
+      "_origin": "ast",
+      "id": "pkg_knowledge_hub",
+      "community": 19,
+      "norm_label": "knowledge-hub"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "knowledge_hub_init",
+      "community": 18,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/cli/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "cli_init",
+      "community": 16,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "knowledge_hub_config",
+      "community": 2,
+      "norm_label": "config.py"
+    },
+    {
+      "label": "Settings",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/config.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "knowledge_hub_config_settings",
+      "community": 2,
+      "norm_label": "settings"
+    },
+    {
+      "label": "BaseSettings",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basesettings",
+      "community": 2,
+      "norm_label": "basesettings"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/ingestion/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "ingestion_init",
+      "community": 17,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/retrieval/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "retrieval_init",
+      "community": 20,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "schemas.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas",
+      "community": 6,
+      "norm_label": "schemas.py"
+    },
+    {
+      "label": "ChunkMetadata",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas_chunkmetadata",
+      "community": 6,
+      "norm_label": "chunkmetadata"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "basemodel",
+      "community": 6,
+      "norm_label": "basemodel"
+    },
+    {
+      "label": "DocumentChunk",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas_documentchunk",
+      "community": 6,
+      "norm_label": "documentchunk"
+    },
+    {
+      "label": "QueryInput",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas_queryinput",
+      "community": 6,
+      "norm_label": "queryinput"
+    },
+    {
+      "label": "ChunkResult",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas_chunkresult",
+      "community": 6,
+      "norm_label": "chunkresult"
+    },
+    {
+      "label": "QueryResult",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "knowledge_hub_schemas_queryresult",
+      "community": 6,
+      "norm_label": "queryresult"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/server/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "server_init",
+      "community": 21,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "storage_init",
+      "community": 22,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "metadata.py",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "storage_metadata",
+      "community": 2,
+      "norm_label": "metadata.py"
+    },
+    {
+      "label": "SourceMetadataManager",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager",
+      "community": 2,
+      "norm_label": "sourcemetadatamanager"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "Settings",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "settings",
+      "community": 2,
+      "norm_label": "settings"
+    },
+    {
+      "label": "QdrantClient",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "qdrantclient",
+      "community": 2,
+      "norm_label": "qdrantclient"
+    },
+    {
+      "label": ".ensure_collection()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_ensure_collection",
+      "community": 2,
+      "norm_label": ".ensure_collection()"
+    },
+    {
+      "label": ".get_hash()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_get_hash",
+      "community": 2,
+      "norm_label": ".get_hash()"
+    },
+    {
+      "label": ".upsert()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_upsert",
+      "community": 2,
+      "norm_label": ".upsert()"
+    },
+    {
+      "label": ".remove()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_remove",
+      "community": 2,
+      "norm_label": ".remove()"
+    },
+    {
+      "label": ".list_sources()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_list_sources",
+      "community": 2,
+      "norm_label": ".list_sources()"
+    },
+    {
+      "label": ".orphan_cleanup()",
+      "file_type": "code",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "storage_metadata_sourcemetadatamanager_orphan_cleanup",
+      "community": 2,
+      "norm_label": ".orphan_cleanup()"
+    },
+    {
+      "label": "Manages source file metadata in a separate Qdrant collection.      Uses a lightw",
+      "file_type": "rationale",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "storage_metadata_rationale_14",
+      "community": 2,
+      "norm_label": "manages source file metadata in a separate qdrant collection.      uses a lightw"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "tests/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_init",
+      "community": 23,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "conftest.py",
+      "file_type": "code",
+      "source_file": "tests/conftest.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_conftest",
+      "community": 11,
+      "norm_label": "conftest.py"
+    },
+    {
+      "label": "temp_storage_dir()",
+      "file_type": "code",
+      "source_file": "tests/conftest.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "tests_conftest_temp_storage_dir",
+      "community": 11,
+      "norm_label": "temp_storage_dir()"
+    },
+    {
+      "label": "Temporary storage directory for Qdrant and batch_size state.",
+      "file_type": "rationale",
+      "source_file": "tests/conftest.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tests_conftest_rationale_6",
+      "community": 11,
+      "norm_label": "temporary storage directory for qdrant and batch_size state."
+    },
+    {
+      "label": "test_config.py",
+      "file_type": "code",
+      "source_file": "tests/test_config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_config",
+      "community": 2,
+      "norm_label": "test_config.py"
+    },
+    {
+      "label": "test_settings_defaults()",
+      "file_type": "code",
+      "source_file": "tests/test_config.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "tests_test_config_test_settings_defaults",
+      "community": 2,
+      "norm_label": "test_settings_defaults()"
+    },
+    {
+      "label": "test_settings_from_env()",
+      "file_type": "code",
+      "source_file": "tests/test_config.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "tests_test_config_test_settings_from_env",
+      "community": 2,
+      "norm_label": "test_settings_from_env()"
+    },
+    {
+      "label": "test_metadata.py",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_metadata",
+      "community": 2,
+      "norm_label": "test_metadata.py"
+    },
+    {
+      "label": "settings()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "tests_test_metadata_settings",
+      "community": 2,
+      "norm_label": "settings()"
+    },
+    {
+      "label": "metadata_mgr()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "tests_test_metadata_metadata_mgr",
+      "community": 2,
+      "norm_label": "metadata_mgr()"
+    },
+    {
+      "label": "test_upsert_and_get_hash()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "tests_test_metadata_test_upsert_and_get_hash",
+      "community": 2,
+      "norm_label": "test_upsert_and_get_hash()"
+    },
+    {
+      "label": "test_get_hash_missing()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "tests_test_metadata_test_get_hash_missing",
+      "community": 2,
+      "norm_label": "test_get_hash_missing()"
+    },
+    {
+      "label": "test_list_sources()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "tests_test_metadata_test_list_sources",
+      "community": 2,
+      "norm_label": "test_list_sources()"
+    },
+    {
+      "label": "test_remove()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "tests_test_metadata_test_remove",
+      "community": 2,
+      "norm_label": "test_remove()"
+    },
+    {
+      "label": "test_orphan_cleanup()",
+      "file_type": "code",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "tests_test_metadata_test_orphan_cleanup",
+      "community": 2,
+      "norm_label": "test_orphan_cleanup()"
+    },
+    {
+      "label": "test_schemas.py",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_schemas",
+      "community": 6,
+      "norm_label": "test_schemas.py"
+    },
+    {
+      "label": "test_chunk_metadata_creation()",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "tests_test_schemas_test_chunk_metadata_creation",
+      "community": 6,
+      "norm_label": "test_chunk_metadata_creation()"
+    },
+    {
+      "label": "test_chunk_metadata_defaults()",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "tests_test_schemas_test_chunk_metadata_defaults",
+      "community": 6,
+      "norm_label": "test_chunk_metadata_defaults()"
+    },
+    {
+      "label": "test_document_chunk_excludes_embeddings()",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "tests_test_schemas_test_document_chunk_excludes_embeddings",
+      "community": 6,
+      "norm_label": "test_document_chunk_excludes_embeddings()"
+    },
+    {
+      "label": "test_query_input_defaults()",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "tests_test_schemas_test_query_input_defaults",
+      "community": 6,
+      "norm_label": "test_query_input_defaults()"
+    },
+    {
+      "label": "test_query_result_structure()",
+      "file_type": "code",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "tests_test_schemas_test_query_result_structure",
+      "community": 6,
+      "norm_label": "test_query_result_structure()"
+    },
+    {
+      "label": "progress.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/progress.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_progress",
+      "community": 10,
+      "norm_label": "progress.md"
+    },
+    {
+      "label": "SDD Progress Ledger",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/progress.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_progress_sdd_progress_ledger",
+      "community": 10,
+      "norm_label": "sdd progress ledger"
+    },
+    {
+      "label": "Tasks",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/progress.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "sdd_progress_tasks",
+      "community": 10,
+      "norm_label": "tasks"
+    },
+    {
+      "label": "task-1-brief.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_1_brief",
+      "community": 12,
+      "norm_label": "task-1-brief.md"
+    },
+    {
+      "label": "Task 1: Project Scaffolding",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_1_brief_task_1_project_scaffolding",
+      "community": 12,
+      "norm_label": "task 1: project scaffolding"
+    },
+    {
+      "label": "task-1-report.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_1_report",
+      "community": 8,
+      "norm_label": "task-1-report.md"
+    },
+    {
+      "label": "Task 1 Report",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_task_1_report",
+      "community": 8,
+      "norm_label": "task 1 report"
+    },
+    {
+      "label": "What was implemented",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_what_was_implemented",
+      "community": 8,
+      "norm_label": "what was implemented"
+    },
+    {
+      "label": "Tests",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_tests",
+      "community": 8,
+      "norm_label": "tests"
+    },
+    {
+      "label": "Commits",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_commits",
+      "community": 8,
+      "norm_label": "commits"
+    },
+    {
+      "label": "Self-Review",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_self_review",
+      "community": 8,
+      "norm_label": "self-review"
+    },
+    {
+      "label": "Concerns",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "sdd_task_1_report_concerns",
+      "community": 8,
+      "norm_label": "concerns"
+    },
+    {
+      "label": "task-2-brief.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_2_brief",
+      "community": 13,
+      "norm_label": "task-2-brief.md"
+    },
+    {
+      "label": "Task 2: Config (config.py) + Schemas (schemas.py)",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_2_brief_task_2_config_config_py_schemas_schemas_py",
+      "community": 13,
+      "norm_label": "task 2: config (config.py) + schemas (schemas.py)"
+    },
+    {
+      "label": "task-2-report.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_2_report",
+      "community": 7,
+      "norm_label": "task-2-report.md"
+    },
+    {
+      "label": "Task 2 Report: Config + Schemas",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_task_2_report_config_schemas",
+      "community": 7,
+      "norm_label": "task 2 report: config + schemas"
+    },
+    {
+      "label": "Status: DONE",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_status_done",
+      "community": 7,
+      "norm_label": "status: done"
+    },
+    {
+      "label": "Commits",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_commits",
+      "community": 7,
+      "norm_label": "commits"
+    },
+    {
+      "label": "Test Summary",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_test_summary",
+      "community": 7,
+      "norm_label": "test summary"
+    },
+    {
+      "label": "TDD Steps Followed",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_tdd_steps_followed",
+      "community": 7,
+      "norm_label": "tdd steps followed"
+    },
+    {
+      "label": "Files Created/Modified",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_files_created_modified",
+      "community": 7,
+      "norm_label": "files created/modified"
+    },
+    {
+      "label": "Deviations from Brief",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_deviations_from_brief",
+      "community": 7,
+      "norm_label": "deviations from brief"
+    },
+    {
+      "label": "Concerns",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "sdd_task_2_report_concerns",
+      "community": 7,
+      "norm_label": "concerns"
+    },
+    {
+      "label": "task-3-brief.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-3-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_3_brief",
+      "community": 14,
+      "norm_label": "task-3-brief.md"
+    },
+    {
+      "label": "Task 3: Storage \u2014 Metadata Manager",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-3-brief.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_3_brief_task_3_storage_metadata_manager",
+      "community": 14,
+      "norm_label": "task 3: storage \u2014 metadata manager"
+    },
+    {
+      "label": "task-3-report.md",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-3-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_3_report",
+      "community": 15,
+      "norm_label": "task-3-report.md"
+    },
+    {
+      "label": "Task 3 Report: Storage \u2014 Metadata Manager",
+      "file_type": "document",
+      "source_file": ".superpowers/sdd/task-3-report.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "sdd_task_3_report_task_3_report_storage_metadata_manager",
+      "community": 15,
+      "norm_label": "task 3 report: storage \u2014 metadata manager"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude",
+      "community": 9,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude_claude_md",
+      "community": 9,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "Codebase Navigation",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "claude_codebase_navigation",
+      "community": 9,
+      "norm_label": "codebase navigation"
+    },
+    {
+      "label": "Project Overview",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "claude_project_overview",
+      "community": 9,
+      "norm_label": "project overview"
+    },
+    {
+      "label": "Current State",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "claude_current_state",
+      "community": 9,
+      "norm_label": "current state"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "claude_graphify",
+      "community": 9,
+      "norm_label": "graphify"
+    },
+    {
+      "label": "CODEBASE_INDEX.md",
+      "file_type": "document",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "codebase_index",
+      "community": 1,
+      "norm_label": "codebase_index.md"
+    },
+    {
+      "label": "Codebase Index",
+      "file_type": "document",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "codebase_index_codebase_index",
+      "community": 1,
+      "norm_label": "codebase index"
+    },
+    {
+      "label": "Source",
+      "file_type": "document",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "codebase_index_source",
+      "community": 1,
+      "norm_label": "source"
+    },
+    {
+      "label": "Config",
+      "file_type": "document",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "codebase_index_config",
+      "community": 1,
+      "norm_label": "config"
+    },
+    {
+      "label": "Docs",
+      "file_type": "document",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "codebase_index_docs",
+      "community": 1,
+      "norm_label": "docs"
+    },
+    {
+      "label": "2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan",
+      "community": 5,
+      "norm_label": "2026-06-23-vector-rag-knowledge-hub-plan.md"
+    },
+    {
+      "label": "Vector RAG Knowledge Hub \u2014 Implementation Plan",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_vector_rag_knowledge_hub_implementation_plan",
+      "community": 5,
+      "norm_label": "vector rag knowledge hub \u2014 implementation plan"
+    },
+    {
+      "label": "Global Constraints",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "community": 5,
+      "norm_label": "global constraints"
+    },
+    {
+      "label": "Task 1: Project Scaffolding",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_1_project_scaffolding",
+      "community": 5,
+      "norm_label": "task 1: project scaffolding"
+    },
+    {
+      "label": "Task 2: Config (config.py) + Schemas (schemas.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L135",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_2_config_config_py_schemas_schemas_py",
+      "community": 5,
+      "norm_label": "task 2: config (config.py) + schemas (schemas.py)"
+    },
+    {
+      "label": "Task 3: Storage \u2014 Metadata Manager",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L369",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_3_storage_metadata_manager",
+      "community": 5,
+      "norm_label": "task 3: storage \u2014 metadata manager"
+    },
+    {
+      "label": "Task 4: Storage \u2014 QdrantVectorStore",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L566",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_4_storage_qdrantvectorstore",
+      "community": 5,
+      "norm_label": "task 4: storage \u2014 qdrantvectorstore"
+    },
+    {
+      "label": "Task 5: Ingestion \u2014 OllamaEmbedder",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L809",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_5_ingestion_ollamaembedder",
+      "community": 5,
+      "norm_label": "task 5: ingestion \u2014 ollamaembedder"
+    },
+    {
+      "label": "Task 6: Ingestion \u2014 Chunker",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1041",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_6_ingestion_chunker",
+      "community": 5,
+      "norm_label": "task 6: ingestion \u2014 chunker"
+    },
+    {
+      "label": "Task 7: Ingestion \u2014 Document Loaders",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1281",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_7_ingestion_document_loaders",
+      "community": 5,
+      "norm_label": "task 7: ingestion \u2014 document loaders"
+    },
+    {
+      "label": "Task 8: Ingestion \u2014 Pipeline (Orchestrator)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1430",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_8_ingestion_pipeline_orchestrator",
+      "community": 5,
+      "norm_label": "task 8: ingestion \u2014 pipeline (orchestrator)"
+    },
+    {
+      "label": "Task 9: Retrieval \u2014 Reranker",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1669",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_9_retrieval_reranker",
+      "community": 5,
+      "norm_label": "task 9: retrieval \u2014 reranker"
+    },
+    {
+      "label": "Task 10: Retrieval \u2014 QueryEngine",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1800",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_10_retrieval_queryengine",
+      "community": 5,
+      "norm_label": "task 10: retrieval \u2014 queryengine"
+    },
+    {
+      "label": "Task 11: Server \u2014 Health Monitor + MCP Tools + MCP Server",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1953",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_11_server_health_monitor_mcp_tools_mcp_server",
+      "community": 5,
+      "norm_label": "task 11: server \u2014 health monitor + mcp tools + mcp server"
+    },
+    {
+      "label": "Task 12: CLI",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2223",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_12_cli",
+      "community": 5,
+      "norm_label": "task 12: cli"
+    },
+    {
+      "label": "Task 13: Integration Tests",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2416",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_13_integration_tests",
+      "community": 5,
+      "norm_label": "task 13: integration tests"
+    },
+    {
+      "label": "Task 14: Final Verification & Graphify Update",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2527",
+      "_origin": "ast",
+      "id": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_14_final_verification_graphify_update",
+      "community": 5,
+      "norm_label": "task 14: final verification & graphify update"
+    },
+    {
+      "label": "2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh",
+      "community": 4,
+      "norm_label": "2026-06-23-vector-rag-knowledge-hub-design-zh.md"
+    },
+    {
+      "label": "Vector RAG \u77e5\u8bc6\u4e2d\u5fc3 \u2014 \u8bbe\u8ba1\u89c4\u683c",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "community": 4,
+      "norm_label": "vector rag \u77e5\u8bc6\u4e2d\u5fc3 \u2014 \u8bbe\u8ba1\u89c4\u683c"
+    },
+    {
+      "label": "1. \u6982\u8ff0",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_1_\u6982\u8ff0",
+      "community": 4,
+      "norm_label": "1. \u6982\u8ff0"
+    },
+    {
+      "label": "2. \u6280\u672f\u9009\u578b",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_2_\u6280\u672f\u9009\u578b",
+      "community": 4,
+      "norm_label": "2. \u6280\u672f\u9009\u578b"
+    },
+    {
+      "label": "3. \u9879\u76ee\u7ed3\u6784",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_3_\u9879\u76ee\u7ed3\u6784",
+      "community": 4,
+      "norm_label": "3. \u9879\u76ee\u7ed3\u6784"
+    },
+    {
+      "label": "4. \u7ec4\u4ef6\u67b6\u6784",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_4_\u7ec4\u4ef6\u67b6\u6784",
+      "community": 4,
+      "norm_label": "4. \u7ec4\u4ef6\u67b6\u6784"
+    },
+    {
+      "label": "5. \u6570\u636e\u6a21\u578b\uff08schemas.py\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_5_\u6570\u636e\u6a21\u578b_schemas_py",
+      "community": 4,
+      "norm_label": "5. \u6570\u636e\u6a21\u578b(schemas.py)"
+    },
+    {
+      "label": "6. \u6838\u5fc3\u6570\u636e\u6d41",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L136",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_\u6838\u5fc3\u6570\u636e\u6d41",
+      "community": 4,
+      "norm_label": "6. \u6838\u5fc3\u6570\u636e\u6d41"
+    },
+    {
+      "label": "6.1 \u6444\u53d6\u6d41\u6c34\u7ebf",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_1_\u6444\u53d6\u6d41\u6c34\u7ebf",
+      "community": 4,
+      "norm_label": "6.1 \u6444\u53d6\u6d41\u6c34\u7ebf"
+    },
+    {
+      "label": "6.2 \u67e5\u8be2\u6d41\u6c34\u7ebf",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_2_\u67e5\u8be2\u6d41\u6c34\u7ebf",
+      "community": 4,
+      "norm_label": "6.2 \u67e5\u8be2\u6d41\u6c34\u7ebf"
+    },
+    {
+      "label": "7. \u914d\u7f6e\uff08config.py\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L206",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_7_\u914d\u7f6e_config_py",
+      "community": 4,
+      "norm_label": "7. \u914d\u7f6e(config.py)"
+    },
+    {
+      "label": "8. GPU OOM \u5904\u7406\uff08embedder.py\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L249",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_8_gpu_oom_\u5904\u7406_embedder_py",
+      "community": 4,
+      "norm_label": "8. gpu oom \u5904\u7406(embedder.py)"
+    },
+    {
+      "label": "9. MCP Server \u5b89\u5168",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L289",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_9_mcp_server_\u5b89\u5168",
+      "community": 4,
+      "norm_label": "9. mcp server \u5b89\u5168"
+    },
+    {
+      "label": "10. \u8fd0\u884c\u65f6\u5065\u5eb7\u68c0\u67e5\uff08server/health.py\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L327",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_10_\u8fd0\u884c\u65f6\u5065\u5eb7\u68c0\u67e5_server_health_py",
+      "community": 4,
+      "norm_label": "10. \u8fd0\u884c\u65f6\u5065\u5eb7\u68c0\u67e5(server/health.py)"
+    },
+    {
+      "label": "11. \u9519\u8bef\u5904\u7406\u7b56\u7565",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L364",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_11_\u9519\u8bef\u5904\u7406\u7b56\u7565",
+      "community": 4,
+      "norm_label": "11. \u9519\u8bef\u5904\u7406\u7b56\u7565"
+    },
+    {
+      "label": "12. \u6d4b\u8bd5\u7b56\u7565",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L387",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_12_\u6d4b\u8bd5\u7b56\u7565",
+      "community": 4,
+      "norm_label": "12. \u6d4b\u8bd5\u7b56\u7565"
+    },
+    {
+      "label": "testcontainers \u6d4b\u8bd5\u5939\u5177\uff08tests/conftest.py\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L396",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_testcontainers_\u6d4b\u8bd5\u5939\u5177_tests_conftest_py",
+      "community": 4,
+      "norm_label": "testcontainers \u6d4b\u8bd5\u5939\u5177(tests/conftest.py)"
+    },
+    {
+      "label": "13. MCP Tool \u5951\u7ea6",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L419",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_13_mcp_tool_\u5951\u7ea6",
+      "community": 4,
+      "norm_label": "13. mcp tool \u5951\u7ea6"
+    },
+    {
+      "label": "14. CLI \u547d\u4ee4",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L461",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_14_cli_\u547d\u4ee4",
+      "community": 4,
+      "norm_label": "14. cli \u547d\u4ee4"
+    },
+    {
+      "label": "15. \u672c\u6b21\u8303\u56f4\u5916\uff08\u4e0d\u5728\u672c\u89c4\u683c\u4e2d\uff09",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L478",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_15_\u672c\u6b21\u8303\u56f4\u5916_\u4e0d\u5728\u672c\u89c4\u683c\u4e2d",
+      "community": 4,
+      "norm_label": "15. \u672c\u6b21\u8303\u56f4\u5916(\u4e0d\u5728\u672c\u89c4\u683c\u4e2d)"
+    },
+    {
+      "label": "2026-06-23-vector-rag-knowledge-hub-design.md",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design",
+      "community": 3,
+      "norm_label": "2026-06-23-vector-rag-knowledge-hub-design.md"
+    },
+    {
+      "label": "Vector RAG Knowledge Hub \u2014 Design Spec",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "community": 3,
+      "norm_label": "vector rag knowledge hub \u2014 design spec"
+    },
+    {
+      "label": "1. Overview",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_1_overview",
+      "community": 3,
+      "norm_label": "1. overview"
+    },
+    {
+      "label": "2. Technology Decisions",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_2_technology_decisions",
+      "community": 3,
+      "norm_label": "2. technology decisions"
+    },
+    {
+      "label": "3. Project Structure",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_3_project_structure",
+      "community": 3,
+      "norm_label": "3. project structure"
+    },
+    {
+      "label": "4. Component Architecture",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_4_component_architecture",
+      "community": 3,
+      "norm_label": "4. component architecture"
+    },
+    {
+      "label": "5. Data Models (schemas.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L97",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_5_data_models_schemas_py",
+      "community": 3,
+      "norm_label": "5. data models (schemas.py)"
+    },
+    {
+      "label": "6. Core Data Flows",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L136",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_core_data_flows",
+      "community": 3,
+      "norm_label": "6. core data flows"
+    },
+    {
+      "label": "6.1 Ingestion Pipeline",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_1_ingestion_pipeline",
+      "community": 3,
+      "norm_label": "6.1 ingestion pipeline"
+    },
+    {
+      "label": "6.2 Query Pipeline",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_2_query_pipeline",
+      "community": 3,
+      "norm_label": "6.2 query pipeline"
+    },
+    {
+      "label": "7. Configuration (config.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L206",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_7_configuration_config_py",
+      "community": 3,
+      "norm_label": "7. configuration (config.py)"
+    },
+    {
+      "label": "8. GPU OOM Handling (embedder.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L249",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_8_gpu_oom_handling_embedder_py",
+      "community": 3,
+      "norm_label": "8. gpu oom handling (embedder.py)"
+    },
+    {
+      "label": "9. MCP Server Security",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L289",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_9_mcp_server_security",
+      "community": 3,
+      "norm_label": "9. mcp server security"
+    },
+    {
+      "label": "10. Runtime Health Checks (server/health.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L327",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_10_runtime_health_checks_server_health_py",
+      "community": 3,
+      "norm_label": "10. runtime health checks (server/health.py)"
+    },
+    {
+      "label": "11. Error Handling Strategy",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L364",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_11_error_handling_strategy",
+      "community": 3,
+      "norm_label": "11. error handling strategy"
+    },
+    {
+      "label": "12. Testing Strategy",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L387",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_12_testing_strategy",
+      "community": 3,
+      "norm_label": "12. testing strategy"
+    },
+    {
+      "label": "testcontainers fixtures (tests/conftest.py)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L396",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_testcontainers_fixtures_tests_conftest_py",
+      "community": 3,
+      "norm_label": "testcontainers fixtures (tests/conftest.py)"
+    },
+    {
+      "label": "13. MCP Tool Contract",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L420",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_13_mcp_tool_contract",
+      "community": 3,
+      "norm_label": "13. mcp tool contract"
+    },
+    {
+      "label": "14. CLI Commands",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L461",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_14_cli_commands",
+      "community": 3,
+      "norm_label": "14. cli commands"
+    },
+    {
+      "label": "15. Out of Scope (for this spec)",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L478",
+      "_origin": "ast",
+      "id": "specs_2026_06_23_vector_rag_knowledge_hub_design_15_out_of_scope_for_this_spec",
+      "community": 3,
+      "norm_label": "15. out of scope (for this spec)"
+    },
+    {
       "label": "CLAUDE.md Project Guidance File",
       "file_type": "document",
       "source_file": "CLAUDE.md",
@@ -59,20 +1512,6 @@
       "id": "knowledge_hub_claude_knowledge_hub_project"
     },
     {
-      "label": "CODEBASE_INDEX.md",
-      "file_type": "document",
-      "source_file": "CODEBASE_INDEX.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "rationale": "A navigation index that maps every file to its exports and purpose, enabling directory-level discoverability without reading entire directories. The design trades upfront maintenance of the index for a ~98% reduction in tokens consumed during codebase exploration, guiding readers to the exact file they need before opening it.",
-      "id": "codebase_index",
-      "community": 1,
-      "norm_label": "codebase_index.md"
-    },
-    {
       "label": "CLAUDE.md",
       "file_type": "document",
       "source_file": "CODEBASE_INDEX.md",
@@ -81,12 +1520,1472 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md",
       "community": 1,
-      "norm_label": "claude.md"
+      "norm_label": "claude.md",
+      "id": "claude_md"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/config.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "knowledge_hub_config",
+      "target": "knowledge_hub_config_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "storage_metadata",
+      "target": "knowledge_hub_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_config.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_test_config",
+      "target": "knowledge_hub_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "knowledge_hub_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/config.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "knowledge_hub_config_settings",
+      "target": "basesettings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "source": "qdrantclient",
+      "target": "knowledge_hub_config_settings",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "source": "settings",
+      "target": "knowledge_hub_config_settings",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "knowledge_hub_config_settings",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_config.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tests_test_config_test_settings_defaults",
+      "target": "knowledge_hub_config_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_config.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "tests_test_config_test_settings_from_env",
+      "target": "knowledge_hub_config_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "tests_test_metadata_settings",
+      "target": "knowledge_hub_config_settings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas",
+      "target": "knowledge_hub_schemas_chunkmetadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas",
+      "target": "knowledge_hub_schemas_chunkresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas",
+      "target": "knowledge_hub_schemas_documentchunk",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas",
+      "target": "knowledge_hub_schemas_queryinput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas",
+      "target": "knowledge_hub_schemas_queryresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "knowledge_hub_schemas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas_chunkmetadata",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_chunk_metadata_creation",
+      "target": "knowledge_hub_schemas_chunkmetadata"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_chunk_metadata_defaults",
+      "target": "knowledge_hub_schemas_chunkmetadata"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_document_chunk_excludes_embeddings",
+      "target": "knowledge_hub_schemas_chunkmetadata"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas_chunkresult",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas_documentchunk",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas_queryinput",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/schemas.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "knowledge_hub_schemas_queryresult",
+      "target": "basemodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_document_chunk_excludes_embeddings",
+      "target": "knowledge_hub_schemas_documentchunk"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_query_input_defaults",
+      "target": "knowledge_hub_schemas_queryinput"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_query_result_structure",
+      "target": "knowledge_hub_schemas_chunkresult"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "tests_test_schemas_test_query_result_structure",
+      "target": "knowledge_hub_schemas_queryresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "storage_metadata",
+      "target": "storage_metadata_sourcemetadatamanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "storage_metadata_rationale_14",
+      "target": "storage_metadata_sourcemetadatamanager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_ensure_collection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_get_hash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_list_sources",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_orphan_cleanup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager",
+      "target": "storage_metadata_sourcemetadatamanager_upsert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tests_test_metadata_metadata_mgr",
+      "target": "storage_metadata_sourcemetadatamanager"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager_init",
+      "target": "qdrantclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager_init",
+      "target": "settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "tests_test_metadata_metadata_mgr",
+      "target": "qdrantclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager_orphan_cleanup",
+      "target": "storage_metadata_sourcemetadatamanager_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/knowledge_hub/storage/metadata.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "storage_metadata_sourcemetadatamanager_orphan_cleanup",
+      "target": "storage_metadata_sourcemetadatamanager_list_sources",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/conftest.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_conftest",
+      "target": "tests_conftest_temp_storage_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/conftest.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_conftest_rationale_6",
+      "target": "tests_conftest_temp_storage_dir",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_config.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_test_config",
+      "target": "tests_test_config_test_settings_defaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_config.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tests_test_config",
+      "target": "tests_test_config_test_settings_from_env",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_metadata_mgr",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_test_get_hash_missing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_test_list_sources",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_test_orphan_cleanup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_test_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_metadata.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tests_test_metadata",
+      "target": "tests_test_metadata_test_upsert_and_get_hash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "tests_test_schemas_test_chunk_metadata_creation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "tests_test_schemas_test_chunk_metadata_defaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "tests_test_schemas_test_document_chunk_excludes_embeddings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "tests_test_schemas_test_query_input_defaults",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_schemas.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "tests_test_schemas",
+      "target": "tests_test_schemas_test_query_result_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/progress.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_progress",
+      "target": "sdd_progress_sdd_progress_ledger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/progress.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "sdd_progress_sdd_progress_ledger",
+      "target": "sdd_progress_tasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-brief.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_1_brief",
+      "target": "sdd_task_1_brief_task_1_project_scaffolding",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_1_report",
+      "target": "sdd_task_1_report_task_1_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "sdd_task_1_report_task_1_report",
+      "target": "sdd_task_1_report_commits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "sdd_task_1_report_task_1_report",
+      "target": "sdd_task_1_report_concerns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "sdd_task_1_report_task_1_report",
+      "target": "sdd_task_1_report_self_review",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "sdd_task_1_report_task_1_report",
+      "target": "sdd_task_1_report_tests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-1-report.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "sdd_task_1_report_task_1_report",
+      "target": "sdd_task_1_report_what_was_implemented",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-brief.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_2_brief",
+      "target": "sdd_task_2_brief_task_2_config_config_py_schemas_schemas_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_2_report",
+      "target": "sdd_task_2_report_task_2_report_config_schemas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_commits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_concerns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_deviations_from_brief",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_files_created_modified",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_status_done",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_tdd_steps_followed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-2-report.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "sdd_task_2_report_task_2_report_config_schemas",
+      "target": "sdd_task_2_report_test_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-3-brief.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_3_brief",
+      "target": "sdd_task_3_brief_task_3_storage_metadata_manager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".superpowers/sdd/task-3-report.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "sdd_task_3_report",
+      "target": "sdd_task_3_report_task_3_report_storage_metadata_manager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "claude",
+      "target": "claude_claude_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_claude_md",
+      "target": "claude_codebase_navigation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "claude_claude_md",
+      "target": "claude_current_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "claude_claude_md",
+      "target": "claude_graphify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "claude_claude_md",
+      "target": "claude_project_overview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "codebase_index",
+      "target": "claude_md"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "codebase_index",
+      "target": "codebase_index_codebase_index",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "codebase_index_codebase_index",
+      "target": "codebase_index_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "codebase_index_codebase_index",
+      "target": "codebase_index_docs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CODEBASE_INDEX.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "codebase_index_codebase_index",
+      "target": "codebase_index_source",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_vector_rag_knowledge_hub_implementation_plan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_vector_rag_knowledge_hub_implementation_plan",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1800",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_10_retrieval_queryengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1953",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_11_server_health_monitor_mcp_tools_mcp_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2223",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_12_cli",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2416",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_13_integration_tests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L2527",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_14_final_verification_graphify_update",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_1_project_scaffolding",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_2_config_config_py_schemas_schemas_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L369",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_3_storage_metadata_manager",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L566",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_4_storage_qdrantvectorstore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L809",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_5_ingestion_ollamaembedder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1041",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_6_ingestion_chunker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1281",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_7_ingestion_document_loaders",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1430",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_8_ingestion_pipeline_orchestrator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md",
+      "source_location": "L1669",
+      "weight": 1.0,
+      "source": "plans_2026_06_23_vector_rag_knowledge_hub_plan_global_constraints",
+      "target": "plans_2026_06_23_vector_rag_knowledge_hub_plan_task_9_retrieval_reranker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L327",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_10_\u8fd0\u884c\u65f6\u5065\u5eb7\u68c0\u67e5_server_health_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_11_\u9519\u8bef\u5904\u7406\u7b56\u7565",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L387",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_12_\u6d4b\u8bd5\u7b56\u7565",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L419",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_13_mcp_tool_\u5951\u7ea6",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L461",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_14_cli_\u547d\u4ee4",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L478",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_15_\u672c\u6b21\u8303\u56f4\u5916_\u4e0d\u5728\u672c\u89c4\u683c\u4e2d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_1_\u6982\u8ff0",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_2_\u6280\u672f\u9009\u578b",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_3_\u9879\u76ee\u7ed3\u6784",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_4_\u7ec4\u4ef6\u67b6\u6784",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_5_\u6570\u636e\u6a21\u578b_schemas_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_\u6838\u5fc3\u6570\u636e\u6d41",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L206",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_7_\u914d\u7f6e_config_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_8_gpu_oom_\u5904\u7406_embedder_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L289",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_vector_rag_\u77e5\u8bc6\u4e2d\u5fc3_\u8bbe\u8ba1\u89c4\u683c",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_9_mcp_server_\u5b89\u5168",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_\u6838\u5fc3\u6570\u636e\u6d41",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_1_\u6444\u53d6\u6d41\u6c34\u7ebf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_\u6838\u5fc3\u6570\u636e\u6d41",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_6_2_\u67e5\u8be2\u6d41\u6c34\u7ebf",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_12_\u6d4b\u8bd5\u7b56\u7565",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_zh_testcontainers_\u6d4b\u8bd5\u5939\u5177_tests_conftest_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L327",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_10_runtime_health_checks_server_health_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L364",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_11_error_handling_strategy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L387",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_12_testing_strategy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L420",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_13_mcp_tool_contract",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L461",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_14_cli_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L478",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_15_out_of_scope_for_this_spec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_1_overview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_2_technology_decisions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_3_project_structure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_4_component_architecture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_5_data_models_schemas_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_core_data_flows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L206",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_7_configuration_config_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_8_gpu_oom_handling_embedder_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L289",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_vector_rag_knowledge_hub_design_spec",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_9_mcp_server_security",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_core_data_flows",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_1_ingestion_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_core_data_flows",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_6_2_query_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md",
+      "source_location": "L396",
+      "weight": 1.0,
+      "source": "specs_2026_06_23_vector_rag_knowledge_hub_design_12_testing_strategy",
+      "target": "specs_2026_06_23_vector_rag_knowledge_hub_design_testcontainers_fixtures_tests_conftest_py",
+      "confidence_score": 1.0
+    },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
@@ -116,18 +3015,8 @@
       "weight": 1.0,
       "source": "knowledge_hub_claude_claude_md",
       "target": "knowledge_hub_claude_knowledge_hub_project"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "CODEBASE_INDEX.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "codebase_index",
-      "target": "claude_md"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "4635dfab6b2aa66dd7e8149deb479d5bf6c3ff65"
+  "built_at_commit": "1d0c777e8c58b72ae4b4699259db1b31deca0830"
 }

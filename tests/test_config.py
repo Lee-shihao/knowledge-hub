@@ -8,9 +8,9 @@ def test_settings_defaults():
     assert settings.MCP_HOST == "127.0.0.1"
     assert settings.MCP_PORT == 8765
     assert settings.MCP_TRANSPORT == "sse"
-    assert settings.OLLAMA_BASE_URL == "http://localhost:11434"
-    assert settings.EMBED_MODEL == "bge-m3"
-    assert settings.RERANK_MODEL == "bge-reranker"
+    assert settings.EMBED_MODEL == "BAAI/bge-m3"
+    assert settings.RERANK_MODEL == "BAAI/bge-reranker-v2-m3"
+    assert settings.EMBED_DEVICE == "auto"
     assert settings.QDRANT_URL == "http://localhost:6333"
     assert settings.QDRANT_COLLECTION == "knowledge_hub"
     assert settings.CHUNK_MAX_TOKENS == 512

@@ -1,0 +1,8 @@
+graphify-out/cache/
+graphify-out/cost.json
+graphify-out/*.log
+
+# Graphify 中间/临时文件
+graphify-out/.graphify_*.json
+graphify-out/.graphify_python
+graphify-out/.graphify_root

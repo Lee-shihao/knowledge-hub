@@ -109,7 +109,7 @@ class ChunkMetadata(BaseModel):
     ingested_at: datetime
 
 class DocumentChunk(BaseModel):
-    id: str                                 # md5(source_file + heading_path + text[:50]), deterministic
+    id: str                                 # md5(source_file + "|".join(heading_path) + text[:200]), deterministic
     text: str
     dense_embedding: list[float] = Field(exclude=True)   # 1024d, excluded from logs/serialization
     sparse_embedding: dict[int, float] = Field(exclude=True)  # converted to SparseVector in vector_store
@@ -175,9 +175,9 @@ Tags are stored in `ChunkMetadata.tags` and persisted in Qdrant payload for serv
 
 **Incremental update logic:**
 1. Compute `md5(file_content)` for each local file
-2. Query Qdrant for existing source_file → hash mapping
-3. Skip files with matching hash; re-ingest files with changed hash
-4. After ingestion, remove Qdrant points whose source_file no longer exists locally (orphan cleanup)
+2. Maintain a lightweight `source_metadata` collection in Qdrant (separate from vector points), keyed by `source_file`, storing `{source_hash, last_ingested_at, chunk_count}`. This avoids O(n) scroll+filter over tens of thousands of vector points.
+3. Compare local hash against `source_metadata` → skip files with matching hash; re-ingest changed files
+4. After ingestion, remove Qdrant points and `source_metadata` entries for source_files no longer present locally (orphan cleanup)
 
 ### 6.2 Query Pipeline
 
@@ -270,7 +270,7 @@ class OllamaEmbedder:
         # All batch attempts failed → single-text serial fallback
         results = []
         for t in texts:
-            results.append(await self._call_ollama([t], 1))
+            results.extend(await self._call_ollama([t], 1))
         return results
 
     def _persist_batch_size(self):
@@ -301,6 +301,18 @@ def create_mcp_server(settings: Settings, query_engine: QueryEngine) -> FastMCP:
         if settings.MCP_HOST != "127.0.0.1":
             raise ValueError("MCP_HOST must be 127.0.0.1 when MCP_AUTH_TOKEN is not set")
         mcp = FastMCP("knowledge-hub")
+
+    # IP allowlist middleware (applied after auth, if configured)
+    if settings.MCP_ALLOWED_IPS:
+        from starlette.middleware.base import BaseHTTPMiddleware
+        class IPAllowlistMiddleware(BaseHTTPMiddleware):
+            async def dispatch(self, request, call_next):
+                client_ip = request.client.host
+                if client_ip not in settings.MCP_ALLOWED_IPS:
+                    from starlette.responses import JSONResponse
+                    return JSONResponse({"error": "Forbidden"}, status_code=403)
+                return await call_next(request)
+        mcp.add_middleware(IPAllowlistMiddleware)
 
     mcp.add_tool(query_knowledge_base, name="query_knowledge_base")
     return mcp
@@ -354,7 +366,7 @@ QueryEngine checks `HealthMonitor.get_status()` before calling Ollama/Qdrant. If
 | Layer | Strategy |
 |-------|----------|
 | MCP Server | Catch all exceptions, return structured error JSON, never expose stack traces. Respect MCP error protocol. |
-| Query Engine | Ollama timeout → retry (max 2). Qdrant unreachable → "Knowledge base unavailable." Empty collection → "Knowledge base is empty; ingest documents first." |
+| Query Engine | Ollama timeout → retry (max 2). Qdrant unreachable → "Knowledge base unavailable." Empty collection → "Knowledge base is empty; ingest documents first." Reranker failure → graceful degradation: return Qdrant's raw hybrid search results (top_k) without reranking, with a warning in query_time_ms metadata. |
 | Ingestion Pipeline | Single file failure does not stop the batch. Failed files collected in report. Embedding failure → exponential backoff retry (max 3), then log and skip. |
 | Global | structlog for structured logging. Levels: DEBUG (dev), INFO (ops), WARNING (degradations), ERROR (failures). |
 
@@ -370,6 +382,7 @@ QueryEngine checks `HealthMonitor.get_status()` before calling Ollama/Qdrant. If
 | Duplicate file ingestion | source_hash match → skip |
 | Orphan vectors (source deleted) | Post-ingestion cleanup pass |
 | GPU OOM during embedding | Auto-degrade batch_size, persist, fallback to serial |
+| Reranker unavailable/timeout | Return Qdrant's top_k results directly (un-reranked), attach warning |
 
 ## 12. Testing Strategy
 
@@ -398,9 +411,9 @@ def qdrant():
 
 @pytest.fixture(scope="session")
 def ollama():
+    # NOTE: first run pulls bge-m3 (~2GB). In CI, pre-cache the model layer.
+    # Context manager auto-starts the container; no manual .start() needed.
     with OllamaContainer() as oc:
-        # NOTE: first run pulls bge-m3 (~2GB). In CI, pre-cache the model layer.
-        oc.start()
         yield oc.get_container_host_ip(), oc.get_exposed_port(11434)
 ```
 
@@ -448,16 +461,19 @@ Claude Code connects via MCP config:
 ## 14. CLI Commands
 
 ```
-kh index                # Ingest all documents from data/
-kh index --path <dir>   # Ingest from specific directory
-kh index --force        # Re-ingest all, ignoring source_hash cache
-kh query "<question>"   # Direct query (no MCP needed)
-kh query "<q>" -k 10    # With custom top_k
-kh status               # Show document count, last ingestion time, storage size
-kh cleanup-orphans       # Manually trigger orphan vector cleanup
+kh index                  # Ingest all documents from data/
+kh index --path <dir>     # Ingest from specific directory
+kh index --tags "a,b"     # Add tags (can be overridden by .meta.json per-file)
+kh index --force          # Re-ingest all, ignoring source_hash cache
+kh query "<question>"     # Direct query (no MCP needed)
+kh query "<q>" -k 10      # With custom top_k
+kh status                 # Show document count, last ingestion time, storage size
+kh cleanup-orphans         # Manually trigger orphan vector cleanup
 kh config reset-batch-size  # Reset OOM-degraded batch size to default
-kh config show           # Show current effective configuration
+kh config show             # Show current effective configuration
 ```
+
+Note: `--tags` applies to all files in the run but is the **lowest priority** source — sidecar `.meta.json` and directory-name tags take precedence. This is intentional: `--tags` is a catch-all for unorganized directories; per-document metadata belongs in `.meta.json` files.
 
 ## 15. Out of Scope (for this spec)
 
@@ -467,6 +483,7 @@ kh config show           # Show current effective configuration
 - Knowledge graph integration (graphify is separate)
 - Document-level access control
 - Monitoring dashboards / Prometheus metrics
+- `kh index --meta <file>` for per-run metadata injection (use sidecar `.meta.json` files instead; CLI `--tags` covers simple cases)
 
 ---
 

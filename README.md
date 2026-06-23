@@ -2,6 +2,8 @@
 
 **Local-first Vector RAG knowledge base with MCP interface.**
 
+[中文文档](README_CN.md)
+
 Knowledge Hub lets you ingest documents (Markdown, plain text), embed them with BGE-M3 dense+sparse vectors, store in Qdrant, and query via hybrid search + cross-encoder reranking — all running locally with no cloud API calls.
 
 ## Architecture

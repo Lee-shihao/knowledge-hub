@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-23 · 88 files · ~0.2M tokens total
+> 2026-06-23 · 89 files · ~0.2M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -73,7 +73,6 @@
 - `pyproject.toml`
 
 ## Docs
-- `.superpowers/sdd/task-4-brief.md`
 - `.superpowers/sdd/task-4-report.md`
 - `.superpowers/sdd/task-5-brief.md`
 - `.superpowers/sdd/task-5-report.md`
@@ -88,6 +87,7 @@
 - `CODEBASE_INDEX.md`
 - `graphify-out/2026-06-23/GRAPH_REPORT.md`
 - `graphify-out/2026-06-24/GRAPH_REPORT.md`
+- `README.md`
 
 ---
 *Index: ~1.7k tokens · Full codebase: ~0.2M tokens · Saves ~99%*

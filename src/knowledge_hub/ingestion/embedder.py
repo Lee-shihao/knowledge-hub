@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -107,7 +108,7 @@ class OllamaEmbedder:
         tokens = re.findall(r'\w+', text.lower())
         sparse = {}
         for t in tokens:
-            h = hash(t) % 100000
+            h = int(hashlib.md5(t.encode()).hexdigest()[:8], 16) % 100000
             sparse[h] = sparse.get(h, 0.0) + 1.0
         # Normalize
         max_val = max(sparse.values()) if sparse else 1.0

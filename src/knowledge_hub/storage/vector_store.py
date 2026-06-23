@@ -10,6 +10,7 @@ from qdrant_client.models import (
     MatchValue,
     MatchAny,
     Prefetch,
+    FusionQuery,
 )
 
 from knowledge_hub.config import Settings
@@ -110,6 +111,7 @@ class QdrantVectorStore:
                     limit=top_k,
                 ),
             ],
+            query=FusionQuery(fusion="rrf"),
             query_filter=query_filter,
             limit=top_k,
         )

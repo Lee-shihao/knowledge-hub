@@ -115,7 +115,8 @@ async def test_hybrid_search_no_filter(vector_store):
     )
     assert len(results) == 1
     chunk_id, score, payload = results[0]
-    assert chunk_id == chunk.id
+    # Qdrant returns UUID with hyphens; normalize for comparison
+    assert chunk_id.replace("-", "") == chunk.id.replace("-", "")
     assert score > 0
     assert payload["text"] == "Searchable content here"
     assert payload["source_file"] == "search.pdf"

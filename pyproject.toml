@@ -35,3 +35,6 @@ kh = "knowledge_hub.cli.main:cli"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+    "integration: marks tests as requiring external services (e.g. Qdrant)",
+]

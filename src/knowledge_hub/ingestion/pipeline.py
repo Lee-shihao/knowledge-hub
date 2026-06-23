@@ -74,13 +74,12 @@ class IngestionPipeline:
             paths = list(data_dir.rglob("*")) if data_dir.exists() else []
 
         files = [p for p in paths if p.is_file()]
+        local_files = {p.name for p in files}
         report.total = len(files)
 
-        # Always run orphan cleanup, even with no files
-        local_files = {p.name for p in paths if p.is_file()}
-        report.orphans_cleaned = await self._metadata.orphan_cleanup(local_files)
-
         if not files:
+            # Still run orphan cleanup even with no new files
+            report.orphans_cleaned = await self._metadata.orphan_cleanup(local_files)
             logger.info("no_files_to_ingest")
             return report
 
@@ -90,6 +89,7 @@ class IngestionPipeline:
                 source_name = file_path.name
 
                 # Check for existing hash (incremental update)
+                existing_hash = None
                 if not force:
                     existing_hash = await self._metadata.get_hash(source_name)
                     if existing_hash == source_hash:
@@ -98,7 +98,9 @@ class IngestionPipeline:
                         continue
 
                 # Remove old chunks if re-ingesting changed file
-                if await self._metadata.get_hash(source_name):
+                if existing_hash is None:
+                    existing_hash = await self._metadata.get_hash(source_name)
+                if existing_hash:
                     await self._store.delete_by_source(source_name)
 
                 # Load sidecar metadata
@@ -107,7 +109,11 @@ class IngestionPipeline:
                 if sidecar.exists():
                     sidecar_data = json.loads(sidecar.read_text())
                     if "tags" in sidecar_data:
-                        file_tags = sidecar_data["tags"]  # sidecar overrides CLI tags
+                        # Merge: sidecar tags take priority, CLI tags kept as fallback
+                        sidecar_tags = set(sidecar_data["tags"])
+                        file_tags = sidecar_data["tags"] + [
+                            t for t in file_tags if t not in sidecar_tags
+                        ]
 
                 # Directory name as fallback tag
                 dir_tag = file_path.parent.name
@@ -144,7 +150,9 @@ class IngestionPipeline:
                 report.failed += 1
                 report.failed_files.append(str(file_path))
 
-        # Log final summary
+        # Orphan cleanup: remove vectors for files no longer on disk
+        report.orphans_cleaned = await self._metadata.orphan_cleanup(local_files)
+
         logger.info(
             "ingestion_complete",
             total=report.total,

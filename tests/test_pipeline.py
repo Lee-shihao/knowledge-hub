@@ -180,20 +180,22 @@ async def test_pipeline_cli_tags(pipeline, mock_embedder, settings, tmp_path):
 
 @pytest.mark.asyncio
 async def test_pipeline_sidecar_overrides_cli_tags(pipeline, mock_embedder, settings, tmp_path):
-    """Sidecar tags should override CLI tags."""
+    """Sidecar tags should take priority over CLI tags (merged)."""
     data_dir = tmp_path / "data"
     content = "# Override Doc\n\nSome content here. " * 10
     _write_md(data_dir / "doc.md", content)
 
     sidecar = data_dir / ".meta.json"
-    sidecar.write_text(json.dumps({"tags": ["sidecar-tag"]}))
+    sidecar.write_text(json.dumps({"tags": ["sidecar-tag", "shared-tag"]}))
 
     mock_embedder.embed_texts = AsyncMock(return_value=[
         {"dense": [0.1] * 1024, "sparse": {0: 0.5}}
     ] * 5)
 
-    report = await pipeline.run([data_dir / "doc.md"], tags=["cli-tag"])
+    report = await pipeline.run([data_dir / "doc.md"], tags=["cli-tag", "shared-tag"])
     assert report.succeeded == 1
+    # Sidecar tags come first, CLI tags not in sidecar are appended
+    # Result: ["sidecar-tag", "shared-tag", "cli-tag"]
 
 
 @pytest.mark.asyncio

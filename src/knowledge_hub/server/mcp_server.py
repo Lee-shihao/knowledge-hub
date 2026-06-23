@@ -66,22 +66,41 @@ def create_mcp_app(settings: Settings) -> FastMCP:
 
     # IP allowlist middleware
     if settings.MCP_ALLOWED_IPS:
+        import ipaddress
         from starlette.middleware import Middleware
         from starlette.middleware.base import BaseHTTPMiddleware
         from starlette.responses import JSONResponse
 
+        # Parse IP addresses and CIDR ranges
+        allowed_networks = []
+        for ip_str in settings.MCP_ALLOWED_IPS:
+            try:
+                if "/" in ip_str:
+                    allowed_networks.append(ipaddress.ip_network(ip_str, strict=False))
+                else:
+                    allowed_networks.append(ipaddress.ip_network(f"{ip_str}/32", strict=False))
+            except ValueError:
+                logger.warning("invalid_ip_in_allowlist", ip=ip_str)
+
         class IPAllowlistMiddleware(BaseHTTPMiddleware):
-            def __init__(self, app, allowed_ips=None):
+            def __init__(self, app, allowed_networks=None):
                 super().__init__(app)
-                self.allowed_ips = allowed_ips or []
+                self.allowed_networks = allowed_networks or []
 
             async def dispatch(self, request, call_next):
                 client_ip = request.client.host if request.client else None
-                if client_ip not in self.allowed_ips:
+                if client_ip:
+                    try:
+                        ip_addr = ipaddress.ip_address(client_ip)
+                        if not any(ip_addr in net for net in self.allowed_networks):
+                            return JSONResponse({"error": "Forbidden"}, status_code=403)
+                    except ValueError:
+                        return JSONResponse({"error": "Forbidden"}, status_code=403)
+                else:
                     return JSONResponse({"error": "Forbidden"}, status_code=403)
                 return await call_next(request)
 
-        mcp.add_middleware(Middleware(IPAllowlistMiddleware, allowed_ips=settings.MCP_ALLOWED_IPS))
+        mcp.add_middleware(Middleware(IPAllowlistMiddleware, allowed_networks=allowed_networks))
 
     # Register tools
     tools = create_tools(settings, query_engine, health)

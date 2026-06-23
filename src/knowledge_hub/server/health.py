@@ -7,7 +7,6 @@ Note: No Ollama probing — models are loaded at server init time,
 so model_loaded=True means the server started successfully.
 """
 import asyncio
-import subprocess
 
 import structlog
 from dataclasses import dataclass
@@ -101,7 +100,8 @@ class HealthMonitor:
             True if Qdrant responds, False otherwise.
         """
         try:
-            collections = self._qdrant.get_collections()
+            # Run sync Qdrant call in thread pool to avoid blocking event loop
+            collections = await asyncio.to_thread(self._qdrant.get_collections)
             return collections is not None
         except Exception:
             return False
@@ -113,14 +113,17 @@ class HealthMonitor:
             Tuple of (gpu_available, gpu_memory_free_mb).
         """
         try:
-            result = subprocess.run(
-                ["nvidia-smi", "--query-gpu=memory.free", "--format=csv,noheader,nounits"],
-                capture_output=True,
-                text=True,
-                timeout=5,
+            # Use async subprocess to avoid blocking event loop
+            process = await asyncio.create_subprocess_exec(
+                "nvidia-smi",
+                "--query-gpu=memory.free",
+                "--format=csv,noheader,nounits",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
-            if result.returncode == 0:
-                mem_free = int(result.stdout.strip().split("\n")[0])
+            stdout, _stderr = await asyncio.wait_for(process.communicate(), timeout=5)
+            if process.returncode == 0:
+                mem_free = int(stdout.decode().strip().split("\n")[0])
                 return True, mem_free
         except Exception:
             pass

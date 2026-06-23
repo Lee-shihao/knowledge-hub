@@ -1,0 +1,157 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1782200025.140463,
+    "ast_hash": "335670e629bf8fe74f82bc4f7f32c438",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1782209879.581213,
+    "ast_hash": "a9596e0f2675efd8d7e64756b5b6a667",
+    "semantic_hash": ""
+  },
+  "CODEBASE_INDEX.md": {
+    "mtime": 1782218243.2432349,
+    "ast_hash": "cfebeb16fc56a941d91e451a9fad14f7",
+    "semantic_hash": ""
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1782218508.6406128,
+    "ast_hash": "8e4607782ab2e1f07b89aa9cb6ae25b5",
+    "semantic_hash": ""
+  },
+  ".tokenmiser/cache.json": {
+    "mtime": 1782214865.4443092,
+    "ast_hash": "88a138ab9bc88b0713ef6e4ec42e516a",
+    "semantic_hash": ""
+  },
+  "pyproject.toml": {
+    "mtime": 1782214906.180835,
+    "ast_hash": "b21fa245a3e9e9c7e489022799acc6e6",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/cli/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/config.py": {
+    "mtime": 1782208406.5156512,
+    "ast_hash": "dc496a0045613128f52484c32106e8aa",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/ingestion/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/retrieval/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/schemas.py": {
+    "mtime": 1782209386.2985983,
+    "ast_hash": "1087cbad8bf89e95d532b61826a287b1",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/server/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/storage/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "src/knowledge_hub/storage/metadata.py": {
+    "mtime": 1782214863.8085818,
+    "ast_hash": "5062a2992f1a3877b28eb77024915dad",
+    "semantic_hash": ""
+  },
+  "tests/__init__.py": {
+    "mtime": 1782204687.3210185,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1782208331.1567628,
+    "ast_hash": "ea4dd687a8c7a1478d26a46114e856aa",
+    "semantic_hash": ""
+  },
+  "tests/test_config.py": {
+    "mtime": 1782208283.2506454,
+    "ast_hash": "e7ffb4e90a3e4b5c626a3cf9fcb70434",
+    "semantic_hash": ""
+  },
+  "tests/test_metadata.py": {
+    "mtime": 1782211058.0072105,
+    "ast_hash": "b3ea2af4d337fbbc2a25fd745fdba7fe",
+    "semantic_hash": ""
+  },
+  "tests/test_schemas.py": {
+    "mtime": 1782208758.850795,
+    "ast_hash": "b679f4713446d6cbd2c7b4a424b5d2e4",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/progress.md": {
+    "mtime": 1782210210.703672,
+    "ast_hash": "783ef445c2ff15e74070318ec8e1b58b",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-1-brief.md": {
+    "mtime": 1782204555.6804984,
+    "ast_hash": "cb50a6d51dfe751d47dfd0d40fd6ce84",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-1-report.md": {
+    "mtime": 1782207811.8101342,
+    "ast_hash": "5cb107d8b04b2de4f9d94c4531241e6e",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-2-brief.md": {
+    "mtime": 1782208178.025518,
+    "ast_hash": "e6988cd290f9d53f8ee1d75309a55dbf",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-2-report.md": {
+    "mtime": 1782209561.341904,
+    "ast_hash": "e70886c055096ad5faef18addb7c2a52",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-3-brief.md": {
+    "mtime": 1782210609.4392254,
+    "ast_hash": "f5c0e332b0b0495cbe25772336f10f5d",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-3-report.md": {
+    "mtime": 1782218241.7712095,
+    "ast_hash": "c21051918e98822f3c827284663dbf6d",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md": {
+    "mtime": 1782203675.1348302,
+    "ast_hash": "4e43b89e9043cd93f2793e70c2117f10",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design-zh.md": {
+    "mtime": 1782209896.3129919,
+    "ast_hash": "7d23f75d903e1a681cee508e45ddd443",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-23-vector-rag-knowledge-hub-design.md": {
+    "mtime": 1782203267.8547153,
+    "ast_hash": "6118f222a3f54882f09e1c70f607b4be",
+    "semantic_hash": ""
+  },
+  "tps546d24a_new.pdf": {
+    "mtime": 1782209392.656421,
+    "ast_hash": "244f774848aef24f2743c0882f239838",
+    "semantic_hash": ""
+  }
+}

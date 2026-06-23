@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-23 · 56 files · ~80.7k tokens total
+> 2026-06-23 · 86 files · ~0.2M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -13,18 +13,25 @@
 
 **src/knowledge_hub/cli/**
 - `__init__.py`
+- `main.py` — CLI for knowledge-hub: index, query, manage, and serve. · cli, index, query, status, cleanup_orphans, config, config_show, config_reset_batch_size +1
 
 **src/knowledge_hub/ingestion/**
 - `__init__.py`
 - `chunker.py` — SemanticChunker — heading-aware document chunking for embedding. · SemanticChunker
 - `embedder.py` — OOMError, FlagEmbeddingEmbedder
 - `loaders.py` — DocumentLoader
+- `pipeline.py` — IngestionPipeline — orchestrates the full ingestion flow: load → chunk → embed → store. · IngestionReport, IngestionPipeline
 
 **src/knowledge_hub/retrieval/**
 - `__init__.py`
+- `query_engine.py` — QueryEngine — orchestrates the full query flow: embed → hybrid search → rerank. · QueryEngine
+- `reranker.py` — Reranker using FlagEmbedding's FlagReranker for cross-encoder re-ranking. · Reranker
 
 **src/knowledge_hub/server/**
 - `__init__.py`
+- `health.py` — HealthMonitor — background health prober for Qdrant and GPU. · HealthStatus, HealthMonitor
+- `mcp_server.py` — MCP server — wires together all components and exposes query_knowledge_base tool. · create_mcp_app, run_mcp_server
+- `tools.py` — MCP tool wrappers around the QueryEngine. · create_tools
 
 **src/knowledge_hub/storage/**
 - `__init__.py`
@@ -35,11 +42,19 @@
 - `__init__.py`
 - `conftest.py` — temp_storage_dir
 - `test_chunker.py` — Tests for SemanticChunker — heading-aware document chunking. · make_doc, test_chunker_produces_chunks, test_chunker_short_document, test_chunker_heading_path_in_metadata, test_chunk_id_deterministic, test_chunk_id_differs_for_different_source, test_heading_chain_resets_correctly, test_overlap_keeps_last_paragraph +2
+- `test_cli.py` — Tests for the knowledge-hub CLI. · runner, TestCliHelp, TestConfigShow, TestStatus, TestConfigResetBatchSize, TestCleanupOrphans, TestIndex, TestQuery +1
 - `test_config.py` — test_settings_defaults, test_settings_from_env
 - `test_embedder.py` — settings, embedder, test_embed_query_returns_dense_and_sparse, test_embed_texts_batch, test_batch_size_persistence, test_reset_batch_size, test_embed_query_mocked, test_embed_texts_splits_into_batches +2
+- `test_health.py` — Tests for HealthMonitor (no real Qdrant/GPU probing, mock-based only). · TestHealthStatus, TestHealthMonitor
+- `test_integration.py` — qdrant_available, settings, integration_setup, rtdoc_path, test_full_ingest_and_query, test_ingest_skips_unchanged_file, test_ingest_reingests_changed_file, test_orphan_cleanup +2
 - `test_loaders.py` — test_compute_hash, test_load_markdown_file, test_load_text_file, test_load_nonexistent_file, test_large_file_warning, test_file_too_large_rejected, test_unsupported_suffix_skipped, test_supported_suffixes
+- `test_mcp_server.py` — Tests for MCP server creation — app wiring, auth, IP middleware. · TestCreateMCPApp, TestIPMiddleware
 - `test_metadata.py` — settings, metadata_mgr, test_upsert_and_get_hash, test_get_hash_missing, test_list_sources, test_remove, test_orphan_cleanup
+- `test_pipeline.py` — Tests for IngestionPipeline — orchestrates load → chunk → embed → store. · settings, mock_embedder, pipeline, test_pipeline_ingests_markdown, test_pipeline_skips_unchanged_file, test_pipeline_force_reingests, test_pipeline_handles_missing_file, test_pipeline_handles_unsupported_format +2
+- `test_query_engine.py` — Tests for QueryEngine — orchestrates embed → hybrid search → rerank. · settings, embedder, vector_store, reranker, query_engine, test_query_empty_collection, test_query_with_results, test_query_passes_filters_to_hybrid_search +2
+- `test_reranker.py` — Tests for Reranker using FlagReranker from FlagEmbedding. · settings, reranker, test_rerank_returns_top_k_sorted, test_rerank_preserves_metadata, test_rerank_empty_candidates, test_rerank_fewer_than_top_k, test_rerank_graceful_degradation_on_exception, test_rerank_uses_asyncio_to_thread +2
 - `test_schemas.py` — test_chunk_metadata_creation, test_chunk_metadata_defaults, test_document_chunk_excludes_embeddings, test_query_input_defaults, test_query_result_structure
+- `test_tools.py` — Tests for MCP tools — query_knowledge_base health gates and QueryEngine calls. · TestCreateTools
 - `test_vector_store.py` — make_chunk_id, settings, vector_store, test_ensure_collection, test_upsert_and_count, test_upsert_idempotent, test_delete_by_source, test_hybrid_search_no_filter +2
 
 ## Config
@@ -50,13 +65,14 @@
 - `graphify-out/2026-06-23/cost.json`
 - `graphify-out/2026-06-23/graph.json`
 - `graphify-out/2026-06-23/manifest.json`
+- `graphify-out/2026-06-24/.graphify_analysis.json`
+- `graphify-out/2026-06-24/.graphify_labels.json`
+- `graphify-out/2026-06-24/cost.json`
+- `graphify-out/2026-06-24/graph.json`
+- `graphify-out/2026-06-24/manifest.json`
 - `pyproject.toml`
 
 ## Docs
-- `.superpowers/sdd/task-2-brief.md`
-- `.superpowers/sdd/task-2-report.md`
-- `.superpowers/sdd/task-3-brief.md`
-- `.superpowers/sdd/task-3-report.md`
 - `.superpowers/sdd/task-4-brief.md`
 - `.superpowers/sdd/task-4-report.md`
 - `.superpowers/sdd/task-5-brief.md`
@@ -65,9 +81,13 @@
 - `.superpowers/sdd/task-6-report.md`
 - `.superpowers/sdd/task-7-brief.md`
 - `.superpowers/sdd/task-7-report.md`
+- `.superpowers/sdd/task-8-brief.md`
+- `.superpowers/sdd/task-9-brief.md`
+- `.superpowers/sdd/task-9-report.md`
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
 - `graphify-out/2026-06-23/GRAPH_REPORT.md`
+- `graphify-out/2026-06-24/GRAPH_REPORT.md`
 
 ---
-*Index: ~902 tokens · Full codebase: ~80.7k tokens · Saves ~99%*
+*Index: ~1.7k tokens · Full codebase: ~0.2M tokens · Saves ~99%*

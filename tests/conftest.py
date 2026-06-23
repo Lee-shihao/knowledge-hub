@@ -1,5 +1,4 @@
 import pytest
-from qdrant_client import QdrantClient
 
 
 @pytest.fixture

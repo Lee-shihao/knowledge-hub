@@ -164,3 +164,17 @@ def test_heading_chain_with_h3():
     h3_chunks = [c for c in chunks if c.metadata.heading_path == ["A", "B", "C"]]
     assert len(h3_chunks) == 1
     assert "Text C." in h3_chunks[0].text
+
+
+def test_hard_split_respects_max_tokens():
+    """Hard-split chunks should respect max_tokens (character-based estimation)."""
+    settings = Settings(CHUNK_MAX_TOKENS=20, CHUNK_OVERLAP=0.0)
+    chunker = SemanticChunker(settings)
+    # Create a very long single paragraph (no paragraph breaks)
+    long_para = "word " * 500  # ~2500 chars, ~625 tokens
+    doc = make_doc(long_para)
+    chunks = chunker.chunk([doc], "test.txt", "hash1")
+    for c in chunks:
+        estimated_tokens = len(c.text) // 4
+        # Allow 20% margin since estimation is approximate
+        assert estimated_tokens <= 24, f"Chunk has ~{estimated_tokens} tokens, exceeds max_tokens=20"

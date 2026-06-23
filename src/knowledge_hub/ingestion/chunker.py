@@ -151,17 +151,13 @@ class SemanticChunker:
         source_file: str,
         source_hash: str,
     ) -> list[DocumentChunk]:
-        """Split an oversized text element into max_tokens-sized word chunks."""
-        words = text.split()
-        # Estimate ~1 token per word (conservative; actual is ~0.75 for English)
-        # Use max_tokens as the word budget per sub-chunk
-        word_budget = self._max_tokens
-        chunks: list[DocumentChunk] = []
-        for i in range(0, len(words), word_budget):
-            sub_text = " ".join(words[i : i + word_budget])
-            chunks.append(
-                self._make_chunk(sub_text, heading_chain, source_file, source_hash)
-            )
+        """Split an oversized text element into max_tokens-sized chunks."""
+        # Use character-based estimation: ~4 chars per token
+        chars_per_chunk = self._max_tokens * 4
+        chunks = []
+        for i in range(0, len(text), chars_per_chunk):
+            sub_text = text[i:i + chars_per_chunk]
+            chunks.append(self._make_chunk(sub_text, heading_chain, source_file, source_hash))
         return chunks
 
     def _make_chunk(

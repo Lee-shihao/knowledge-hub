@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-23T15:52:32.407Z",
+  "generatedAt": "2026-06-23T18:35:29.407Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -158,8 +158,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_vector_store.py": {
-      "mtime": 1782220142371.4915,
-      "size": 6821,
+      "mtime": 1782239728005.902,
+      "size": 6920,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -178,8 +178,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/vector_store.py": {
-      "mtime": 1782219265903.5425,
-      "size": 4940,
+      "mtime": 1782239646590.3774,
+      "size": 5002,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -276,6 +276,228 @@
         "purpose": null,
         "exports": [
           "DocumentLoader"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_pipeline.py": {
+      "mtime": 1782232732656.6045,
+      "size": 9865,
+      "symbols": {
+        "purpose": "Tests for IngestionPipeline — orchestrates load → chunk → embed → store.",
+        "exports": [
+          "settings",
+          "mock_embedder",
+          "pipeline",
+          "test_pipeline_ingests_markdown",
+          "test_pipeline_skips_unchanged_file",
+          "test_pipeline_force_reingests",
+          "test_pipeline_handles_missing_file",
+          "test_pipeline_handles_unsupported_format",
+          "test_pipeline_sidecar_tags",
+          "test_pipeline_directory_tag_fallback"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/pipeline.py": {
+      "mtime": 1782232717392.5198,
+      "size": 5957,
+      "symbols": {
+        "purpose": "IngestionPipeline — orchestrates the full ingestion flow: load → chunk → embed → store.",
+        "exports": [
+          "IngestionReport",
+          "IngestionPipeline"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_reranker.py": {
+      "mtime": 1782233747285.0103,
+      "size": 6418,
+      "symbols": {
+        "purpose": "Tests for Reranker using FlagReranker from FlagEmbedding.",
+        "exports": [
+          "settings",
+          "reranker",
+          "test_rerank_returns_top_k_sorted",
+          "test_rerank_preserves_metadata",
+          "test_rerank_empty_candidates",
+          "test_rerank_fewer_than_top_k",
+          "test_rerank_graceful_degradation_on_exception",
+          "test_rerank_uses_asyncio_to_thread",
+          "test_resolve_device_auto_cuda",
+          "test_resolve_device_auto_cpu"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/reranker.py": {
+      "mtime": 1782233230389.784,
+      "size": 3783,
+      "symbols": {
+        "purpose": "Reranker using FlagEmbedding's FlagReranker for cross-encoder re-ranking.",
+        "exports": [
+          "Reranker"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_query_engine.py": {
+      "mtime": 1782234120185.4312,
+      "size": 9192,
+      "symbols": {
+        "purpose": "Tests for QueryEngine — orchestrates embed → hybrid search → rerank.",
+        "exports": [
+          "settings",
+          "embedder",
+          "vector_store",
+          "reranker",
+          "query_engine",
+          "test_query_empty_collection",
+          "test_query_with_results",
+          "test_query_passes_filters_to_hybrid_search",
+          "test_query_uses_correct_k_values",
+          "test_query_reranker_failure_graceful_degradation"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/query_engine.py": {
+      "mtime": 1782234228656.404,
+      "size": 3430,
+      "symbols": {
+        "purpose": "QueryEngine — orchestrates the full query flow: embed → hybrid search → rerank.",
+        "exports": [
+          "QueryEngine"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_health.py": {
+      "mtime": 1782237132989.9146,
+      "size": 4098,
+      "symbols": {
+        "purpose": "Tests for HealthMonitor (no real Qdrant/GPU probing, mock-based only).",
+        "exports": [
+          "TestHealthStatus",
+          "TestHealthMonitor"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/health.py": {
+      "mtime": 1782237011735.8005,
+      "size": 4377,
+      "symbols": {
+        "purpose": "HealthMonitor — background health prober for Qdrant and GPU.",
+        "exports": [
+          "HealthStatus",
+          "HealthMonitor"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_tools.py": {
+      "mtime": 1782235611164.216,
+      "size": 6017,
+      "symbols": {
+        "purpose": "Tests for MCP tools — query_knowledge_base health gates and QueryEngine calls.",
+        "exports": [
+          "TestCreateTools"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/tools.py": {
+      "mtime": 1782235683067.6616,
+      "size": 2113,
+      "symbols": {
+        "purpose": "MCP tool wrappers around the QueryEngine.",
+        "exports": [
+          "create_tools"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_mcp_server.py": {
+      "mtime": 1782235965629.6377,
+      "size": 4654,
+      "symbols": {
+        "purpose": "Tests for MCP server creation — app wiring, auth, IP middleware.",
+        "exports": [
+          "TestCreateMCPApp",
+          "TestIPMiddleware"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/mcp_server.py": {
+      "mtime": 1782237038467.6873,
+      "size": 4966,
+      "symbols": {
+        "purpose": "MCP server — wires together all components and exposes query_knowledge_base tool.",
+        "exports": [
+          "create_mcp_app",
+          "run_mcp_server"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_cli.py": {
+      "mtime": 1782237946340.2803,
+      "size": 13498,
+      "symbols": {
+        "purpose": "Tests for the knowledge-hub CLI.",
+        "exports": [
+          "runner",
+          "TestCliHelp",
+          "TestConfigShow",
+          "TestStatus",
+          "TestConfigResetBatchSize",
+          "TestCleanupOrphans",
+          "TestIndex",
+          "TestQuery",
+          "TestServe"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
+      "mtime": 1782237893081.777,
+      "size": 6037,
+      "symbols": {
+        "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",
+        "exports": [
+          "cli",
+          "index",
+          "query",
+          "status",
+          "cleanup_orphans",
+          "config",
+          "config_show",
+          "config_reset_batch_size",
+          "serve"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_integration.py": {
+      "mtime": 1782238964596.1294,
+      "size": 8211,
+      "symbols": {
+        "purpose": null,
+        "exports": [
+          "qdrant_available",
+          "settings",
+          "integration_setup",
+          "rtdoc_path",
+          "test_full_ingest_and_query",
+          "test_ingest_skips_unchanged_file",
+          "test_ingest_reingests_changed_file",
+          "test_orphan_cleanup",
+          "test_query_with_source_filter",
+          "test_multiple_file_ingestion"
         ],
         "language": "python"
       }

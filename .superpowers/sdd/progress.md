@@ -27,20 +27,17 @@ Started: 2026-06-23
 - Task 13: Integration Tests — COMPLETE (commits 8b2deb2..13d5605, 7/7 integration tests pass with real Qdrant + FlagEmbedding CPU)
   - Fixed: hybrid_search now uses FusionQuery(fusion="rrf") for Qdrant prefetch merging
   - Fixed: UUID format normalization in vector_store tests
-  - Known issue: FlagReranker tokenizer compat with transformers 5.x (`prepare_for_model` removed), graceful degradation works
+  - FIXED: FlagReranker tokenizer compat — pinned transformers>=4.40,<5.0 in pyproject.toml (commit 2ac1aeb)
 - Task 14: Final Verification — COMPLETE
 
 ## Task 14: Final Verification
 
 ### Test Results
 - Unit tests: 126 passed
-- Integration tests: 7 passed
+- Integration tests: 7 passed (with real FlagReranker reranking)
 - Total: 133 tests passing
 
-### Known Issues
-1. **FlagReranker tokenizer compatibility**: `XLMRobertaTokenizer.prepare_for_model` removed in transformers 5.x. Graceful degradation works (returns un-reranked results). Fix options:
-   - Downgrade transformers to <5.0
-   - Use a different reranker model
-   - Wait for FlagEmbedding update
+### Resolved Issues
+1. **FlagReranker tokenizer compatibility** (FIXED): Pinned `transformers>=4.40,<5.0` in pyproject.toml. `prepare_for_model` was removed in transformers 5.x (FlagEmbedding issue #1569). With transformers 4.57.6, FlagReranker works correctly.
 
 ### CLI Smoke Test

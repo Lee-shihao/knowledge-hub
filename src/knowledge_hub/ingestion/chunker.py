@@ -103,7 +103,7 @@ class SemanticChunker:
             para = para.strip()
             if not para:
                 continue
-            para_tokens = self._estimate_tokens(para)
+            para_tokens = self._count_tokens(para)
 
             # Hard split for oversized single elements
             if para_tokens > self._max_tokens:
@@ -138,7 +138,7 @@ class SemanticChunker:
                 # Overlap: keep last paragraph if overlap > 0
                 if self._overlap > 0 and len(current_texts) > 0:
                     current_texts = [current_texts[-1]]
-                    current_tokens = self._estimate_tokens(current_texts[0])
+                    current_tokens = self._count_tokens(current_texts[0])
                 else:
                     current_texts = []
                     current_tokens = 0
@@ -165,13 +165,59 @@ class SemanticChunker:
         source_file: str,
         source_hash: str,
     ) -> list[DocumentChunk]:
-        """Split an oversized text element into max_tokens-sized chunks."""
-        # Use character-based estimation: ~4 chars per token
-        chars_per_chunk = self._max_tokens * 4
-        chunks = []
-        for i in range(0, len(text), chars_per_chunk):
-            sub_text = text[i:i + chars_per_chunk]
-            chunks.append(self._make_chunk(sub_text, heading_chain, source_file, source_hash))
+        """Split an oversized text element into max_tokens-sized chunks by lines."""
+        lines = text.split("\n")
+        chunks: list[DocumentChunk] = []
+        current_lines: list[str] = []
+        current_tokens = 0
+
+        for line in lines:
+            line_tokens = self._count_tokens(line)
+
+            if line_tokens > self._max_tokens:
+                # Extreme case: single line exceeds max_tokens (minified JS, base64)
+                # Use tokenizer encode/decode for precise token-based truncation
+                if current_lines:
+                    chunks.append(self._make_chunk(
+                        "\n".join(current_lines), heading_chain, source_file, source_hash
+                    ))
+                    current_lines = []
+                    current_tokens = 0
+                if self._tokenizer is None:
+                    # Fallback: char-based splitting when tokenizer is not available
+                    chars_per_chunk = self._max_tokens * 4
+                    for i in range(0, len(line), chars_per_chunk):
+                        sub_text = line[i:i + chars_per_chunk]
+                        chunks.append(self._make_chunk(
+                            sub_text, heading_chain, source_file, source_hash
+                        ))
+                else:
+                    token_ids = self._tokenizer.encode(line, add_special_tokens=False)
+                    for i in range(0, len(token_ids), self._max_tokens):
+                        sub_text = self._tokenizer.decode(
+                            token_ids[i:i + self._max_tokens],
+                            skip_special_tokens=True,
+                        )
+                        chunks.append(self._make_chunk(
+                            sub_text, heading_chain, source_file, source_hash
+                        ))
+                continue
+
+            if current_tokens + line_tokens > self._max_tokens and current_lines:
+                chunks.append(self._make_chunk(
+                    "\n".join(current_lines), heading_chain, source_file, source_hash
+                ))
+                current_lines = []
+                current_tokens = 0
+
+            current_lines.append(line)
+            current_tokens += line_tokens
+
+        if current_lines:
+            chunks.append(self._make_chunk(
+                "\n".join(current_lines), heading_chain, source_file, source_hash
+            ))
+
         return chunks
 
     def _make_chunk(
@@ -196,8 +242,3 @@ class SemanticChunker:
                 heading_path=heading_chain,
             ),
         )
-
-    @staticmethod
-    def _estimate_tokens(text: str) -> int:
-        """Rough token estimation: ~4 chars per token."""
-        return max(1, len(text) // 4)

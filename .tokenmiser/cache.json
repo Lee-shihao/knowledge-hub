@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T09:01:05.792Z",
+  "generatedAt": "2026-06-24T09:40:08.021Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -221,8 +221,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_chunker.py": {
-      "mtime": 1782225704208.8354,
-      "size": 7192,
+      "mtime": 1782294006332.4287,
+      "size": 7802,
       "symbols": {
         "purpose": "Tests for SemanticChunker — heading-aware document chunking.",
         "exports": [
@@ -241,8 +241,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/chunker.py": {
-      "mtime": 1782225668759.5361,
-      "size": 6652,
+      "mtime": 1782293438028.4907,
+      "size": 9017,
       "symbols": {
         "purpose": "SemanticChunker — heading-aware document chunking for embedding.",
         "exports": [

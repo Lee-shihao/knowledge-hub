@@ -155,9 +155,10 @@ kh serve --host 0.0.0.0 --port 9999
 # 启动 MCP 服务器（仅本地访问，无需认证）
 kh serve
 
-# 使用 curl 测试（streamable-http 传输）
+# 测试：列出可用工具
 curl -X POST http://127.0.0.1:8765/mcp \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
@@ -174,19 +175,19 @@ kh serve --host 0.0.0.0 --port 8765
 从远程机器连接（带 Bearer 令牌）：
 
 ```bash
-# 通过 MCP JSON-RPC 查询（streamable-http）
+# 列出可用工具
 curl -X POST http://<服务器IP>:8765/mcp \
   -H "Authorization: Bearer your-secret-token" \
   -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 1,
-    "method": "tools/call",
-    "params": {
-      "name": "query_knowledge_base",
-      "arguments": {"query": "BCM2835 SPI接口数量", "top_k": 5}
-    }
-  }'
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+# 通过 MCP JSON-RPC 查询（注意：JSON 必须写在同一行，多行会导致解析错误）
+curl -X POST http://<服务器IP>:8765/mcp \
+  -H "Authorization: Bearer your-secret-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI接口数量","top_k":5}}}'
 ```
 
 ### 在 AI 客户端中配置（Claude Code、Cursor 等）

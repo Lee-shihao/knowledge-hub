@@ -102,7 +102,7 @@ All settings use `KH_` prefix and can be configured via:
 
 1. **Environment variables** (recommended for deployment):
    ```bash
-   export KH_EMBED_DEVICE=cuda
+   export KH_EMBED_DEVICE=cuda          # Use GPU (auto-enables fp16)
    export KH_QDRANT_URL=http://qdrant-server:6333
    kh index --path ./data
    ```
@@ -111,7 +111,7 @@ All settings use `KH_` prefix and can be configured via:
    ```bash
    # Create .env file in project root
    cat > .env << 'EOF'
-   KH_EMBED_DEVICE=cuda
+   KH_EMBED_DEVICE=cpu               # Force CPU (disable GPU, use fp32)
    KH_QDRANT_URL=http://localhost:6333
    KH_CHUNK_MAX_TOKENS=512
    KH_HYBRID_CANDIDATE_K=30
@@ -124,6 +124,11 @@ All settings use `KH_` prefix and can be configured via:
    ```bash
    kh serve --host 0.0.0.0 --port 9999
    ```
+
+> **Tip**: `KH_EMBED_DEVICE` controls where embedding/reranking models run:
+> - `auto` — auto-detect CUDA, fallback to CPU (default)
+> - `cuda` — force GPU, auto-enables fp16 for faster inference
+> - `cpu` — force CPU, uses fp32 (slower but no GPU required)
 
 | Variable | Default | Description |
 |----------|---------|-------------|

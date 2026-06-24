@@ -100,7 +100,7 @@ kh serve --host 0.0.0.0 --port 9999
 
 1. **环境变量**（推荐用于部署）：
    ```bash
-   export KH_EMBED_DEVICE=cuda
+   export KH_EMBED_DEVICE=cuda          # 使用 GPU（自动启用 fp16）
    export KH_QDRANT_URL=http://qdrant-server:6333
    kh index --path ./data
    ```
@@ -109,7 +109,7 @@ kh serve --host 0.0.0.0 --port 9999
    ```bash
    # 在项目根目录创建 .env 文件
    cat > .env << 'EOF'
-   KH_EMBED_DEVICE=cuda
+   KH_EMBED_DEVICE=cpu               # 强制使用 CPU（禁用 GPU，使用 fp32）
    KH_QDRANT_URL=http://localhost:6333
    KH_CHUNK_MAX_TOKENS=512
    KH_HYBRID_CANDIDATE_K=30
@@ -122,6 +122,11 @@ kh serve --host 0.0.0.0 --port 9999
    ```bash
    kh serve --host 0.0.0.0 --port 9999
    ```
+
+> **提示**：`KH_EMBED_DEVICE` 控制嵌入/重排序模型的运行位置：
+> - `auto` — 自动检测 CUDA，无 GPU 时回退到 CPU（默认）
+> - `cuda` — 强制使用 GPU，自动启用 fp16 加速推理
+> - `cpu` — 强制使用 CPU，使用 fp32（较慢但无需 GPU）
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|

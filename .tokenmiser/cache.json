@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T07:04:03.868Z",
+  "generatedAt": "2026-06-24T07:32:56.336Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -147,8 +147,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/metadata.py": {
-      "mtime": 1782218672055.9382,
-      "size": 3181,
+      "mtime": 1782286298419.273,
+      "size": 3415,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -178,8 +178,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/vector_store.py": {
-      "mtime": 1782239646590.3774,
-      "size": 5002,
+      "mtime": 1782286320077.2026,
+      "size": 5221,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -301,8 +301,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/pipeline.py": {
-      "mtime": 1782232717392.5198,
-      "size": 5957,
+      "mtime": 1782286374655.9216,
+      "size": 6117,
       "symbols": {
         "purpose": "IngestionPipeline — orchestrates the full ingestion flow: load → chunk → embed → store.",
         "exports": [

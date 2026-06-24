@@ -69,6 +69,10 @@ class IngestionPipeline:
         tags = tags or []
         report = IngestionReport()
 
+        # Ensure Qdrant collections exist before any operations
+        await self._store.ensure_collection()
+        await self._metadata.ensure_collection()
+
         if paths is None:
             data_dir = Path(self.settings.DATA_DIR)
             paths = list(data_dir.rglob("*")) if data_dir.exists() else []

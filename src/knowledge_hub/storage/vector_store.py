@@ -118,7 +118,13 @@ class QdrantVectorStore:
         return [(p.id, p.score, p.payload) for p in results.points]
 
     async def delete_by_source(self, source_file: str) -> None:
-        """Delete all chunks from a specific source file."""
+        """Delete all chunks from a specific source file.
+
+        Silently succeeds if the collection doesn't exist.
+        """
+        collections = [c.name for c in self._client.get_collections().collections]
+        if self._collection not in collections:
+            return
         self._client.delete(
             collection_name=self._collection,
             points_selector=Filter(

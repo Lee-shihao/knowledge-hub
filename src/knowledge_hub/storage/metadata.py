@@ -83,6 +83,13 @@ class SourceMetadataManager:
         return sources
 
     async def orphan_cleanup(self, local_source_files: set[str]) -> int:
+        """Remove vectors for files no longer on disk.
+
+        Returns 0 if the metadata collection doesn't exist (clean Qdrant).
+        """
+        # Ensure collection exists before querying
+        await self.ensure_collection()
+
         db_sources = set(await self.list_sources())
         orphans = db_sources - local_source_files
         for orphan in orphans:

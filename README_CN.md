@@ -147,6 +147,62 @@ kh serve --host 0.0.0.0 --port 9999
 | `KH_DATA_DIR` | `./data` | 文档源目录 |
 | `KH_STORAGE_DIR` | `./storage` | 元数据存储目录 |
 
+## MCP 服务器使用
+
+### 本地使用（同一台机器）
+
+```bash
+# 启动 MCP 服务器（仅本地访问，无需认证）
+kh serve
+
+# 使用 curl 测试
+curl -s -N http://127.0.0.1:8765/sse
+```
+
+### 局域网访问（远程连接）
+
+绑定非 localhost 地址需要设置认证令牌：
+
+```bash
+# 设置令牌并启动
+export KH_MCP_AUTH_TOKEN=your-secret-token
+kh serve --host 0.0.0.0 --port 8765
+```
+
+从远程机器连接（带 Bearer 令牌）：
+
+```bash
+# 测试 SSE 连接
+curl -s -N -H "Authorization: Bearer your-secret-token" http://<服务器IP>:8765/sse
+
+# 通过 MCP JSON-RPC 查询
+curl -X POST http://<服务器IP>:8765/sse \
+  -H "Authorization: Bearer your-secret-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "query_knowledge_base",
+      "arguments": {"query": "BCM2835 SPI接口数量", "top_k": 5}
+    }
+  }'
+```
+
+### 在 AI 客户端中配置（Claude Desktop、Cursor 等）
+
+```json
+{
+  "mcpServers": {
+    "knowledge-hub": {
+      "url": "http://<服务器IP>:8765/sse",
+      "headers": {"Authorization": "Bearer your-secret-token"}
+    }
+  }
+}
+```
+
 ## 项目结构
 
 ```

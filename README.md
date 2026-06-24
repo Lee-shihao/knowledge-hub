@@ -149,6 +149,62 @@ All settings use `KH_` prefix and can be configured via:
 | `KH_DATA_DIR` | `./data` | Document source directory |
 | `KH_STORAGE_DIR` | `./storage` | Metadata storage directory |
 
+## MCP Server Usage
+
+### Local (same machine)
+
+```bash
+# Start MCP server (localhost only, no auth needed)
+kh serve
+
+# Test with curl
+curl -s -N http://127.0.0.1:8765/sse
+```
+
+### LAN (remote access)
+
+Binding to non-localhost requires an auth token:
+
+```bash
+# Set auth token and start
+export KH_MCP_AUTH_TOKEN=your-secret-token
+kh serve --host 0.0.0.0 --port 8765
+```
+
+From a remote machine, connect with Bearer token:
+
+```bash
+# Test SSE connection
+curl -s -N -H "Authorization: Bearer your-secret-token" http://<server-ip>:8765/sse
+
+# Query via MCP JSON-RPC
+curl -X POST http://<server-ip>:8765/sse \
+  -H "Authorization: Bearer your-secret-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "query_knowledge_base",
+      "arguments": {"query": "BCM2835 SPI interfaces", "top_k": 5}
+    }
+  }'
+```
+
+### Configure in AI clients (Claude Desktop, Cursor, etc.)
+
+```json
+{
+  "mcpServers": {
+    "knowledge-hub": {
+      "url": "http://<server-ip>:8765/sse",
+      "headers": {"Authorization": "Bearer your-secret-token"}
+    }
+  }
+}
+```
+
 ## Project Structure
 
 ```

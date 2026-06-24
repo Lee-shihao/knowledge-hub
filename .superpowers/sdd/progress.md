@@ -41,3 +41,4 @@ Started: 2026-06-23
 1. **FlagReranker tokenizer compatibility** (FIXED): Pinned `transformers>=4.40,<5.0` in pyproject.toml. `prepare_for_model` was removed in transformers 5.x (FlagEmbedding issue #1569). With transformers 4.57.6, FlagReranker works correctly.
 
 ### CLI Smoke Test
+- Task 1: 加载 tokenizer + _count_tokens — COMPLETE (commits 0242c67..d24adf5, review clean, minor: commit policy noted as controller decision)

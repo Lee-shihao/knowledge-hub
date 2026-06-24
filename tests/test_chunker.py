@@ -1,6 +1,7 @@
 """Tests for SemanticChunker — heading-aware document chunking."""
 
 import hashlib
+from unittest.mock import patch
 
 from llama_index.core.schema import Document
 
@@ -167,14 +168,29 @@ def test_heading_chain_with_h3():
 
 
 def test_hard_split_respects_max_tokens():
-    """Hard-split chunks should respect max_tokens (character-based estimation)."""
+    """Hard-split chunks should respect max_tokens, verified by the real tokenizer."""
     settings = Settings(CHUNK_MAX_TOKENS=20, CHUNK_OVERLAP=0.0)
     chunker = SemanticChunker(settings)
-    # Create a very long single paragraph (no paragraph breaks)
-    long_para = "word " * 500  # ~2500 chars, ~625 tokens
+    tokenizer = chunker._tokenizer
+    long_para = "word " * 300
     doc = make_doc(long_para)
     chunks = chunker.chunk([doc], "test.txt", "hash1")
+    assert len(chunks) > 1, "Long paragraph should be hard-split into multiple chunks"
     for c in chunks:
-        estimated_tokens = len(c.text) // 4
-        # Allow 20% margin since estimation is approximate
-        assert estimated_tokens <= 24, f"Chunk has ~{estimated_tokens} tokens, exceeds max_tokens=20"
+        token_count = len(tokenizer.encode(c.text, add_special_tokens=False))
+        assert token_count <= chunker._max_tokens, (
+            f"Chunk has {token_count} tokens, exceeds max_tokens={chunker._max_tokens}"
+        )
+
+
+def test_fallback_when_tokenizer_unavailable():
+    """When the tokenizer can't be loaded, fall back to len(text) // 4."""
+    settings = Settings()
+    with patch(
+        "knowledge_hub.ingestion.chunker.AutoTokenizer.from_pretrained",
+        side_effect=OSError("model not found"),
+    ):
+        chunker = SemanticChunker(settings)
+        assert chunker._tokenizer is None
+        assert chunker._count_tokens("hello") == max(1, len("hello") // 4)
+        assert chunker._count_tokens("") == max(1, len("") // 4)

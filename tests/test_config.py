@@ -7,7 +7,7 @@ def test_settings_defaults():
     settings = Settings()
     assert settings.MCP_HOST == "127.0.0.1"
     assert settings.MCP_PORT == 8765
-    assert settings.MCP_TRANSPORT == "sse"
+    assert settings.MCP_TRANSPORT == "streamable-http"
     assert settings.EMBED_MODEL == "BAAI/bge-m3"
     assert settings.RERANK_MODEL == "BAAI/bge-reranker-v2-m3"
     assert settings.EMBED_DEVICE == "auto"

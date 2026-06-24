@@ -124,7 +124,7 @@ def run_mcp_server(settings: Settings):
     """
     mcp = create_mcp_app(settings)
 
-    transport = "sse" if settings.MCP_TRANSPORT == "sse" else "streamable-http"
+    transport = settings.MCP_TRANSPORT
     logger.info(
         "mcp_server_starting",
         host=settings.MCP_HOST,
@@ -133,8 +133,19 @@ def run_mcp_server(settings: Settings):
         auth=bool(settings.MCP_AUTH_TOKEN),
     )
 
-    mcp.run(
-        host=settings.MCP_HOST,
-        port=settings.MCP_PORT,
-        transport=transport,
-    )
+    # streamable-http: use stateless mode for simple request-response
+    # sse: traditional long-connection mode
+    if transport == "streamable-http":
+        mcp.run(
+            host=settings.MCP_HOST,
+            port=settings.MCP_PORT,
+            transport=transport,
+            stateless_http=True,
+            json_response=True,
+        )
+    else:
+        mcp.run(
+            host=settings.MCP_HOST,
+            port=settings.MCP_PORT,
+            transport=transport,
+        )

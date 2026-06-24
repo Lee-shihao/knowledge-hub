@@ -157,8 +157,11 @@ All settings use `KH_` prefix and can be configured via:
 # Start MCP server (localhost only, no auth needed)
 kh serve
 
-# Test with curl
-curl -s -N http://127.0.0.1:8765/sse
+# Test: list available tools
+curl -X POST http://127.0.0.1:8765/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
 ### LAN (remote access)
@@ -174,36 +177,42 @@ kh serve --host 0.0.0.0 --port 8765
 From a remote machine, connect with Bearer token:
 
 ```bash
-# Test SSE connection
-curl -s -N -H "Authorization: Bearer your-secret-token" http://<server-ip>:8765/sse
-
-# Query via MCP JSON-RPC
-curl -X POST http://<server-ip>:8765/sse \
+# List available tools
+curl -X POST http://<server-ip>:8765/mcp \
   -H "Authorization: Bearer your-secret-token" \
   -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 1,
-    "method": "tools/call",
-    "params": {
-      "name": "query_knowledge_base",
-      "arguments": {"query": "BCM2835 SPI interfaces", "top_k": 5}
-    }
-  }'
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+
+# Query via MCP JSON-RPC (must be on one line — multiline JSON causes parse errors)
+curl -X POST http://<server-ip>:8765/mcp \
+  -H "Authorization: Bearer your-secret-token" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI interfaces","top_k":5}}}'
 ```
 
-### Configure in AI clients (Claude Desktop, Cursor, etc.)
+### Configure in AI clients (Claude Code, Cursor, etc.)
 
 ```json
 {
   "mcpServers": {
     "knowledge-hub": {
-      "url": "http://<server-ip>:8765/sse",
+      "url": "http://<server-ip>:8765/mcp",
+      "transport": "streamable-http",
       "headers": {"Authorization": "Bearer your-secret-token"}
     }
   }
 }
 ```
+
+### Transport options
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `KH_MCP_TRANSPORT` | `streamable-http` | `streamable-http` (stateless, curl-friendly) or `sse` (long-connection) |
+
+Use `sse` for backward compatibility with older MCP clients that require SSE transport.
 
 ## Project Structure
 

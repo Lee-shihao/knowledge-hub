@@ -1,0 +1,42 @@
+{
+  "nodes": [
+    {
+      "id": "codebase_index",
+      "label": "CODEBASE_INDEX.md",
+      "file_type": "document",
+      "source_file": "/home/leo/workspace/knowledge-hub/CODEBASE_INDEX.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A navigation index that maps every file to its exports and purpose, enabling directory-level discoverability without reading entire directories. The design trades upfront maintenance of the index for a ~98% reduction in tokens consumed during codebase exploration, guiding readers to the exact file they need before opening it."
+    },
+    {
+      "id": "claude_md",
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "/home/leo/workspace/knowledge-hub/CODEBASE_INDEX.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "codebase_index",
+      "target": "claude_md",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/home/leo/workspace/knowledge-hub/CODEBASE_INDEX.md",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 12000,
+  "output_tokens": 3787
+}

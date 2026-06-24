@@ -26,7 +26,7 @@ def _get_settings() -> Settings:
 
 
 def _build_pipeline(settings: Settings) -> IngestionPipeline:
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
     return IngestionPipeline(
@@ -40,7 +40,7 @@ def _build_pipeline(settings: Settings) -> IngestionPipeline:
 
 
 def _build_query_engine(settings: Settings) -> QueryEngine:
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
     embedder = FlagEmbeddingEmbedder(settings)
@@ -99,7 +99,7 @@ def query(query_text, top_k):
 def status():
     """Show knowledge base status."""
     settings = _get_settings()
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     try:
         count = client.count(collection_name=settings.QDRANT_COLLECTION).count
         meta_mgr = SourceMetadataManager(settings, client)
@@ -123,7 +123,7 @@ def cleanup_orphans():
     settings = _get_settings()
     data_dir = Path(settings.DATA_DIR)
     local_files = {p.name for p in data_dir.rglob("*") if p.is_file()} if data_dir.exists() else set()
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     removed = asyncio.run(meta_mgr.orphan_cleanup(local_files))
     click.echo(f"Removed {removed} orphan source(s).")

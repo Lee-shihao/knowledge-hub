@@ -25,7 +25,7 @@ def settings(temp_storage_dir):
 
 @pytest.fixture
 async def vector_store(settings):
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     await meta_mgr.ensure_collection()
     store = QdrantVectorStore(settings, client, meta_mgr)

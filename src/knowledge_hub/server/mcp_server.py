@@ -35,7 +35,7 @@ def create_mcp_app(settings: Settings) -> FastMCP:
         ValueError: If MCP_HOST is not 127.0.0.1 and no auth token is set.
     """
     # Infrastructure clients
-    qdrant_client = QdrantClient(settings.QDRANT_URL)
+    qdrant_client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
 
     # Health monitor
     health = HealthMonitor(settings, qdrant_client)

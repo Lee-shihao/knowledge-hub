@@ -16,7 +16,7 @@ def settings(temp_storage_dir):
 
 @pytest.fixture
 async def metadata_mgr(settings):
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     mgr = SourceMetadataManager(settings, client)
     await mgr.ensure_collection()
     yield mgr

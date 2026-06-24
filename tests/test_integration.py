@@ -30,7 +30,7 @@ from knowledge_hub.schemas import QueryInput
 def qdrant_available() -> bool:
     """Check if Qdrant is reachable on localhost:6333."""
     try:
-        client = QdrantClient("http://localhost:6333")
+        client = QdrantClient("http://localhost:6333", check_compatibility=False)
         client.get_collections()
         return True
     except Exception:
@@ -58,7 +58,7 @@ def settings(temp_storage_dir, tmp_path):
 @pytest.fixture
 async def integration_setup(settings):
     """Set up all components for integration testing with real Qdrant + FlagEmbedding."""
-    client = QdrantClient(settings.QDRANT_URL)
+    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     await meta_mgr.ensure_collection()
     store = QdrantVectorStore(settings, client, meta_mgr)

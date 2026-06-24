@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-24 · 111 files · ~0.4M tokens total
+> 2026-06-24 · 93 files · ~0.2M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -73,21 +73,21 @@
 - `pyproject.toml`
 
 ## Docs
+- `.superpowers/sdd/task-6-brief.md`
+- `.superpowers/sdd/task-6-report.md`
+- `.superpowers/sdd/task-7-brief.md`
+- `.superpowers/sdd/task-7-report.md`
+- `.superpowers/sdd/task-8-brief.md`
+- `.superpowers/sdd/task-9-brief.md`
+- `.superpowers/sdd/task-9-report.md`
 - `CLAUDE.md`
 - `CODEBASE_INDEX.md`
-- `data/algorithms/algorithms-c.md`
-- `data/algorithms/algorithms-keon.md`
-- `data/algorithms/algorithms-python-directory.md`
-- `data/algorithms/hello-algo.md`
-- `data/c-programming/c-best-practices.md`
-- `data/linux-kernel/kernel-development-guide.md`
-- `data/ml-llm/transformer架构详解-中文.md`
-- `data/soc-manuals/rt-thread-实时操作系统指南-中文.md`
-- `data/soc-manuals/stm32-开发指南-中文.md`
+- `data/algorithm-design-patterns.md`
+- `data/c-best-practices.md`
 - `graphify-out/2026-06-23/GRAPH_REPORT.md`
 - `graphify-out/2026-06-24/GRAPH_REPORT.md`
 - `README_CN.md`
 - `README.md`
 
 ---
-*Index: ~1.7k tokens · Full codebase: ~0.4M tokens · Saves ~100%*
+*Index: ~1.7k tokens · Full codebase: ~0.2M tokens · Saves ~99%*

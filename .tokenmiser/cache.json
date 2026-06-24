@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-23T18:35:29.407Z",
+  "generatedAt": "2026-06-24T03:54:22.028Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -130,8 +130,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_metadata.py": {
-      "mtime": 1782211058007.2107,
-      "size": 2027,
+      "mtime": 1782273260645.2385,
+      "size": 2054,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -158,8 +158,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_vector_store.py": {
-      "mtime": 1782239728005.902,
-      "size": 6920,
+      "mtime": 1782273106683.0374,
+      "size": 6947,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -433,8 +433,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/mcp_server.py": {
-      "mtime": 1782237038467.6873,
-      "size": 4966,
+      "mtime": 1782272954002.4963,
+      "size": 4993,
       "symbols": {
         "purpose": "MCP server — wires together all components and exposes query_knowledge_base tool.",
         "exports": [
@@ -464,8 +464,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
-      "mtime": 1782237893081.777,
-      "size": 6037,
+      "mtime": 1782272896234.412,
+      "size": 6145,
       "symbols": {
         "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",
         "exports": [
@@ -483,8 +483,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_integration.py": {
-      "mtime": 1782238964596.1294,
-      "size": 8211,
+      "mtime": 1782273087699.6394,
+      "size": 8265,
       "symbols": {
         "purpose": null,
         "exports": [

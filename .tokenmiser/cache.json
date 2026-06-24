@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T07:32:56.336Z",
+  "generatedAt": "2026-06-24T07:39:15.475Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -464,8 +464,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
-      "mtime": 1782283949345.6648,
-      "size": 6937,
+      "mtime": 1782286753419.8076,
+      "size": 7161,
       "symbols": {
         "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",
         "exports": [

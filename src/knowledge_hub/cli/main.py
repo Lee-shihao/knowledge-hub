@@ -76,7 +76,17 @@ def index(path, force, tags):
     """Ingest documents into the knowledge base."""
     settings = _get_settings()
     pipeline = _build_pipeline(settings)
-    paths = [Path(path)] if path else None
+
+    # Expand directory to file list, or use None for default DATA_DIR
+    if path:
+        path_obj = Path(path)
+        if path_obj.is_dir():
+            paths = list(path_obj.rglob("*"))
+        else:
+            paths = [path_obj]
+    else:
+        paths = None
+
     tag_list = [t.strip() for t in tags.split(",")] if tags else []
     report = asyncio.run(pipeline.run(paths=paths, force=force, tags=tag_list))
     click.echo(

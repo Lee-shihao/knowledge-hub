@@ -3,10 +3,14 @@
 import hashlib
 import re
 
+import structlog
 from llama_index.core.schema import Document
+from transformers import AutoTokenizer
 
 from knowledge_hub.config import Settings
 from knowledge_hub.schemas import ChunkMetadata, DocumentChunk
+
+logger = structlog.get_logger()
 
 
 class SemanticChunker:
@@ -23,6 +27,15 @@ class SemanticChunker:
     def __init__(self, settings: Settings):
         self._max_tokens = settings.CHUNK_MAX_TOKENS
         self._overlap = settings.CHUNK_OVERLAP
+
+        try:
+            self._tokenizer = AutoTokenizer.from_pretrained(settings.EMBED_MODEL)
+            self._count_tokens = lambda text: len(
+                self._tokenizer.encode(text, add_special_tokens=False)
+            )
+        except Exception as e:
+            logger.warning("tokenizer_load_failed_falling_back", error=str(e))
+            self._count_tokens = lambda text: max(1, len(text) // 4)
 
     def chunk(
         self, documents: list[Document], source_file: str, source_hash: str

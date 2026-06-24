@@ -36,10 +36,46 @@ class Reranker:
             device=device,
             use_fp16=use_fp16,
         )
+
+        # Ensure model is cached to avoid download issues on mirror sites
+        self._ensure_model_cached(self._model_name)
+
         self._model = FlagReranker(
             self._model_name,
             use_fp16=use_fp16,
             device=device,
+        )
+
+    @staticmethod
+    def _ensure_model_cached(model_name: str):
+        """Ensure model is cached locally.
+
+        This prevents download failures when loading from mirror sites that
+        don't have all files present in the original repository.
+        """
+        from huggingface_hub import snapshot_download
+        from pathlib import Path
+
+        cache_dir = Path.home() / ".cache" / "huggingface" / "hub"
+        model_cache_name = f"models--{model_name.replace('/', '--')}"
+        model_cache_path = cache_dir / model_cache_name
+
+        # Check for essential model files (config.json is usually sufficient for reranker)
+        if model_cache_path.exists():
+            snapshots_dir = model_cache_path / "snapshots"
+            if snapshots_dir.exists():
+                for snapshot in snapshots_dir.iterdir():
+                    if snapshot.is_dir() and (snapshot / "config.json").exists():
+                        return
+
+        logger.info("Pre-downloading model", model=model_name)
+        snapshot_download(
+            repo_id=model_name,
+            ignore_patterns=[
+                "*.DS_Store",
+                "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",
+                "flax_model.msgpack", "rust_model.ot", "tf_model.h5",
+            ],
         )
 
     @staticmethod

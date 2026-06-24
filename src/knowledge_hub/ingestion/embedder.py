@@ -42,10 +42,55 @@ class FlagEmbeddingEmbedder:
             device=device,
             use_fp16=use_fp16,
         )
+
+        # Pre-download model with proper ignore_patterns to avoid 403 errors
+        # on .DS_Store and image files in mirror sites
+        self._ensure_model_cached(self._model_name)
+
         self._model = BGEM3FlagModel(
             self._model_name,
             use_fp16=use_fp16,
             device=device,
+        )
+
+    @staticmethod
+    def _ensure_model_cached(model_name: str):
+        """Ensure model is cached locally with proper ignore_patterns.
+
+        This prevents 403 errors when downloading from mirror sites that
+        don't have .DS_Store or image files that exist in the original repo.
+        """
+        from huggingface_hub import snapshot_download
+        from pathlib import Path
+
+        # Check if model is already cached with all essential files
+        cache_dir = Path.home() / ".cache" / "huggingface" / "hub"
+        model_cache_name = f"models--{model_name.replace('/', '--')}"
+        model_cache_path = cache_dir / model_cache_name
+
+        # Check for essential model files (model.onnx_data is the main 2.2GB file)
+        essential_files = ["model.onnx_data", "model.onnx", "config.json"]
+        if model_cache_path.exists():
+            snapshots_dir = model_cache_path / "snapshots"
+            if snapshots_dir.exists():
+                # Find any snapshot directory
+                for snapshot in snapshots_dir.iterdir():
+                    if snapshot.is_dir():
+                        if all((snapshot / f).exists() for f in essential_files):
+                            logger.debug("Model already cached", model=model_name, path=str(model_cache_path))
+                            return
+                        else:
+                            logger.warning("Incomplete model cache, re-downloading", model=model_name)
+                            break
+
+        logger.info("Pre-downloading model with ignore_patterns", model=model_name)
+        snapshot_download(
+            repo_id=model_name,
+            ignore_patterns=[
+                "*.DS_Store",  # macOS system files
+                "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",  # images
+                "flax_model.msgpack", "rust_model.ot", "tf_model.h5",  # unused model formats
+            ],
         )
 
     @staticmethod

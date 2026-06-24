@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T04:07:52.894Z",
+  "generatedAt": "2026-06-24T06:21:20.924Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -209,8 +209,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/embedder.py": {
-      "mtime": 1782228041896.7563,
-      "size": 5353,
+      "mtime": 1782281809460.5037,
+      "size": 7441,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -333,8 +333,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/reranker.py": {
-      "mtime": 1782233230389.784,
-      "size": 3783,
+      "mtime": 1782282079630.909,
+      "size": 5194,
       "symbols": {
         "purpose": "Reranker using FlagEmbedding's FlagReranker for cross-encoder re-ranking.",
         "exports": [
@@ -464,7 +464,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
-      "mtime": 1782273777854.0217,
+      "mtime": 1782278673969.369,
       "size": 6949,
       "symbols": {
         "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",

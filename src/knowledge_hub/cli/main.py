@@ -5,12 +5,17 @@ execution time so that `kh --help` and `kh config show` respond instantly.
 """
 
 import asyncio
+import os
+import warnings
 from pathlib import Path
 
 import click
 import structlog
 
 from knowledge_hub.config import Settings
+
+# Suppress transformers tokenizer warnings (non-actionable for end users)
+warnings.filterwarnings("ignore", message=".*XLMRobertaTokenizerFast.*")
 
 logger = structlog.get_logger()
 

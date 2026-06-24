@@ -35,6 +35,7 @@ class SemanticChunker:
             )
         except Exception as e:
             logger.warning("tokenizer_load_failed_falling_back", error=str(e))
+            self._tokenizer = None
             self._count_tokens = lambda text: max(1, len(text) // 4)
 
     def chunk(

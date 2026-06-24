@@ -50,14 +50,18 @@ class SemanticChunker:
 ```
 
 - `transformers` 已是项目显式依赖（`transformers>=4.40,<5.0`），无需修改 `pyproject.toml`
-- 首次调用会下载 tokenizer 配置（~几 MB），后续命中 HuggingFace 缓存
+- BGE-M3 的 tokenizer 是 XLM-RoBERTa 分词器（sentencepiece.bpe.model ~5MB + tokenizer.json ~16MB，合计约 20MB）。FlagEmbeddingEmbedder 在嵌入阶段已通过 `_ensure_model_cached` 下载完整模型到 HuggingFace hub 缓存目录，chunker 加载 tokenizer 时直接命中本地缓存，**不会触发额外下载**
 - 失败时回退到 `len(text) // 4`，确保离线/未缓存环境仍可工作
 
 #### `_estimate_tokens` → `_count_tokens`
 
 删除 `@staticmethod` 的 `_estimate_tokens`，统一使用 `self._count_tokens(text)`。
 
-`_split_by_tokens` 和 `_hard_split` 内部所有 `self._estimate_tokens(x)` 调用改为 `self._count_tokens(x)`。
+`_split_by_tokens` 和 `_hard_split` 内部所有 `self._estimate_tokens(x)` 调用改为 `self._count_tokens(x)`。包括：
+
+- `_split_by_tokens` 段落累加循环中的 `para_tokens` 和 `current_tokens` 计算
+- `_split_by_tokens` overlap 路径中的 `current_tokens` 重新计算（line 127）
+- `_hard_split` 逐行累加中的 `line_tokens` 计算
 
 #### `_hard_split` — 逐行 token 计数切分
 
@@ -73,17 +77,21 @@ def _hard_split(self, text, heading_chain, source_file, source_hash):
 
         if line_tokens > self._max_tokens:
             # 极端情况：单行超限（minified JS、base64 等）
-            # 此时语义边界已不存在，回退字符截断
+            # 用 tokenizer encode/decode 按 token 精确截断，与主路径一致
             if current_lines:
                 chunks.append(self._make_chunk(
                     "\n".join(current_lines), heading_chain, source_file, source_hash
                 ))
                 current_lines = []
                 current_tokens = 0
-            chars_per_chunk = self._max_tokens * 4
-            for i in range(0, len(line), chars_per_chunk):
+            token_ids = self._tokenizer.encode(line, add_special_tokens=False)
+            for i in range(0, len(token_ids), self._max_tokens):
+                sub_text = self._tokenizer.decode(
+                    token_ids[i:i + self._max_tokens],
+                    skip_special_tokens=True,
+                )
                 chunks.append(self._make_chunk(
-                    line[i:i + chars_per_chunk], heading_chain, source_file, source_hash
+                    sub_text, heading_chain, source_file, source_hash
                 ))
             continue
 

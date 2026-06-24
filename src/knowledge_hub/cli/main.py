@@ -180,13 +180,14 @@ def config_reset_batch_size():
 @click.option("--port", default=None, type=int, help="Bind port.")
 def serve(host, port):
     """Start the MCP server."""
+    from knowledge_hub.server.mcp_server import run_mcp_server
+
     settings = _get_settings()
     if host:
         settings.MCP_HOST = host
     if port:
         settings.MCP_PORT = port
-    from knowledge_hub.server.mcp_server import run_mcp_server
-    asyncio.run(run_mcp_server(settings))
+    run_mcp_server(settings)
 
 
 if __name__ == "__main__":

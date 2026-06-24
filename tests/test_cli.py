@@ -327,7 +327,7 @@ class TestServe:
 
     def test_serve_passes_host_and_port(self, runner):
         with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
-             patch("knowledge_hub.server.mcp_server.run_mcp_server", new_callable=AsyncMock) as mock_run:
+             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
 
             mock_settings = MagicMock()
             mock_settings.MCP_HOST = "127.0.0.1"
@@ -336,7 +336,7 @@ class TestServe:
 
             result = runner.invoke(cli, ["serve", "--host", "0.0.0.0", "--port", "9999"])
             assert result.exit_code == 0
-            mock_run.assert_awaited_once()
+            mock_run.assert_called_once()
             # Verify the settings were updated before calling run_mcp_server
             assert mock_settings.MCP_HOST == "0.0.0.0"
             assert mock_settings.MCP_PORT == 9999

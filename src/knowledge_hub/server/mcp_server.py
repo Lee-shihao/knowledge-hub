@@ -113,16 +113,16 @@ def create_mcp_app(settings: Settings) -> FastMCP:
     return mcp
 
 
-async def run_mcp_server(settings: Settings):
+def run_mcp_server(settings: Settings):
     """Start the MCP server with health monitoring.
+
+    This is a synchronous function — FastMCP.run() uses anyio.run() internally,
+    so it must NOT be called inside an existing asyncio event loop.
 
     Args:
         settings: Application settings.
     """
     mcp = create_mcp_app(settings)
-
-    # Start health probe loop
-    await mcp._health.start()
 
     transport = "sse" if settings.MCP_TRANSPORT == "sse" else "streamable-http"
     logger.info(
@@ -133,7 +133,7 @@ async def run_mcp_server(settings: Settings):
         auth=bool(settings.MCP_AUTH_TOKEN),
     )
 
-    await mcp.run(
+    mcp.run(
         host=settings.MCP_HOST,
         port=settings.MCP_PORT,
         transport=transport,

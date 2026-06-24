@@ -340,3 +340,35 @@ class TestServe:
             # Verify the settings were updated before calling run_mcp_server
             assert mock_settings.MCP_HOST == "0.0.0.0"
             assert mock_settings.MCP_PORT == 9999
+
+    def test_serve_uses_default_streamable_http_transport(self, runner):
+        """Default MCP_TRANSPORT should be streamable-http, propagated to run_mcp_server."""
+        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
+             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
+
+            mock_settings = MagicMock()
+            mock_settings.MCP_HOST = "127.0.0.1"
+            mock_settings.MCP_PORT = 8765
+            mock_settings.MCP_TRANSPORT = "streamable-http"
+            mock_get_settings.return_value = mock_settings
+
+            result = runner.invoke(cli, ["serve"])
+            assert result.exit_code == 0
+            mock_run.assert_called_once_with(mock_settings)
+            assert mock_settings.MCP_TRANSPORT == "streamable-http"
+
+    def test_serve_respects_sse_transport_override(self, runner):
+        """When MCP_TRANSPORT is set to sse, it should be propagated."""
+        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
+             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
+
+            mock_settings = MagicMock()
+            mock_settings.MCP_HOST = "127.0.0.1"
+            mock_settings.MCP_PORT = 8765
+            mock_settings.MCP_TRANSPORT = "sse"
+            mock_get_settings.return_value = mock_settings
+
+            result = runner.invoke(cli, ["serve"])
+            assert result.exit_code == 0
+            mock_run.assert_called_once_with(mock_settings)
+            assert mock_settings.MCP_TRANSPORT == "sse"

@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T07:41:29.712Z",
+  "generatedAt": "2026-06-24T09:01:05.792Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -77,8 +77,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_config.py": {
-      "mtime": 1782228151834.3809,
-      "size": 1315,
+      "mtime": 1782291664446.4697,
+      "size": 1327,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -89,8 +89,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/config.py": {
-      "mtime": 1782227907089.3994,
-      "size": 1081,
+      "mtime": 1782289965630.7393,
+      "size": 1093,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -421,20 +421,22 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_mcp_server.py": {
-      "mtime": 1782235965629.6377,
-      "size": 4654,
+      "mtime": 1782291588450.9373,
+      "size": 14351,
       "symbols": {
         "purpose": "Tests for MCP server creation — app wiring, auth, IP middleware.",
         "exports": [
           "TestCreateMCPApp",
-          "TestIPMiddleware"
+          "TestIPMiddleware",
+          "TestRunMCPServer",
+          "TestStreamableHTTPIntegration"
         ],
         "language": "python"
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/mcp_server.py": {
-      "mtime": 1782283767701.0107,
-      "size": 5071,
+      "mtime": 1782290047250.9363,
+      "size": 5410,
       "symbols": {
         "purpose": "MCP server — wires together all components and exposes query_knowledge_base tool.",
         "exports": [
@@ -445,8 +447,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_cli.py": {
-      "mtime": 1782284641645.07,
-      "size": 13472,
+      "mtime": 1782291161126.4802,
+      "size": 15029,
       "symbols": {
         "purpose": "Tests for the knowledge-hub CLI.",
         "exports": [

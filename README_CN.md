@@ -155,8 +155,10 @@ kh serve --host 0.0.0.0 --port 9999
 # 启动 MCP 服务器（仅本地访问，无需认证）
 kh serve
 
-# 使用 curl 测试
-curl -s -N http://127.0.0.1:8765/sse
+# 使用 curl 测试（streamable-http 传输）
+curl -X POST http://127.0.0.1:8765/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
 ### 局域网访问（远程连接）
@@ -172,11 +174,8 @@ kh serve --host 0.0.0.0 --port 8765
 从远程机器连接（带 Bearer 令牌）：
 
 ```bash
-# 测试 SSE 连接
-curl -s -N -H "Authorization: Bearer your-secret-token" http://<服务器IP>:8765/sse
-
-# 通过 MCP JSON-RPC 查询
-curl -X POST http://<服务器IP>:8765/sse \
+# 通过 MCP JSON-RPC 查询（streamable-http）
+curl -X POST http://<服务器IP>:8765/mcp \
   -H "Authorization: Bearer your-secret-token" \
   -H "Content-Type: application/json" \
   -d '{
@@ -190,18 +189,27 @@ curl -X POST http://<服务器IP>:8765/sse \
   }'
 ```
 
-### 在 AI 客户端中配置（Claude Desktop、Cursor 等）
+### 在 AI 客户端中配置（Claude Code、Cursor 等）
 
 ```json
 {
   "mcpServers": {
     "knowledge-hub": {
-      "url": "http://<服务器IP>:8765/sse",
+      "url": "http://<服务器IP>:8765/mcp",
+      "transport": "streamable-http",
       "headers": {"Authorization": "Bearer your-secret-token"}
     }
   }
 }
 ```
+
+### 传输协议选项
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `KH_MCP_TRANSPORT` | `streamable-http` | `streamable-http`（无状态，curl友好）或 `sse`（长连接） |
+
+使用 `sse` 可向后兼容需要 SSE 传输的旧版 MCP 客户端。
 
 ## 项目结构
 

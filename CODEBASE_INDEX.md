@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-24 · 93 files · ~0.2M tokens total
+> 2026-06-24 · 94 files · ~0.2M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -48,7 +48,7 @@
 - `test_health.py` — Tests for HealthMonitor (no real Qdrant/GPU probing, mock-based only). · TestHealthStatus, TestHealthMonitor
 - `test_integration.py` — qdrant_available, settings, integration_setup, rtdoc_path, test_full_ingest_and_query, test_ingest_skips_unchanged_file, test_ingest_reingests_changed_file, test_orphan_cleanup +2
 - `test_loaders.py` — test_compute_hash, test_load_markdown_file, test_load_text_file, test_load_nonexistent_file, test_large_file_warning, test_file_too_large_rejected, test_unsupported_suffix_skipped, test_supported_suffixes
-- `test_mcp_server.py` — Tests for MCP server creation — app wiring, auth, IP middleware. · TestCreateMCPApp, TestIPMiddleware
+- `test_mcp_server.py` — Tests for MCP server creation — app wiring, auth, IP middleware. · TestCreateMCPApp, TestIPMiddleware, TestRunMCPServer, TestStreamableHTTPIntegration
 - `test_metadata.py` — settings, metadata_mgr, test_upsert_and_get_hash, test_get_hash_missing, test_list_sources, test_remove, test_orphan_cleanup
 - `test_pipeline.py` — Tests for IngestionPipeline — orchestrates load → chunk → embed → store. · settings, mock_embedder, pipeline, test_pipeline_ingests_markdown, test_pipeline_skips_unchanged_file, test_pipeline_force_reingests, test_pipeline_handles_missing_file, test_pipeline_handles_unsupported_format +2
 - `test_query_engine.py` — Tests for QueryEngine — orchestrates embed → hybrid search → rerank. · settings, embedder, vector_store, reranker, query_engine, test_query_empty_collection, test_query_with_results, test_query_passes_filters_to_hybrid_search +2

@@ -59,6 +59,12 @@ docker run -p 6333:6333 qdrant/qdrant
 git clone <repo-url> && cd knowledge-hub
 uv sync
 
+# Activate the virtual environment (optional, for direct kh usage)
+source .venv/bin/activate
+
+# Or use via uv run (no activation needed)
+uv run kh --help
+
 # First run downloads models (~2.2GB)
 kh index --path ./data
 ```
@@ -92,7 +98,32 @@ kh serve --host 0.0.0.0 --port 9999
 
 ### Environment Variables
 
-All settings use `KH_` prefix (or `.env` file):
+All settings use `KH_` prefix and can be configured via:
+
+1. **Environment variables** (recommended for deployment):
+   ```bash
+   export KH_EMBED_DEVICE=cuda
+   export KH_QDRANT_URL=http://qdrant-server:6333
+   kh index --path ./data
+   ```
+
+2. **`.env` file** (recommended for development):
+   ```bash
+   # Create .env file in project root
+   cat > .env << 'EOF'
+   KH_EMBED_DEVICE=cuda
+   KH_QDRANT_URL=http://localhost:6333
+   KH_CHUNK_MAX_TOKENS=512
+   KH_HYBRID_CANDIDATE_K=30
+   EOF
+
+   kh config show  # Verify settings
+   ```
+
+3. **CLI overrides** (for one-off changes):
+   ```bash
+   kh serve --host 0.0.0.0 --port 9999
+   ```
 
 | Variable | Default | Description |
 |----------|---------|-------------|

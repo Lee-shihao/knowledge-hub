@@ -57,6 +57,12 @@ docker run -p 6333:6333 qdrant/qdrant
 git clone <repo-url> && cd knowledge-hub
 uv sync
 
+# 激活虚拟环境（可选，用于直接使用 kh 命令）
+source .venv/bin/activate
+
+# 或通过 uv run 运行（无需激活）
+uv run kh --help
+
 # 首次运行会下载模型（约 2.2GB）
 kh index --path ./data
 ```
@@ -90,7 +96,32 @@ kh serve --host 0.0.0.0 --port 9999
 
 ### 环境变量
 
-所有配置使用 `KH_` 前缀（或 `.env` 文件）：
+所有配置使用 `KH_` 前缀，可通过以下方式配置：
+
+1. **环境变量**（推荐用于部署）：
+   ```bash
+   export KH_EMBED_DEVICE=cuda
+   export KH_QDRANT_URL=http://qdrant-server:6333
+   kh index --path ./data
+   ```
+
+2. **`.env` 文件**（推荐用于开发）：
+   ```bash
+   # 在项目根目录创建 .env 文件
+   cat > .env << 'EOF'
+   KH_EMBED_DEVICE=cuda
+   KH_QDRANT_URL=http://localhost:6333
+   KH_CHUNK_MAX_TOKENS=512
+   KH_HYBRID_CANDIDATE_K=30
+   EOF
+
+   kh config show  # 验证配置
+   ```
+
+3. **CLI 参数覆盖**（用于一次性修改）：
+   ```bash
+   kh serve --host 0.0.0.0 --port 9999
+   ```
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|

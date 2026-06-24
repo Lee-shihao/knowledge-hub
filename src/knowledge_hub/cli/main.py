@@ -1,22 +1,16 @@
-"""CLI for knowledge-hub: index, query, manage, and serve."""
+"""CLI for knowledge-hub: index, query, manage, and serve.
+
+Heavy imports (FlagEmbedding, torch, llama_index) are deferred to command
+execution time so that `kh --help` and `kh config show` respond instantly.
+"""
 
 import asyncio
 from pathlib import Path
 
 import click
 import structlog
-from qdrant_client import QdrantClient
 
 from knowledge_hub.config import Settings
-from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
-from knowledge_hub.ingestion.loaders import DocumentLoader
-from knowledge_hub.ingestion.chunker import SemanticChunker
-from knowledge_hub.ingestion.pipeline import IngestionPipeline
-from knowledge_hub.retrieval.query_engine import QueryEngine
-from knowledge_hub.retrieval.reranker import Reranker
-from knowledge_hub.schemas import QueryInput
-from knowledge_hub.storage.metadata import SourceMetadataManager
-from knowledge_hub.storage.vector_store import QdrantVectorStore
 
 logger = structlog.get_logger()
 
@@ -25,7 +19,16 @@ def _get_settings() -> Settings:
     return Settings()
 
 
-def _build_pipeline(settings: Settings) -> IngestionPipeline:
+def _build_pipeline(settings):
+    """Build ingestion pipeline (triggers heavy imports)."""
+    from qdrant_client import QdrantClient
+    from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
+    from knowledge_hub.ingestion.loaders import DocumentLoader
+    from knowledge_hub.ingestion.chunker import SemanticChunker
+    from knowledge_hub.ingestion.pipeline import IngestionPipeline
+    from knowledge_hub.storage.metadata import SourceMetadataManager
+    from knowledge_hub.storage.vector_store import QdrantVectorStore
+
     client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
@@ -39,7 +42,15 @@ def _build_pipeline(settings: Settings) -> IngestionPipeline:
     )
 
 
-def _build_query_engine(settings: Settings) -> QueryEngine:
+def _build_query_engine(settings):
+    """Build query engine (triggers heavy imports)."""
+    from qdrant_client import QdrantClient
+    from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
+    from knowledge_hub.retrieval.query_engine import QueryEngine
+    from knowledge_hub.retrieval.reranker import Reranker
+    from knowledge_hub.storage.metadata import SourceMetadataManager
+    from knowledge_hub.storage.vector_store import QdrantVectorStore
+
     client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
@@ -84,6 +95,8 @@ def index(path, force, tags):
 @click.option("-k", "--top-k", type=int, default=5, help="Number of results.")
 def query(query_text, top_k):
     """Query the knowledge base directly."""
+    from knowledge_hub.schemas import QueryInput
+
     settings = _get_settings()
     engine = _build_query_engine(settings)
     result = asyncio.run(engine.query(QueryInput(query=query_text, top_k=top_k)))
@@ -98,6 +111,9 @@ def query(query_text, top_k):
 @cli.command()
 def status():
     """Show knowledge base status."""
+    from qdrant_client import QdrantClient
+    from knowledge_hub.storage.metadata import SourceMetadataManager
+
     settings = _get_settings()
     client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
     try:
@@ -120,6 +136,9 @@ def status():
 @cli.command()
 def cleanup_orphans():
     """Remove vectors for deleted source files."""
+    from qdrant_client import QdrantClient
+    from knowledge_hub.storage.metadata import SourceMetadataManager
+
     settings = _get_settings()
     data_dir = Path(settings.DATA_DIR)
     local_files = {p.name for p in data_dir.rglob("*") if p.is_file()} if data_dir.exists() else set()
@@ -148,6 +167,8 @@ def config_show():
 @config.command("reset-batch-size")
 def config_reset_batch_size():
     """Reset OOM-degraded batch size to default."""
+    from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
+
     settings = _get_settings()
     embedder = FlagEmbeddingEmbedder(settings)
     asyncio.run(embedder.reset_batch_size())

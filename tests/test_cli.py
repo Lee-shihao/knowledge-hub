@@ -126,7 +126,7 @@ class TestStatus:
             mock_settings.QDRANT_COLLECTION = "knowledge_hub"
             mock_get_settings.return_value = mock_settings
 
-            with patch("knowledge_hub.cli.main.QdrantClient") as mock_qdrant:
+            with patch("qdrant_client.QdrantClient") as mock_qdrant:
                 mock_client = MagicMock()
                 mock_client.count.side_effect = Exception("Connection refused")
                 mock_qdrant.return_value = mock_client
@@ -142,8 +142,8 @@ class TestStatus:
             mock_settings.QDRANT_COLLECTION = "knowledge_hub"
             mock_get_settings.return_value = mock_settings
 
-            with patch("knowledge_hub.cli.main.QdrantClient") as mock_qdrant, \
-                 patch("knowledge_hub.cli.main.SourceMetadataManager") as mock_meta_cls:
+            with patch("qdrant_client.QdrantClient") as mock_qdrant, \
+                 patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls:
 
                 mock_client = MagicMock()
                 mock_client.count.return_value = MagicMock(count=42)
@@ -170,7 +170,7 @@ class TestConfigResetBatchSize:
             mock_settings.EMBED_BATCH_SIZE = 16
             mock_get_settings.return_value = mock_settings
 
-            with patch("knowledge_hub.cli.main.FlagEmbeddingEmbedder") as mock_embedder_cls:
+            with patch("knowledge_hub.ingestion.embedder.FlagEmbeddingEmbedder") as mock_embedder_cls:
                 mock_embedder = MagicMock()
                 mock_embedder.reset_batch_size = AsyncMock()
                 mock_embedder_cls.return_value = mock_embedder
@@ -191,8 +191,8 @@ class TestCleanupOrphans:
             mock_settings.QDRANT_URL = "http://localhost:6333"
             mock_get_settings.return_value = mock_settings
 
-            with patch("knowledge_hub.cli.main.QdrantClient") as mock_qdrant, \
-                 patch("knowledge_hub.cli.main.SourceMetadataManager") as mock_meta_cls, \
+            with patch("qdrant_client.QdrantClient") as mock_qdrant, \
+                 patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls, \
                  patch("pathlib.Path.exists", return_value=True), \
                  patch("pathlib.Path.rglob") as mock_rglob:
 

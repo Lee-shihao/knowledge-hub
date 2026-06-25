@@ -2,6 +2,8 @@
 
 All GPU-heavy components (embedder, reranker) are loaded once and shared.
 """
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 from knowledge_hub.config import Settings
@@ -38,25 +40,24 @@ class AppState:
     pipeline: IngestionPipeline
     health: HealthMonitor
     job_manager: JobManager
+    mcp: "FastMCP" | None = None  # Set during create()
 
     @classmethod
     async def create(cls, settings: Settings) -> "AppState":
         """Build all components and return a fully-initialized AppState.
 
-        Two-phase construction: components first, then AppState instance.
-        The mcp field is set to None here and assigned by the caller
-        after create_mcp_app() is called with the completed state.
+        Two-phase construction: components first, then AppState instance
+        with mcp=None, then mcp is constructed with a self-reference.
 
         Args:
             settings: Application settings.
 
         Returns:
-            Fully initialized AppState (mcp field = None).
+            Fully initialized AppState with mcp created.
         """
         from qdrant_client import QdrantClient
-        from fastmcp import FastMCP
 
-        # Phase 1: Build all infrastructure and ML components
+        # Phase 1: Build all components
         client = build_qdrant_client(settings)
         embedder = FlagEmbeddingEmbedder(settings)
         reranker = Reranker(settings)
@@ -77,7 +78,10 @@ class AppState:
         health = HealthMonitor(settings, client)
         await health.start()
 
-        return cls(
+        # Phase 2: Build state, then create mcp with self-reference
+        from knowledge_hub.server.mcp_server import create_mcp_app
+
+        state = cls(
             settings=settings,
             qdrant_client=client,
             embedder=embedder,
@@ -88,4 +92,7 @@ class AppState:
             pipeline=pipeline,
             health=health,
             job_manager=job_manager,
+            mcp=None,
         )
+        state.mcp = create_mcp_app(state)
+        return state

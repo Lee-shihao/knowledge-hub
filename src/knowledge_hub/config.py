@@ -21,7 +21,13 @@ class Settings(BaseSettings):
 
     # Qdrant
     QDRANT_URL: str = "http://localhost:6333"
+    QDRANT_MODE: Literal["embedded", "http"] = "embedded"
+    QDRANT_PATH: str = "./storage/qdrant"
     QDRANT_COLLECTION: str = "knowledge_hub"
+
+    # Upload server
+    UPLOAD_PORT: int = 8766
+    UPLOAD_ENABLED: bool = True
 
     # Ingestion
     CHUNK_MAX_TOKENS: int = 512
@@ -37,3 +43,8 @@ class Settings(BaseSettings):
     # Storage paths
     DATA_DIR: str = "./data"
     STORAGE_DIR: str = "./storage"
+
+    @property
+    def SERVER_HOST(self) -> str:
+        """Shared bind address for MCP and upload servers."""
+        return self.MCP_HOST

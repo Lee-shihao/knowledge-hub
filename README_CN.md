@@ -175,61 +175,90 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 
 ## MCP 服务器使用
 
-### 本地使用（同一台机器）
-
-```bash
-# 启动服务（MCP + HTTP 上传）
-kh serve
-
-# 测试：通过 MCP 列出可用工具
-curl -X POST http://127.0.0.1:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-
-# 通过 MCP 查询知识库
-curl -X POST http://127.0.0.1:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"优先级继承","top_k":5}}}'
-```
+MCP 服务器通过 JSON-RPC（streamable-http 传输）暴露 3 个工具，可直接用 `curl` 调用。
 
 ### MCP 工具
 
 | 工具 | 说明 |
 |------|------|
-| `query_knowledge_base` | 语义搜索，混合稠密+稀疏向量 + 重排序 |
-| `list_kb_sources` | 列出所有已索引源文件（包含分块数和哈希） |
+| `query_knowledge_base` | 语义搜索，混合稠密+稀疏向量 + 交叉编码器重排序 |
+| `list_kb_sources` | 列出所有已索引源文件（包含分块数和内容哈希） |
 | `get_kb_status` | 系统健康状态（模型、Qdrant、GPU）+ 集合统计 |
 
-### 局域网访问（远程连接）
+### 远程访问（局域网）
 
 绑定非 localhost 地址需要设置认证令牌（MCP 和上传共用）：
 
 ```bash
-# 设置令牌并启动
-export KH_SERVER_AUTH_TOKEN=your-secret-token
+# 启动服务
+export KH_SERVER_AUTH_TOKEN=test-token-123
 kh serve --host 0.0.0.0
+# [info] server_starting mcp=http://0.0.0.0:8765/mcp upload=http://0.0.0.0:8766/upload
 ```
 
-从远程机器连接：
+**列出可用工具：**
 
 ```bash
-# 列出可用工具
-curl -X POST http://<服务器IP>:8765/mcp \
-  -H "Authorization: Bearer your-secret-token" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 
-# 上传文件
-curl -X POST http://<服务器IP>:8766/upload \
-  -H "Authorization: Bearer your-secret-token" \
-  -F "file=@document.pdf" \
-  -F "tags=important"
+# 返回 3 个工具：query_knowledge_base, list_kb_sources, get_kb_status
 ```
 
-### 在 AI 客户端中配置（Claude Code、Cursor 等）
+**查询知识库：**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI接口数量","top_k":3}}}'
+
+# 返回 3 条结果（查询耗时 743ms）：
+#   Top 1（score 7.19）：BCM2835 提供 2 个 SPI 接口：SPI0（标准，2 个片选）和 SPI1（辅助，3 个片选）
+#     — 来源 test-upload.md，章节 "SPI 接口数量"
+#   Top 2（score 5.29）：bcm2835-arm-peripherals.pdf 第 152 页 — 芯片数据手册
+#   Top 3（score 3.63）：test-upload.md 概述部分
+```
+
+**列出已索引源文件：**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_kb_sources"}}'
+
+# 返回：{"sources":[{"filename":"bcm2835-arm-peripherals.pdf","chunk_count":2560,...}],"count":1}
+```
+
+**检查系统状态：**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_kb_status"}}'
+
+# 返回：
+#   model_loaded: true        qdrant: true        gpu_available: true
+#   gpu_memory_free_mb: 14393 collection: knowledge_hub
+#   total_chunks: 2564        total_sources: 1
+```
+
+### 本地访问（无需认证）
+
+```bash
+kh serve
+# 在 127.0.0.1 上暴露相同端点，无需 Authorization 头
+```
+
+### 在 AI 客户端中配置
 
 ```json
 {
@@ -245,30 +274,76 @@ curl -X POST http://<服务器IP>:8766/upload \
 
 ## HTTP 上传服务
 
-外部 Agent 无需 CLI 权限即可直接上传文件到知识库：
+通过 HTTP 上传文件即可自动导入。服务端校验格式后保存到数据目录，异步索引。
+
+### 完整流程（在 GPU 服务器上已验证）
+
+**1. 上传文件：**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8766/upload \
+    -H "Authorization: Bearer test-token-123" \
+    -F "file=@test-upload.md" \
+    -F "tags=spi,bcm2835,test"
+
+{"job_id":"e3ce9f20b6fc","status":"pending"}
+```
+
+**2. 轮询任务状态（小文件约 1 秒完成）：**
+
+```bash
+$ curl -s http://192.168.30.125:8766/upload/status/e3ce9f20b6fc \
+    -H "Authorization: Bearer test-token-123"
+
+{
+  "job_id": "e3ce9f20b6fc",
+  "filename": "test-upload.md",
+  "status": "done",
+  "chunks": 1,
+  "error": null,
+  "created_at": "2026-06-25T10:38:36.562323+00:00",
+  "completed_at": "2026-06-25T10:38:37.563172+00:00",
+  "failed_files": []
+}
+```
+
+**3. 通过 MCP 查询刚上传的内容：**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI接口数量","top_k":3}}}'
+
+# 最高分结果（7.19）即为刚上传的文件内容
+```
+
+### API 参考
 
 ```
 POST /upload                    GET /upload/status/{job_id}
 Content-Type: multipart/form    响应：
-  file: <二进制文件>            {
-  tags: "tag1,tag2"（可选）       "job_id": "abc123",
-                                  "filename": "paper.pdf",
-响应：                              "status": "done",
-  {"job_id": "abc123",            "chunks": 15,
-   "status": "pending"}           "error": null,
-                                  "created_at": "...",
-支持格式：.md .txt .pdf           "completed_at": "..."
-  .html .htm .docx .rst         }
+  file: <二进制文件>（必填）       {
+  tags: "tag1,tag2"（可选）         "job_id": "e3ce9f20b6fc",
+                                    "filename": "test-upload.md",
+响应：                                "status": "done",
+  {"job_id": "e3ce9f20b6fc",        "chunks": 1,
+   "status": "pending"}             "error": null,
+                                    "created_at": "2026-06-25T10:38:36",
+支持格式：.md .txt .pdf             "completed_at": "2026-06-25T10:38:37",
+  .html .htm .docx .rst             "failed_files": []
+                                  }
 ```
 
 | 状态 | 含义 |
 |------|------|
-| `pending` | 任务已排队，等待处理 |
+| `pending` | 任务已排队 |
 | `processing` | 导入管道运行中（加载 → 分块 → 嵌入 → 存储） |
-| `done` | 成功索引 |
+| `done` | 索引完成，立即可查询 |
 | `failed` | 导入出错（见 `error` 字段） |
 
-上传和 MCP 共用 `KH_SERVER_AUTH_TOKEN` 认证。本地访问无需认证。
+上传和 MCP 共用 `KH_SERVER_AUTH_TOKEN`。本地访问（默认 127.0.0.1）无需认证。
 
 ## 项目结构
 

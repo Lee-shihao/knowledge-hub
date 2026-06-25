@@ -177,61 +177,90 @@ All settings use `KH_` prefix and can be configured via:
 
 ## MCP Server Usage
 
-### Local (same machine)
-
-```bash
-# Start server (MCP + HTTP upload)
-kh serve
-
-# Test: list available tools via MCP
-curl -X POST http://127.0.0.1:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-
-# Query knowledge base via MCP
-curl -X POST http://127.0.0.1:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"priority inheritance","top_k":5}}}'
-```
+The MCP server exposes 3 tools over JSON-RPC (streamable-http transport). All examples use `curl` — no special client needed.
 
 ### MCP Tools
 
 | Tool | Description |
 |------|-------------|
-| `query_knowledge_base` | Semantic search with hybrid dense+sparse + rerank |
-| `list_kb_sources` | List all indexed sources with chunk_count and hash |
-| `get_kb_status` | System health (model, Qdrant, GPU) + collection stats |
+| `query_knowledge_base` | Semantic search with hybrid dense+sparse + cross-encoder rerank |
+| `list_kb_sources` | List all indexed sources with chunk count and content hash |
+| `get_kb_status` | System health (model, Qdrant, GPU) + collection statistics |
 
-### LAN (remote access)
+### Remote Access (LAN)
 
-Binding to non-localhost requires an auth token (shared by MCP and upload):
+Bind to non-localhost with an auth token (shared by MCP and upload):
 
 ```bash
-# Set auth token and start
-export KH_SERVER_AUTH_TOKEN=your-secret-token
+# Start server
+export KH_SERVER_AUTH_TOKEN=test-token-123
 kh serve --host 0.0.0.0
+# [info] server_starting mcp=http://0.0.0.0:8765/mcp upload=http://0.0.0.0:8766/upload
 ```
 
-From a remote machine:
+**List available tools:**
 
 ```bash
-# List available tools
-curl -X POST http://<server-ip>:8765/mcp \
-  -H "Authorization: Bearer your-secret-token" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 
-# Upload a file
-curl -X POST http://<server-ip>:8766/upload \
-  -H "Authorization: Bearer your-secret-token" \
-  -F "file=@document.pdf" \
-  -F "tags=important"
+# Response includes 3 tools: query_knowledge_base, list_kb_sources, get_kb_status
 ```
 
-### Configure in AI clients (Claude Code, Cursor, etc.)
+**Query the knowledge base:**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI interface count","top_k":3}}}'
+
+# Response (3 results, 743ms query time):
+#   Top hit (score 7.19): "BCM2835 provides 2 SPI interfaces: SPI0 (standard, 2 CS)
+#     and SPI1 (auxiliary, 3 CS)" — source: test-upload.md, section: "SPI Interface Count"
+#   Second (score 5.29): bcm2835-arm-peripherals.pdf page 152 — chip datasheet
+#   Third (score 3.63): test-upload.md overview section
+```
+
+**List indexed sources:**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_kb_sources"}}'
+
+# Response: {"sources":[{"filename":"bcm2835-arm-peripherals.pdf","chunk_count":2560,...}],"count":1}
+```
+
+**Check system status:**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_kb_status"}}'
+
+# Response:
+#   model_loaded: true        qdrant: true        gpu_available: true
+#   gpu_memory_free_mb: 14393 collection: knowledge_hub
+#   total_chunks: 2564        total_sources: 1
+```
+
+### Local Access (no auth)
+
+```bash
+kh serve
+# Same endpoints on 127.0.0.1, no Authorization header needed
+```
+
+### Configure in AI Clients
 
 ```json
 {
@@ -247,30 +276,76 @@ curl -X POST http://<server-ip>:8766/upload \
 
 ## HTTP Upload Server
 
-External agents can upload files directly to the knowledge base without needing CLI access:
+Upload files via HTTP for automatic ingestion. The server validates formats, saves to the data directory, and indexes asynchronously.
+
+### End-to-End Flow (verified on GPU server)
+
+**1. Upload a file:**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8766/upload \
+    -H "Authorization: Bearer test-token-123" \
+    -F "file=@test-upload.md" \
+    -F "tags=spi,bcm2835,test"
+
+{"job_id":"e3ce9f20b6fc","status":"pending"}
+```
+
+**2. Poll job status until complete (~1 second for small files):**
+
+```bash
+$ curl -s http://192.168.30.125:8766/upload/status/e3ce9f20b6fc \
+    -H "Authorization: Bearer test-token-123"
+
+{
+  "job_id": "e3ce9f20b6fc",
+  "filename": "test-upload.md",
+  "status": "done",
+  "chunks": 1,
+  "error": null,
+  "created_at": "2026-06-25T10:38:36.562323+00:00",
+  "completed_at": "2026-06-25T10:38:37.563172+00:00",
+  "failed_files": []
+}
+```
+
+**3. Query the uploaded content via MCP:**
+
+```bash
+$ curl -s -X POST http://192.168.30.125:8765/mcp \
+    -H "Authorization: Bearer test-token-123" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI interface count","top_k":3}}}'
+
+# Top result (score 7.19) is the newly uploaded file
+```
+
+### API Reference
 
 ```
 POST /upload                    GET /upload/status/{job_id}
 Content-Type: multipart/form    Response:
-  file: <binary>                {
-  tags: "tag1,tag2" (optional)    "job_id": "abc123",
-                                  "filename": "paper.pdf",
+  file: <binary> (required)     {
+  tags: "tag1,tag2" (optional)    "job_id": "e3ce9f20b6fc",
+                                  "filename": "test-upload.md",
 Response:                         "status": "done",
-  {"job_id": "abc123",            "chunks": 15,
+  {"job_id": "e3ce9f20b6fc",      "chunks": 1,
    "status": "pending"}           "error": null,
-                                  "created_at": "...",
-Supported formats: .md .txt      "completed_at": "..."
-  .pdf .html .htm .docx .rst    }
+                                  "created_at": "2026-06-25T10:38:36",
+Supported formats: .md .txt      "completed_at": "2026-06-25T10:38:37",
+  .pdf .html .htm .docx .rst      "failed_files": []
+                                }
 ```
 
 | Status | Meaning |
 |--------|---------|
-| `pending` | Job queued, waiting to start |
-| `processing` | Ingestion pipeline running (load → chunk → embed → store) |
-| `done` | Successfully indexed |
+| `pending` | Job queued |
+| `processing` | Ingestion running (load → chunk → embed → store) |
+| `done` | Successfully indexed, queryable immediately |
 | `failed` | Error during ingestion (see `error` field) |
 
-Upload and MCP share the same `KH_SERVER_AUTH_TOKEN` for authentication. On localhost no auth is required.
+Upload and MCP share the same `KH_SERVER_AUTH_TOKEN`. On localhost (default) no auth is required.
 
 ## Project Structure
 

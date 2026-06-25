@@ -65,3 +65,50 @@ async def test_orphan_cleanup(metadata_mgr):
     assert removed == 1  # orphan.pdf removed
     assert await metadata_mgr.get_hash("orphan.pdf") is None
     assert await metadata_mgr.get_hash("keep.pdf") == "h1"
+
+
+class TestListSourceDetails:
+    """Tests for list_source_details() — returns full payload per source."""
+
+    def test_list_source_details_returns_payloads(self, settings, metadata_mgr):
+        import asyncio
+
+        async def _run():
+            await metadata_mgr.ensure_collection()
+            await metadata_mgr.upsert("doc1.md", "hash_abc", 5)
+            await metadata_mgr.upsert("doc2.pdf", "hash_def", 3)
+            details = await metadata_mgr.list_source_details()
+            return details
+
+        details = asyncio.run(_run())
+        assert len(details) == 2
+        filenames = [d["source_file"] for d in details]
+        assert "doc1.md" in filenames
+        assert "doc2.pdf" in filenames
+        for d in details:
+            assert "source_hash" in d
+            assert "chunk_count" in d
+
+    def test_list_source_details_empty(self, settings, metadata_mgr):
+        import asyncio
+
+        async def _run():
+            await metadata_mgr.ensure_collection()
+            details = await metadata_mgr.list_source_details()
+            return details
+
+        details = asyncio.run(_run())
+        assert details == []
+
+    def test_list_sources_unchanged(self, settings, metadata_mgr):
+        """Existing list_sources() should still return just filenames."""
+        import asyncio
+
+        async def _run():
+            await metadata_mgr.ensure_collection()
+            await metadata_mgr.upsert("doc1.md", "hash_abc", 5)
+            sources = await metadata_mgr.list_sources()
+            return sources
+
+        sources = asyncio.run(_run())
+        assert sources == ["doc1.md"]

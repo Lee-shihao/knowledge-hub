@@ -147,7 +147,8 @@ class JobManager:
         self._jobs: dict[str, dict] = {}
         self._lock = asyncio.Lock()  # Serialize index tasks to avoid OOM
 
-    def submit(self, path: Path, filename: str, tags: list[str]) -> str:
+    async def submit(self, path: Path, filename: str, tags: list[str]) -> str:
+        """Submit an ingestion job. Must be called from an async context."""
         job_id = uuid.uuid4().hex[:12]
         now = datetime.now(timezone.utc)
         self._jobs[job_id] = {
@@ -171,6 +172,8 @@ class JobManager:
                     completed_at=datetime.now(timezone.utc),
                     failed_files=report.failed_files,
                 )
+                # File is intentionally kept in DATA_DIR after indexing.
+                # Supports re-indexing (kh index --force) and orphan cleanup.
             except Exception as e:
                 self._jobs[job_id].update(
                     status="failed", error=str(e),
@@ -203,7 +206,7 @@ class JobManager:
             del self._jobs[jid]
 ```
 
-TTL: 3600s (1 hour), lazy eviction on submit()/get(). Configurable via `JOB_TTL_SECONDS`.
+TTL: 3600s (1 hour), lazy eviction on submit()/get(). Hardcoded as module-level `_JOB_TTL_SECONDS = 3600` — add to Settings only if tuning is needed later.
 
 ## 3. HTTP Upload Server
 
@@ -349,7 +352,7 @@ def serve(host, port, upload_port, no_upload):
             config = uvicorn.Config(
                 state.mcp.http_app(transport="streamable-http",
                                    stateless_http=True, json_response=True),
-                host=settings.MCP_HOST, port=settings.MCP_PORT,
+                host=settings.SERVER_HOST, port=settings.MCP_PORT,
             )
             await uvicorn.Server(config).serve()
         else:
@@ -364,9 +367,9 @@ async def _run_servers(state: AppState, settings: Settings):
     )
     upload_app = create_upload_app(state)
 
-    mcp_config = uvicorn.Config(mcp_app, host=settings.MCP_HOST,
+    mcp_config = uvicorn.Config(mcp_app, host=settings.SERVER_HOST,
                                  port=settings.MCP_PORT, log_level="warning")
-    upload_config = uvicorn.Config(upload_app, host=settings.MCP_HOST,
+    upload_config = uvicorn.Config(upload_app, host=settings.SERVER_HOST,
                                     port=settings.UPLOAD_PORT, log_level="warning")
 
     async with anyio.create_task_group() as tg:
@@ -398,8 +401,13 @@ QDRANT_PATH: str = "./storage/qdrant"                   # NEW
 UPLOAD_PORT: int = 8766                                  # NEW
 UPLOAD_ENABLED: bool = True                              # NEW
 
+@property
+def SERVER_HOST(self) -> str:
+    """Shared bind address for MCP and upload servers."""
+    return self.MCP_HOST
+
 # Unchanged but relevant:
-MCP_HOST: str = "127.0.0.1"        # Shared with upload server
+MCP_HOST: str = "127.0.0.1"        # Shared with upload server via SERVER_HOST
 MCP_PORT: int = 8765
 MCP_AUTH_TOKEN: str | None = None  # Shared auth for MCP + upload
 MAX_FILE_SIZE_MB: int = 200        # Reused for upload size limit
@@ -429,7 +437,7 @@ Format validation happens before reading file content, minimizing wasted I/O on 
 | `JobManager` | Unit (mock pipeline) | Submit returns job_id; status transitions pending→processing→done; lock serialization; eviction |
 | `upload_server` | Integration (TestClient) | 401 without token; 413 oversized; 400 bad format; 200 upload → job_id; 404 unknown job |
 | `create_mcp_app(state)` | Unit | Tools registered; auth wired; middleware present |
-| `create_tools()` | Unit (mock components) | 3 tools returned; list_sources/gst_status return expected shape |
+| `create_tools()` | Unit (mock components) | 3 tools returned; list_sources/get_status return expected shape |
 | `kh serve --no-upload` | Integration | Starts MCP-only, responds to query |
 | `kh serve` (full) | Integration | Both ports respond; upload → status → query round-trip |
 

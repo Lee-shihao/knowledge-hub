@@ -17,3 +17,5 @@ graphify-out/.graphify_python
 graphify-out/.graphify_root
 
 data/*test.md
+
+storage/

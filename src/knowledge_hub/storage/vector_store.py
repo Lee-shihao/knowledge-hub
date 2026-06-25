@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
@@ -16,6 +18,24 @@ from qdrant_client.models import (
 from knowledge_hub.config import Settings
 from knowledge_hub.schemas import DocumentChunk
 from knowledge_hub.storage.metadata import SourceMetadataManager
+
+
+def build_qdrant_client(settings: Settings) -> QdrantClient:
+    """Create a QdrantClient based on QDRANT_MODE setting.
+
+    Embedded mode: creates the storage directory and returns a path-based client.
+    HTTP mode: returns a url-based client with compatibility checks disabled.
+
+    Args:
+        settings: Application settings.
+
+    Returns:
+        Configured QdrantClient instance.
+    """
+    if settings.QDRANT_MODE == "embedded":
+        Path(settings.QDRANT_PATH).mkdir(parents=True, exist_ok=True)
+        return QdrantClient(path=settings.QDRANT_PATH)
+    return QdrantClient(url=settings.QDRANT_URL, check_compatibility=False)
 
 
 class QdrantVectorStore:

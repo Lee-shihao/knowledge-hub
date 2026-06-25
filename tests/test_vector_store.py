@@ -4,7 +4,9 @@ from qdrant_client import QdrantClient
 
 from knowledge_hub.config import Settings
 from knowledge_hub.schemas import DocumentChunk, ChunkMetadata
-from knowledge_hub.storage.vector_store import QdrantVectorStore
+from unittest.mock import MagicMock, patch
+
+from knowledge_hub.storage.vector_store import QdrantVectorStore, build_qdrant_client
 from knowledge_hub.storage.metadata import SourceMetadataManager
 
 
@@ -208,3 +210,34 @@ async def test_upsert_multiple_chunks(vector_store):
     ]
     await vector_store.upsert_chunks(chunks)
     assert await vector_store.count() == 5
+
+
+class TestBuildQdrantClient:
+    """Tests for build_qdrant_client() factory function."""
+
+    def test_embedded_mode_creates_dir_and_returns_client(self, tmp_path):
+        """Embedded mode should create QDRANT_PATH dir and return path-based client."""
+        storage = tmp_path / "qdrant_data"
+        settings = Settings(QDRANT_MODE="embedded", QDRANT_PATH=str(storage))
+        with patch("knowledge_hub.storage.vector_store.QdrantClient") as mock_cls:
+            mock_cls.return_value = MagicMock()
+            client = build_qdrant_client(settings)
+            assert storage.exists(), "QDRANT_PATH directory should be created"
+            mock_cls.assert_called_once_with(path=str(storage))
+            assert client is mock_cls.return_value
+
+    def test_http_mode_returns_url_based_client(self):
+        """HTTP mode should return url-based client with check_compatibility=False."""
+        settings = Settings(QDRANT_MODE="http", QDRANT_URL="http://localhost:6333")
+        with patch("knowledge_hub.storage.vector_store.QdrantClient") as mock_cls:
+            mock_cls.return_value = MagicMock()
+            client = build_qdrant_client(settings)
+            mock_cls.assert_called_once_with(
+                url="http://localhost:6333", check_compatibility=False
+            )
+            assert client is mock_cls.return_value
+
+    def test_default_mode_is_embedded(self):
+        """Default QDRANT_MODE should be embedded."""
+        settings = Settings()
+        assert settings.QDRANT_MODE == "embedded"

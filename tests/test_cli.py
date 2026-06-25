@@ -50,6 +50,8 @@ class TestCliHelp:
         assert result.exit_code == 0
         assert "--host" in result.output
         assert "--port" in result.output
+        assert "--upload-port" in result.output
+        assert "--no-upload" in result.output
 
     def test_config_help(self, runner):
         result = runner.invoke(cli, ["config", "--help"])
@@ -65,10 +67,10 @@ class TestConfigShow:
         with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings:
             mock_settings = MagicMock()
             mock_settings.model_dump.return_value = {
-                "MCP_HOST": "127.0.0.1",
+                "SERVER_HOST": "127.0.0.1",
                 "MCP_PORT": 8765,
-                "MCP_AUTH_TOKEN": "secret-token-12345",
-                "MCP_ALLOWED_IPS": ["192.168.1.1"],
+                "SERVER_AUTH_TOKEN": "secret-token-12345",
+                "SERVER_ALLOWED_IPS": ["192.168.1.1"],
                 "EMBED_MODEL": "BAAI/bge-m3",
                 "QDRANT_URL": "http://localhost:6333",
                 "QDRANT_COLLECTION": "knowledge_hub",
@@ -89,7 +91,7 @@ class TestConfigShow:
             mock_settings = MagicMock()
             mock_settings.model_dump.return_value = {
                 "GITHUB_AUTH_TOKEN": "xyz789",
-                "MCP_HOST": "0.0.0.0",
+                "SERVER_HOST": "0.0.0.0",
             }
             mock_get_settings.return_value = mock_settings
 
@@ -105,7 +107,7 @@ class TestConfigShow:
             mock_settings = MagicMock()
             mock_settings.model_dump.return_value = {
                 "CHUNK_MAX_TOKENS": 512,
-                "MCP_HOST": "127.0.0.1",
+                "SERVER_HOST": "127.0.0.1",
             }
             mock_get_settings.return_value = mock_settings
 
@@ -120,45 +122,46 @@ class TestStatus:
     """Tests for `kh status`."""
 
     def test_status_qdrant_unreachable(self, runner):
-        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings:
+        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
+             patch("knowledge_hub.storage.vector_store.build_qdrant_client") as mock_build:
+
             mock_settings = MagicMock()
             mock_settings.QDRANT_URL = "http://localhost:6333"
             mock_settings.QDRANT_COLLECTION = "knowledge_hub"
             mock_get_settings.return_value = mock_settings
 
-            with patch("qdrant_client.QdrantClient") as mock_qdrant:
-                mock_client = MagicMock()
-                mock_client.count.side_effect = Exception("Connection refused")
-                mock_qdrant.return_value = mock_client
+            mock_client = MagicMock()
+            mock_client.count.side_effect = Exception("Connection refused")
+            mock_build.return_value = mock_client
 
-                result = runner.invoke(cli, ["status"])
-                assert result.exit_code == 0
-                assert "Error connecting to Qdrant" in result.output
+            result = runner.invoke(cli, ["status"])
+            assert result.exit_code == 0
+            assert "Error connecting to Qdrant" in result.output
 
     def test_status_success(self, runner):
-        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings:
+        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
+             patch("knowledge_hub.storage.vector_store.build_qdrant_client") as mock_build, \
+             patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls:
+
             mock_settings = MagicMock()
             mock_settings.QDRANT_URL = "http://localhost:6333"
             mock_settings.QDRANT_COLLECTION = "knowledge_hub"
             mock_get_settings.return_value = mock_settings
 
-            with patch("qdrant_client.QdrantClient") as mock_qdrant, \
-                 patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls:
+            mock_client = MagicMock()
+            mock_client.count.return_value = MagicMock(count=42)
+            mock_build.return_value = mock_client
 
-                mock_client = MagicMock()
-                mock_client.count.return_value = MagicMock(count=42)
-                mock_qdrant.return_value = mock_client
+            mock_meta = MagicMock()
+            mock_meta.list_sources = AsyncMock(return_value={"doc1.md", "doc2.md"})
+            mock_meta_cls.return_value = mock_meta
 
-                mock_meta = MagicMock()
-                mock_meta.list_sources = AsyncMock(return_value={"doc1.md", "doc2.md"})
-                mock_meta_cls.return_value = mock_meta
-
-                result = runner.invoke(cli, ["status"])
-                assert result.exit_code == 0
-                assert "knowledge_hub" in result.output
-                assert "42" in result.output
-                assert "doc1.md" in result.output
-                assert "doc2.md" in result.output
+            result = runner.invoke(cli, ["status"])
+            assert result.exit_code == 0
+            assert "knowledge_hub" in result.output
+            assert "42" in result.output
+            assert "doc1.md" in result.output
+            assert "doc2.md" in result.output
 
 
 class TestConfigResetBatchSize:
@@ -185,14 +188,18 @@ class TestCleanupOrphans:
     """Tests for `kh cleanup-orphans`."""
 
     def test_cleanup_orphans(self, runner):
-        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings:
+        with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
+             patch("knowledge_hub.storage.vector_store.build_qdrant_client") as mock_build:
+
             mock_settings = MagicMock()
             mock_settings.DATA_DIR = "/tmp/fake_data"
             mock_settings.QDRANT_URL = "http://localhost:6333"
             mock_get_settings.return_value = mock_settings
 
-            with patch("qdrant_client.QdrantClient") as mock_qdrant, \
-                 patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls, \
+            mock_client = MagicMock()
+            mock_build.return_value = mock_client
+
+            with patch("knowledge_hub.storage.metadata.SourceMetadataManager") as mock_meta_cls, \
                  patch("pathlib.Path.exists", return_value=True), \
                  patch("pathlib.Path.rglob") as mock_rglob:
 
@@ -327,48 +334,45 @@ class TestServe:
 
     def test_serve_passes_host_and_port(self, runner):
         with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
-             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
+             patch("anyio.run") as mock_anyio_run:
 
             mock_settings = MagicMock()
-            mock_settings.MCP_HOST = "127.0.0.1"
+            mock_settings.SERVER_HOST = "127.0.0.1"
             mock_settings.MCP_PORT = 8765
             mock_get_settings.return_value = mock_settings
 
             result = runner.invoke(cli, ["serve", "--host", "0.0.0.0", "--port", "9999"])
             assert result.exit_code == 0
-            mock_run.assert_called_once()
-            # Verify the settings were updated before calling run_mcp_server
-            assert mock_settings.MCP_HOST == "0.0.0.0"
+            assert mock_settings.SERVER_HOST == "0.0.0.0"
             assert mock_settings.MCP_PORT == 9999
+            mock_anyio_run.assert_called_once()
 
-    def test_serve_uses_default_streamable_http_transport(self, runner):
-        """Default MCP_TRANSPORT should be streamable-http, propagated to run_mcp_server."""
+    def test_serve_with_upload_port(self, runner):
+        """--upload-port should update UPLOAD_PORT setting."""
         with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
-             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
+             patch("anyio.run") as mock_anyio_run:
 
             mock_settings = MagicMock()
-            mock_settings.MCP_HOST = "127.0.0.1"
+            mock_settings.SERVER_HOST = "127.0.0.1"
             mock_settings.MCP_PORT = 8765
-            mock_settings.MCP_TRANSPORT = "streamable-http"
+            mock_settings.UPLOAD_PORT = 8766
             mock_get_settings.return_value = mock_settings
 
-            result = runner.invoke(cli, ["serve"])
+            result = runner.invoke(cli, ["serve", "--upload-port", "9998"])
             assert result.exit_code == 0
-            mock_run.assert_called_once_with(mock_settings)
-            assert mock_settings.MCP_TRANSPORT == "streamable-http"
+            assert mock_settings.UPLOAD_PORT == 9998
+            mock_anyio_run.assert_called_once()
 
-    def test_serve_respects_sse_transport_override(self, runner):
-        """When MCP_TRANSPORT is set to sse, it should be propagated."""
+    def test_serve_no_upload_flag_accepted(self, runner):
+        """--no-upload flag should be accepted without errors."""
         with patch("knowledge_hub.cli.main._get_settings") as mock_get_settings, \
-             patch("knowledge_hub.server.mcp_server.run_mcp_server") as mock_run:
+             patch("anyio.run") as mock_anyio_run:
 
             mock_settings = MagicMock()
-            mock_settings.MCP_HOST = "127.0.0.1"
+            mock_settings.SERVER_HOST = "127.0.0.1"
             mock_settings.MCP_PORT = 8765
-            mock_settings.MCP_TRANSPORT = "sse"
             mock_get_settings.return_value = mock_settings
 
-            result = runner.invoke(cli, ["serve"])
+            result = runner.invoke(cli, ["serve", "--no-upload"])
             assert result.exit_code == 0
-            mock_run.assert_called_once_with(mock_settings)
-            assert mock_settings.MCP_TRANSPORT == "sse"
+            mock_anyio_run.assert_called_once()

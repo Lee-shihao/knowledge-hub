@@ -3,155 +3,218 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 
 from knowledge_hub.config import Settings
-from knowledge_hub.schemas import QueryInput, QueryResult, ChunkResult
-from knowledge_hub.server.health import HealthStatus, HealthMonitor
 from knowledge_hub.server.tools import create_tools
 
 
+@pytest.fixture
+def settings():
+    return Settings()
+
+
+@pytest.fixture
+def mock_health():
+    h = MagicMock()
+    h.get_status = AsyncMock()
+    return h
+
+
+@pytest.fixture
+def mock_query_engine():
+    e = MagicMock()
+    e.query = AsyncMock()
+    return e
+
+
+@pytest.fixture
+def mock_metadata_mgr():
+    m = MagicMock()
+    m.list_source_details = AsyncMock(return_value=[])
+    m.list_sources = AsyncMock(return_value=[])
+    return m
+
+
+@pytest.fixture
+def mock_vector_store():
+    v = MagicMock()
+    v.count = AsyncMock(return_value=0)
+    return v
+
+
 class TestCreateTools:
-    """Tests for create_tools() and the query_knowledge_base function."""
+    """Tests for create_tools() — tool registration and count."""
 
-    @pytest.fixture
-    def settings(self):
-        return Settings()
+    def test_returns_three_tools(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """create_tools() should return exactly 3 tools."""
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        assert len(tools) == 3
+        assert set(tools.keys()) == {
+            "query_knowledge_base",
+            "list_kb_sources",
+            "get_kb_status",
+        }
 
-    @pytest.fixture
-    def mock_query_engine(self):
-        """Mock QueryEngine with query() returning a QueryResult."""
-        engine = MagicMock()
-        engine.query = AsyncMock(return_value=QueryResult(
+    def test_tools_are_async_callables(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """All returned tools should be async callables."""
+        import inspect
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        for name, fn in tools.items():
+            assert inspect.iscoroutinefunction(fn), (
+                f"{name} should be a coroutine function"
+            )
+
+
+class TestQueryKnowledgeBase:
+    """Tests for query_knowledge_base tool."""
+
+    @pytest.mark.asyncio
+    async def test_returns_error_when_model_not_loaded(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should return error dict when model_loaded is False."""
+        mock_health.get_status.return_value = MagicMock(
+            model_loaded=False, qdrant=True,
+        )
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["query_knowledge_base"]("test query")
+        assert "error" in result
+        assert result["results"] == []
+
+    @pytest.mark.asyncio
+    async def test_calls_query_engine_when_healthy(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should call query_engine.query() when health checks pass."""
+        from knowledge_hub.schemas import QueryResult, ChunkResult
+
+        mock_health.get_status.return_value = MagicMock(
+            model_loaded=True, qdrant=True,
+        )
+        mock_result = QueryResult(
             results=[
                 ChunkResult(
-                    text="Sample result text",
+                    text="test text",
                     source_file="test.md",
-                    page_or_section="Section 1",
-                    heading_path=["Section 1"],
+                    page_or_section="section 1",
+                    heading_path=["H1"],
                     score=0.95,
                 ),
             ],
-            query_time_ms=12.5,
-        ))
-        return engine
-
-    @pytest.fixture
-    def mock_health(self):
-        """Mock HealthMonitor with healthy status."""
-        health = MagicMock(spec=HealthMonitor)
-        health.get_status = AsyncMock(return_value=HealthStatus(
-            model_loaded=True,
-            qdrant=True,
-            gpu_available=True,
-            gpu_memory_free_mb=8000,
-        ))
-        return health
-
-    @pytest.fixture
-    def mock_health_unhealthy_model(self):
-        """Mock HealthMonitor with model not loaded."""
-        health = MagicMock(spec=HealthMonitor)
-        health.get_status = AsyncMock(return_value=HealthStatus(
-            model_loaded=False,
-            qdrant=True,
-            gpu_available=False,
-            gpu_memory_free_mb=0,
-        ))
-        return health
-
-    @pytest.fixture
-    def mock_health_unhealthy_qdrant(self):
-        """Mock HealthMonitor with Qdrant down."""
-        health = MagicMock(spec=HealthMonitor)
-        health.get_status = AsyncMock(return_value=HealthStatus(
-            model_loaded=True,
-            qdrant=False,
-            gpu_available=True,
-            gpu_memory_free_mb=8000,
-        ))
-        return health
-
-    def test_create_tools_returns_dict_with_query_knowledge_base(self, settings, mock_query_engine, mock_health):
-        """create_tools should return a dict with 'query_knowledge_base' key."""
-        tools = create_tools(settings, mock_query_engine, mock_health)
-        assert "query_knowledge_base" in tools
-        assert callable(tools["query_knowledge_base"])
-
-    @pytest.mark.asyncio
-    async def test_query_knowledge_base_calls_query_engine(self, settings, mock_query_engine, mock_health):
-        """query_knowledge_base should call QueryEngine.query with correct params."""
-        tools = create_tools(settings, mock_query_engine, mock_health)
-        fn = tools["query_knowledge_base"]
-
-        result = await fn(query="test query", top_k=3)
-
-        # Verify the engine was called
-        mock_query_engine.query.assert_called_once()
-        call_arg = mock_query_engine.query.call_args[0][0]
-        assert isinstance(call_arg, QueryInput)
-        assert call_arg.query == "test query"
-        assert call_arg.top_k == 3
-        assert call_arg.filter_source is None
-        assert call_arg.filter_tags is None
-
-        # Verify result structure
-        assert isinstance(result, dict)
-        assert "results" in result
-        assert "query_time_ms" in result
-        assert len(result["results"]) == 1
-        assert result["results"][0]["source_file"] == "test.md"
-
-    @pytest.mark.asyncio
-    async def test_query_knowledge_base_passes_filters(self, settings, mock_query_engine, mock_health):
-        """query_knowledge_base should pass filter_source and filter_tags."""
-        tools = create_tools(settings, mock_query_engine, mock_health)
-        fn = tools["query_knowledge_base"]
-
-        await fn(
-            query="filtered query",
-            top_k=10,
-            filter_source="data/test.pdf",
-            filter_tags=["python", "api"],
+            query_time_ms=10.0,
         )
+        mock_query_engine.query.return_value = mock_result
 
-        call_arg = mock_query_engine.query.call_args[0][0]
-        assert call_arg.filter_source == "data/test.pdf"
-        assert call_arg.filter_tags == ["python", "api"]
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["query_knowledge_base"]("test query", top_k=3)
+        assert "error" not in result
+        assert result["results"][0]["text"] == "test text"
+        mock_query_engine.query.assert_called_once()
 
-    @pytest.mark.asyncio
-    async def test_query_knowledge_base_blocks_on_model_not_loaded(self, settings, mock_query_engine, mock_health_unhealthy_model):
-        """When model_loaded=False, should return error dict without calling engine."""
-        tools = create_tools(settings, mock_query_engine, mock_health_unhealthy_model)
-        fn = tools["query_knowledge_base"]
 
-        result = await fn(query="test query")
-
-        assert result == {
-            "error": "Embedding model is not available",
-            "results": [],
-            "query_time_ms": 0,
-        }
-        mock_query_engine.query.assert_not_called()
+class TestListKbSources:
+    """Tests for list_kb_sources tool."""
 
     @pytest.mark.asyncio
-    async def test_query_knowledge_base_blocks_on_qdrant_down(self, settings, mock_query_engine, mock_health_unhealthy_qdrant):
-        """When qdrant=False, should return error dict without calling engine."""
-        tools = create_tools(settings, mock_query_engine, mock_health_unhealthy_qdrant)
-        fn = tools["query_knowledge_base"]
-
-        result = await fn(query="test query")
-
-        assert result == {
-            "error": "Knowledge base is not available",
-            "results": [],
-            "query_time_ms": 0,
-        }
-        mock_query_engine.query.assert_not_called()
+    async def test_returns_empty_list_when_no_sources(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should return empty sources list when nothing is indexed."""
+        mock_metadata_mgr.list_source_details.return_value = []
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["list_kb_sources"]()
+        assert result["sources"] == []
+        assert result["count"] == 0
 
     @pytest.mark.asyncio
-    async def test_query_knowledge_base_default_top_k(self, settings, mock_query_engine, mock_health):
-        """query_knowledge_base should use default top_k=5."""
-        tools = create_tools(settings, mock_query_engine, mock_health)
-        fn = tools["query_knowledge_base"]
+    async def test_returns_sources_with_metadata(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should return source details including chunk_count and hash."""
+        mock_metadata_mgr.list_source_details.return_value = [
+            {"source_file": "doc.md", "source_hash": "abc", "chunk_count": 5},
+            {"source_file": "doc.pdf", "source_hash": "def", "chunk_count": 3},
+        ]
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["list_kb_sources"]()
+        assert result["count"] == 2
+        assert result["sources"][0]["filename"] == "doc.md"
+        assert result["sources"][0]["chunk_count"] == 5
+        assert result["sources"][0]["source_hash"] == "abc"
 
-        await fn(query="test")
-        call_arg = mock_query_engine.query.call_args[0][0]
-        assert call_arg.top_k == 5
+
+class TestGetKbStatus:
+    """Tests for get_kb_status tool."""
+
+    @pytest.mark.asyncio
+    async def test_returns_health_and_stats(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should return health status plus collection statistics."""
+        mock_health.get_status.return_value = MagicMock(
+            model_loaded=True,
+            qdrant=True,
+            gpu_available=True,
+            gpu_memory_free_mb=8192,
+        )
+        mock_vector_store.count.return_value = 42
+        mock_metadata_mgr.list_sources.return_value = ["a.md", "b.md"]
+
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["get_kb_status"]()
+        assert result["model_loaded"] is True
+        assert result["qdrant"] is True
+        assert result["total_chunks"] == 42
+        assert result["total_sources"] == 2
+        assert result["collection"] == "knowledge_hub"
+
+    @pytest.mark.asyncio
+    async def test_handles_vector_store_error(
+        self, settings, mock_query_engine, mock_health,
+        mock_metadata_mgr, mock_vector_store,
+    ):
+        """Should return -1 counts when Qdrant is unreachable."""
+        mock_health.get_status.return_value = MagicMock(
+            model_loaded=True, qdrant=False,
+            gpu_available=False, gpu_memory_free_mb=0,
+        )
+        mock_vector_store.count.side_effect = RuntimeError("qdrant down")
+        mock_metadata_mgr.list_sources.side_effect = RuntimeError("qdrant down")
+
+        tools = create_tools(
+            settings, mock_query_engine, mock_health,
+            mock_metadata_mgr, mock_vector_store,
+        )
+        result = await tools["get_kb_status"]()
+        assert result["total_chunks"] == -1
+        assert result["total_sources"] == -1

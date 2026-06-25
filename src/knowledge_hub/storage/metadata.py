@@ -82,6 +82,34 @@ class SourceMetadataManager:
             sources.extend(p.payload["source_file"] for p in points)
         return sources
 
+    async def list_source_details(self) -> list[dict]:
+        """Return full payload for all sources.
+
+        Unlike list_sources() which returns only filenames, this returns
+        the complete payload dict for each source (source_file, source_hash,
+        chunk_count).
+
+        Returns:
+            List of payload dicts from the source metadata collection.
+        """
+        points, next_offset = self._client.scroll(
+            collection_name=self._collection,
+            limit=100,
+            with_payload=True,
+            with_vectors=False,
+        )
+        results = [p.payload for p in points]
+        while next_offset:
+            points, next_offset = self._client.scroll(
+                collection_name=self._collection,
+                offset=next_offset,
+                limit=100,
+                with_payload=True,
+                with_vectors=False,
+            )
+            results.extend(p.payload for p in points)
+        return results
+
     async def orphan_cleanup(self, local_source_files: set[str]) -> int:
         """Remove vectors for files no longer on disk.
 

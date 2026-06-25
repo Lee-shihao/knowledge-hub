@@ -30,8 +30,11 @@ class SemanticChunker:
 
         try:
             self._tokenizer = AutoTokenizer.from_pretrained(settings.EMBED_MODEL)
+            # Use __call__ instead of encode() — the fast tokenizer (XLMRobertaTokenizerFast)
+            # warns that encode+pad is slower than __call__, and __call__ returns input_ids
+            # directly as a flat list for single-string inputs.
             self._count_tokens = lambda text: len(
-                self._tokenizer.encode(text, add_special_tokens=False)
+                self._tokenizer(text, add_special_tokens=False)["input_ids"]
             )
         except Exception as e:
             logger.warning("tokenizer_load_failed_falling_back", error=str(e))
@@ -45,7 +48,19 @@ class SemanticChunker:
         for doc in documents:
             if not doc.text or not doc.text.strip():
                 continue
-            sections = self._split_by_headings(doc.text)
+            if not isinstance(doc.text, str):
+                logger.warning(
+                    "non_string_doc_text_skipped",
+                    type=type(doc.text).__name__,
+                    file=source_file,
+                )
+                continue
+            # Sanitize: PDF math extraction can produce lone surrogates
+            # (e.g. \ud835 from broken UTF-16 math italic symbols).
+            # These are valid Python str but invalid UTF-8, causing
+            # TextEncodeInput in the Rust tokenizer.
+            text = doc.text.encode("utf-8", errors="replace").decode("utf-8")
+            sections = self._split_by_headings(text)
             for heading_chain, section_text in sections:
                 section_chunks = self._split_by_tokens(
                     section_text, heading_chain, source_file, source_hash
@@ -192,7 +207,7 @@ class SemanticChunker:
                             sub_text, heading_chain, source_file, source_hash
                         ))
                 else:
-                    token_ids = self._tokenizer.encode(line, add_special_tokens=False)
+                    token_ids = self._tokenizer(line, add_special_tokens=False)["input_ids"]
                     for i in range(0, len(token_ids), self._max_tokens):
                         sub_text = self._tokenizer.decode(
                             token_ids[i:i + self._max_tokens],

@@ -10,23 +10,23 @@
     "semantic_hash": ""
   },
   "CODEBASE_INDEX.md": {
-    "mtime": 1782240794.7862103,
-    "ast_hash": "520c3a0e19c1785627dfc5c28bfcfbca",
+    "mtime": 1782371538.3400218,
+    "ast_hash": "6dd4620f7c1bf583269805c0ca3c271e",
     "semantic_hash": ""
   },
   ".claude/settings.local.json": {
-    "mtime": 1782229152.1552742,
-    "ast_hash": "9acb3c0320911def4ff1e699ce51d120",
+    "mtime": 1782293296.4313753,
+    "ast_hash": "5b4a33257d72f48a82c3c10d105f1ec5",
     "semantic_hash": ""
   },
   ".tokenmiser/cache.json": {
-    "mtime": 1782239729.4035604,
-    "ast_hash": "fc98c4ea1e4bbc6ecc764275e54f6458",
+    "mtime": 1782371515.1158051,
+    "ast_hash": "56a961e35e823729bb540f5b6fc7bd3a",
     "semantic_hash": ""
   },
   "pyproject.toml": {
-    "mtime": 1782228755.7837589,
-    "ast_hash": "4bac81329d124cbb2d1f9bcad0820d19",
+    "mtime": 1782241701.1743896,
+    "ast_hash": "ed2e4d4099b1a5aaa5e450f780b5d690",
     "semantic_hash": ""
   },
   "src/knowledge_hub/__init__.py": {
@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "src/knowledge_hub/config.py": {
-    "mtime": 1782227907.0893993,
-    "ast_hash": "0fd8778df44c10aa1abce73f29edc277",
+    "mtime": 1782371179.4646783,
+    "ast_hash": "49e33081d0626a44533b6c3bf87d2879",
     "semantic_hash": ""
   },
   "src/knowledge_hub/ingestion/__init__.py": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "src/knowledge_hub/storage/metadata.py": {
-    "mtime": 1782218672.0559382,
-    "ast_hash": "514acfbce6c1ae6620d14ea46e2c00ed",
+    "mtime": 1782371512.930535,
+    "ast_hash": "5e4ab82c41ef5272ff9d0a89d4d28246",
     "semantic_hash": ""
   },
   "tests/__init__.py": {
@@ -85,13 +85,13 @@
     "semantic_hash": ""
   },
   "tests/test_config.py": {
-    "mtime": 1782228151.8343809,
-    "ast_hash": "51de91e1615dbec3c6bbcfe7dda68778",
+    "mtime": 1782291664.4464698,
+    "ast_hash": "62373f6530ceefcf07b9abf53ed764f0",
     "semantic_hash": ""
   },
   "tests/test_metadata.py": {
-    "mtime": 1782211058.0072105,
-    "ast_hash": "b3ea2af4d337fbbc2a25fd745fdba7fe",
+    "mtime": 1782371494.7716126,
+    "ast_hash": "68331b6e369950d83a91b200cfc6770e",
     "semantic_hash": ""
   },
   "tests/test_schemas.py": {
@@ -100,38 +100,38 @@
     "semantic_hash": ""
   },
   ".superpowers/sdd/progress.md": {
-    "mtime": 1782240832.85021,
-    "ast_hash": "fb7f3fda8e48cfc458c2235e205a2587",
+    "mtime": 1782371434.5150216,
+    "ast_hash": "8c2c2f44ed01a3719ef3fe1c17d9abfb",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-1-brief.md": {
-    "mtime": 1782204555.6804984,
-    "ast_hash": "cb50a6d51dfe751d47dfd0d40fd6ce84",
+    "mtime": 1782371152.1882865,
+    "ast_hash": "5819beaa8d852580a95db08203afd9b5",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-1-report.md": {
-    "mtime": 1782207811.8101342,
-    "ast_hash": "5cb107d8b04b2de4f9d94c4531241e6e",
+    "mtime": 1782371208.1408975,
+    "ast_hash": "fa3dba7d645ac84465e07a097fd08f61",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-2-brief.md": {
-    "mtime": 1782208178.025518,
-    "ast_hash": "e6988cd290f9d53f8ee1d75309a55dbf",
+    "mtime": 1782371282.8655515,
+    "ast_hash": "937bedeeac4a541cec0960fdc4e91bfe",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-2-report.md": {
-    "mtime": 1782209561.341904,
-    "ast_hash": "e70886c055096ad5faef18addb7c2a52",
+    "mtime": 1782371376.0224593,
+    "ast_hash": "2afcfc9ff3368d90ee2292628f18d17e",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-3-brief.md": {
-    "mtime": 1782210609.4392254,
-    "ast_hash": "f5c0e332b0b0495cbe25772336f10f5d",
+    "mtime": 1782371464.731313,
+    "ast_hash": "16dbb2b1f30a3326d1c791ba282e60d6",
     "semantic_hash": ""
   },
   ".superpowers/sdd/task-3-report.md": {
-    "mtime": 1782218241.7712095,
-    "ast_hash": "c21051918e98822f3c827284663dbf6d",
+    "mtime": 1782371536.9040086,
+    "ast_hash": "431a6a5b760b8c3a911eb6cd24ad9e95",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-06-23-vector-rag-knowledge-hub-plan.md": {
@@ -149,34 +149,29 @@
     "ast_hash": "6118f222a3f54882f09e1c70f607b4be",
     "semantic_hash": ""
   },
-  "tps546d24a_new.pdf": {
-    "mtime": 1782209392.656421,
-    "ast_hash": "244f774848aef24f2743c0882f239838",
-    "semantic_hash": ""
-  },
   "src/knowledge_hub/cli/main.py": {
-    "mtime": 1782237893.081777,
-    "ast_hash": "b8b2535f90a721dbf066e7dc746334ad",
+    "mtime": 1782286888.2403464,
+    "ast_hash": "0beb0f8a42d944937dd87c2867bee3c3",
     "semantic_hash": ""
   },
   "src/knowledge_hub/ingestion/chunker.py": {
-    "mtime": 1782225668.759536,
-    "ast_hash": "640d2638abf3ebaafc0c7fd35537bf3c",
+    "mtime": 1782356143.3731825,
+    "ast_hash": "f8ac65331244b8d623295ef2b2496dc7",
     "semantic_hash": ""
   },
   "src/knowledge_hub/ingestion/embedder.py": {
-    "mtime": 1782228041.8967564,
-    "ast_hash": "94f8f53dc480ad0d858228c9a4879c79",
+    "mtime": 1782356151.8188746,
+    "ast_hash": "4505418bf14dbe54e046ff0ca4b480e1",
     "semantic_hash": ""
   },
   "src/knowledge_hub/ingestion/loaders.py": {
-    "mtime": 1782229950.7260008,
-    "ast_hash": "dc73c2a3c6f0446b57e3d25a64c21fe3",
+    "mtime": 1782357595.8407946,
+    "ast_hash": "0c3e22cf6e8a3d2da3b6f222d33a818c",
     "semantic_hash": ""
   },
   "src/knowledge_hub/ingestion/pipeline.py": {
-    "mtime": 1782232717.3925197,
-    "ast_hash": "a8f144d5e3374e2eed2de9fd367b24b3",
+    "mtime": 1782286374.6559215,
+    "ast_hash": "5ec1b9084284a190fbbc7a5f8054e24e",
     "semantic_hash": ""
   },
   "src/knowledge_hub/retrieval/query_engine.py": {
@@ -185,8 +180,8 @@
     "semantic_hash": ""
   },
   "src/knowledge_hub/retrieval/reranker.py": {
-    "mtime": 1782233230.389784,
-    "ast_hash": "61451bf180c7b1d10b9066da1682ea10",
+    "mtime": 1782282079.6309087,
+    "ast_hash": "c8886fbdff09c4aff14b66ef4f4e30a2",
     "semantic_hash": ""
   },
   "src/knowledge_hub/server/health.py": {
@@ -195,8 +190,8 @@
     "semantic_hash": ""
   },
   "src/knowledge_hub/server/mcp_server.py": {
-    "mtime": 1782237038.4676874,
-    "ast_hash": "6f86f2b9843e7ee2f9497bbae295d7f5",
+    "mtime": 1782290047.2509363,
+    "ast_hash": "f155316e35a1f56dd03a7818702376ce",
     "semantic_hash": ""
   },
   "src/knowledge_hub/server/tools.py": {
@@ -205,18 +200,18 @@
     "semantic_hash": ""
   },
   "src/knowledge_hub/storage/vector_store.py": {
-    "mtime": 1782239646.5903776,
-    "ast_hash": "c0e194c95ae4ffcca9857159a635b63a",
+    "mtime": 1782371332.3700268,
+    "ast_hash": "f9217667fc75a03f2707294ba4b77969",
     "semantic_hash": ""
   },
   "tests/test_chunker.py": {
-    "mtime": 1782225704.2088354,
-    "ast_hash": "73a64fe7fa67eebaa1183b7e2554f610",
+    "mtime": 1782294006.3324287,
+    "ast_hash": "340405c8a8c2df243cd0405f83b72f39",
     "semantic_hash": ""
   },
   "tests/test_cli.py": {
-    "mtime": 1782237946.3402803,
-    "ast_hash": "a986ed8a24bb0b0da3ee013674ab6fc7",
+    "mtime": 1782291161.1264803,
+    "ast_hash": "c0d6c09ec39592646734910d2c7bccf6",
     "semantic_hash": ""
   },
   "tests/test_embedder.py": {
@@ -230,8 +225,8 @@
     "semantic_hash": ""
   },
   "tests/test_integration.py": {
-    "mtime": 1782238964.5961294,
-    "ast_hash": "4a846c1328e4716143083d5728392d87",
+    "mtime": 1782273087.6996396,
+    "ast_hash": "233a21e815e881c63f092dc535a7fa2b",
     "semantic_hash": ""
   },
   "tests/test_loaders.py": {
@@ -240,8 +235,8 @@
     "semantic_hash": ""
   },
   "tests/test_mcp_server.py": {
-    "mtime": 1782235965.6296377,
-    "ast_hash": "64d89ed9e25ce99830000c1a1828f4d3",
+    "mtime": 1782291588.4509373,
+    "ast_hash": "b231c66bafc06ba86056220399b7d01f",
     "semantic_hash": ""
   },
   "tests/test_pipeline.py": {
@@ -265,8 +260,8 @@
     "semantic_hash": ""
   },
   "tests/test_vector_store.py": {
-    "mtime": 1782239728.005902,
-    "ast_hash": "12d7edbf872be38fde62f5f8f041e47b",
+    "mtime": 1782371309.1342664,
+    "ast_hash": "558814d3c1e8a09f4bca01acbee02567",
     "semantic_hash": ""
   },
   ".superpowers/sdd/flagembedding-transition-report.md": {
@@ -357,6 +352,211 @@
   ".superpowers/sdd/task-9-report.md": {
     "mtime": 1782233501.3538938,
     "ast_hash": "55be614acfbb2c9f6bd54326a64b39dc",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-12-report.md": {
+    "mtime": 1782242285.0117466,
+    "ast_hash": "9c7e7988f9ee5701fc0dbab65188bcd4",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-13-report.md": {
+    "mtime": 1782242312.1879978,
+    "ast_hash": "c0eaa0150fdcbae587d10a87fb313823",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1782293355.9438953,
+    "ast_hash": "41c93d53689f448e1d66c019c1028d9b",
+    "semantic_hash": ""
+  },
+  "README_CN.md": {
+    "mtime": 1782293347.527832,
+    "ast_hash": "f923db38d85660e6c60bd0dca7c3c2b4",
+    "semantic_hash": ""
+  },
+  "data/algorithm-design-patterns.md": {
+    "mtime": 1782267711.0161166,
+    "ast_hash": "1111c445dc37c960c65bdc7ecd40cc82",
+    "semantic_hash": ""
+  },
+  "data/c-best-practices.md": {
+    "mtime": 1782267647.2742476,
+    "ast_hash": "830b3786fd76a7960be63a3c89dc6c46",
+    "semantic_hash": ""
+  },
+  "data/coding-style.rst": {
+    "mtime": 1782267229.0233653,
+    "ast_hash": "f4d8552ea6bbac22ae1dab6d0cb986c4",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-24-accurate-token-counting.md": {
+    "mtime": 1782292818.2232666,
+    "ast_hash": "fea5c4c353c603fe371fffd8b2cda09f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-25-http-upload-server-plan.md": {
+    "mtime": 1782371053.306128,
+    "ast_hash": "f51ad19fbe5d05f20767ec294625130f",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-24-accurate-token-counting-design.md": {
+    "mtime": 1782292721.1406868,
+    "ast_hash": "fd1c75171a640cf9c5c597e429afea65",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-24-mcp-transport-design.md": {
+    "mtime": 1782289670.6109986,
+    "ast_hash": "0a7839760432deca93ae20191dd4aca9",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-25-http-upload-server-design.md": {
+    "mtime": 1782370713.2675784,
+    "ast_hash": "467b19597210a003d7c3602da95e506a",
+    "semantic_hash": ""
+  },
+  "data/attention-is-all-you-need.pdf": {
+    "mtime": 1782296283.6915865,
+    "ast_hash": "18e1b007a1dab45b30cc861ba2dfda25",
+    "semantic_hash": ""
+  },
+  "data/bcm2835-arm-peripherals.pdf": {
+    "mtime": 1782268219.8331566,
+    "ast_hash": "e7746771697246a2fba8a8dd0ca8bf86",
+    "semantic_hash": ""
+  },
+  "data/bert-pretraining.pdf": {
+    "mtime": 1782296286.2596276,
+    "ast_hash": "eb00ee1cacec4cdc5fdb41beff58f944",
+    "semantic_hash": ""
+  },
+  "data/bge-m3-multilingual-embedding.pdf": {
+    "mtime": 1782296283.5835922,
+    "ast_hash": "22d270c0b0d445e3d78c7ef3aa2e7c6d",
+    "semantic_hash": ""
+  },
+  "data/chain-of-thought-prompting.pdf": {
+    "mtime": 1782296283.8186824,
+    "ast_hash": "bb5cb052621074b4426998fcfeee100b",
+    "semantic_hash": ""
+  },
+  "data/deepseek-coder-v2.pdf": {
+    "mtime": 1782296496.5229554,
+    "ast_hash": "fe20822a63ae62edfe93197d9c8e2035",
+    "semantic_hash": ""
+  },
+  "data/deepseek-coder.pdf": {
+    "mtime": 1782296404.662153,
+    "ast_hash": "397e17f2186561981ee01100330f7a72",
+    "semantic_hash": ""
+  },
+  "data/deepseek-llm-scaling-open-source.pdf": {
+    "mtime": 1782296405.9659817,
+    "ast_hash": "6a9016866ceb7d8e49ba109f58479e5e",
+    "semantic_hash": ""
+  },
+  "data/deepseek-math.pdf": {
+    "mtime": 1782296406.4429176,
+    "ast_hash": "9dcf13b2c16b347b3ee21848eaabc312",
+    "semantic_hash": ""
+  },
+  "data/deepseek-moe-expert-specialization.pdf": {
+    "mtime": 1782296404.4826097,
+    "ast_hash": "f58f3c8acaa6d30e8b6da544540dbecb",
+    "semantic_hash": ""
+  },
+  "data/deepseek-prover-v1.5.pdf": {
+    "mtime": 1782296458.4956987,
+    "ast_hash": "daa44919171e7db0520210f6f899b50c",
+    "semantic_hash": ""
+  },
+  "data/deepseek-prover-v2.pdf": {
+    "mtime": 1782296459.8165202,
+    "ast_hash": "901ff39bf048e170cd968d3d9565018f",
+    "semantic_hash": ""
+  },
+  "data/deepseek-prover.pdf": {
+    "mtime": 1782296457.8783698,
+    "ast_hash": "f8d3f8f383040deaa6b8dc31fa414f09",
+    "semantic_hash": ""
+  },
+  "data/deepseek-r1-reasoning.pdf": {
+    "mtime": 1782358366.1870074,
+    "ast_hash": "37bc8f9c45b466c4611d753368ff6dd9",
+    "semantic_hash": ""
+  },
+  "data/deepseek-v2-strong-economical-moe.pdf": {
+    "mtime": 1782296404.6698673,
+    "ast_hash": "010731d0c87b19c192da45600b47bbf5",
+    "semantic_hash": ""
+  },
+  "data/deepseek-v3.pdf": {
+    "mtime": 1782296404.7056527,
+    "ast_hash": "2ca231d44e4b9131c5ef7f121acf72ab",
+    "semantic_hash": ""
+  },
+  "data/deepseek-vl-vision-language.pdf": {
+    "mtime": 1782296459.491512,
+    "ast_hash": "587eddfbc91cd42deefc478ba52e5633",
+    "semantic_hash": ""
+  },
+  "data/deepseek-vl2.pdf": {
+    "mtime": 1782296459.9380198,
+    "ast_hash": "39149a04e6010254064b7547ea58998a",
+    "semantic_hash": ""
+  },
+  "data/flashattention-fast-memory-efficient.pdf": {
+    "mtime": 1782296283.2002373,
+    "ast_hash": "71e6e8bb3499c6529c66850a915d395e",
+    "semantic_hash": ""
+  },
+  "data/gpt3-language-models-are-few-shot-learners.pdf": {
+    "mtime": 1782296283.9218676,
+    "ast_hash": "f1798481561d9495486bc007180aa998",
+    "semantic_hash": ""
+  },
+  "data/instructgpt-training-to-follow-instructions.pdf": {
+    "mtime": 1782296283.453721,
+    "ast_hash": "cca17e41d42b5533f5c5bbe302202d44",
+    "semantic_hash": ""
+  },
+  "data/llama-open-efficient-foundation-models.pdf": {
+    "mtime": 1782296282.8743134,
+    "ast_hash": "6aa97afa1573075bda0ada0dba59ffd0",
+    "semantic_hash": ""
+  },
+  "data/llama2-foundation-fine-tuned-chat.pdf": {
+    "mtime": 1782296285.7553103,
+    "ast_hash": "4fa5a523dfe0a8aebbe67c7d5e6f0b3f",
+    "semantic_hash": ""
+  },
+  "data/lora-low-rank-adaptation.pdf": {
+    "mtime": 1782296284.760211,
+    "ast_hash": "6071803f93e4573eb7e0fb2c4e65976a",
+    "semantic_hash": ""
+  },
+  "data/mistral-7b.pdf": {
+    "mtime": 1782296293.8460343,
+    "ast_hash": "8ad11d7d6d3a9ce8a0870088ebbcdb00",
+    "semantic_hash": ""
+  },
+  "data/qlora-efficient-finetuning-quantized.pdf": {
+    "mtime": 1782296284.475604,
+    "ast_hash": "f4200e25fbbfd97990ec1996aafbc2fe",
+    "semantic_hash": ""
+  },
+  "data/rag-retrieval-augmented-generation.pdf": {
+    "mtime": 1782296288.0909085,
+    "ast_hash": "2bd227682ddb17d259d48455a8b9d951",
+    "semantic_hash": ""
+  },
+  "data/scaling-laws-neural-language-models.pdf": {
+    "mtime": 1782296284.340452,
+    "ast_hash": "66bbfa515aad7a216df52938b9c1ecd8",
+    "semantic_hash": ""
+  },
+  "data/word2vec-efficient-estimation.pdf": {
+    "mtime": 1782296282.4755783,
+    "ast_hash": "ae57979bd1115dacba35d86a916ccd6c",
     "semantic_hash": ""
   }
 }

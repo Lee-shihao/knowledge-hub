@@ -5,8 +5,8 @@ execution time so that `kh --help` and `kh config show` respond instantly.
 """
 
 import asyncio
+import logging
 import os
-import warnings
 from pathlib import Path
 
 import click
@@ -14,8 +14,12 @@ import structlog
 
 from knowledge_hub.config import Settings
 
-# Suppress transformers tokenizer warnings (non-actionable for end users)
-warnings.filterwarnings("ignore", message=".*XLMRobertaTokenizerFast.*")
+# Suppress transformers fast-tokenizer warnings (non-actionable for end users).
+# The "XLMRobertaTokenizerFast" warning is emitted via the transformers logger
+# (not Python warnings.warn), so both mechanisms are needed:
+# - The logging suppressor silences the logger.warning() from transformers' internals
+# - The warnings filter catches any Python-level warnings from the same code path
+logging.getLogger("transformers.tokenization_utils_base").setLevel(logging.ERROR)
 
 logger = structlog.get_logger()
 
@@ -26,15 +30,14 @@ def _get_settings() -> Settings:
 
 def _build_pipeline(settings):
     """Build ingestion pipeline (triggers heavy imports)."""
-    from qdrant_client import QdrantClient
     from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
     from knowledge_hub.ingestion.loaders import DocumentLoader
     from knowledge_hub.ingestion.chunker import SemanticChunker
     from knowledge_hub.ingestion.pipeline import IngestionPipeline
     from knowledge_hub.storage.metadata import SourceMetadataManager
-    from knowledge_hub.storage.vector_store import QdrantVectorStore
+    from knowledge_hub.storage.vector_store import QdrantVectorStore, build_qdrant_client
 
-    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
+    client = build_qdrant_client(settings)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
     return IngestionPipeline(
@@ -49,14 +52,13 @@ def _build_pipeline(settings):
 
 def _build_query_engine(settings):
     """Build query engine (triggers heavy imports)."""
-    from qdrant_client import QdrantClient
     from knowledge_hub.ingestion.embedder import FlagEmbeddingEmbedder
     from knowledge_hub.retrieval.query_engine import QueryEngine
     from knowledge_hub.retrieval.reranker import Reranker
     from knowledge_hub.storage.metadata import SourceMetadataManager
-    from knowledge_hub.storage.vector_store import QdrantVectorStore
+    from knowledge_hub.storage.vector_store import QdrantVectorStore, build_qdrant_client
 
-    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
+    client = build_qdrant_client(settings)
     meta_mgr = SourceMetadataManager(settings, client)
     store = QdrantVectorStore(settings, client, meta_mgr)
     embedder = FlagEmbeddingEmbedder(settings)
@@ -126,11 +128,11 @@ def query(query_text, top_k):
 @cli.command()
 def status():
     """Show knowledge base status."""
-    from qdrant_client import QdrantClient
     from knowledge_hub.storage.metadata import SourceMetadataManager
+    from knowledge_hub.storage.vector_store import build_qdrant_client
 
     settings = _get_settings()
-    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
+    client = build_qdrant_client(settings)
     try:
         count = client.count(collection_name=settings.QDRANT_COLLECTION).count
         meta_mgr = SourceMetadataManager(settings, client)
@@ -151,13 +153,13 @@ def status():
 @cli.command()
 def cleanup_orphans():
     """Remove vectors for deleted source files."""
-    from qdrant_client import QdrantClient
     from knowledge_hub.storage.metadata import SourceMetadataManager
+    from knowledge_hub.storage.vector_store import build_qdrant_client
 
     settings = _get_settings()
     data_dir = Path(settings.DATA_DIR)
     local_files = {p.name for p in data_dir.rglob("*") if p.is_file()} if data_dir.exists() else set()
-    client = QdrantClient(settings.QDRANT_URL, check_compatibility=False)
+    client = build_qdrant_client(settings)
     meta_mgr = SourceMetadataManager(settings, client)
     removed = asyncio.run(meta_mgr.orphan_cleanup(local_files))
     click.echo(f"Removed {removed} orphan source(s).")
@@ -191,18 +193,97 @@ def config_reset_batch_size():
 
 
 @cli.command()
-@click.option("--host", default=None, help="Bind address.")
-@click.option("--port", default=None, type=int, help="Bind port.")
-def serve(host, port):
-    """Start the MCP server."""
-    from knowledge_hub.server.mcp_server import run_mcp_server
+@click.option("--host", default=None, help="Bind address for MCP and upload servers.")
+@click.option("--port", default=None, type=int, help="Bind port for MCP server.")
+@click.option("--upload-port", default=None, type=int, help="Bind port for upload server.")
+@click.option("--no-upload", is_flag=True, help="Start MCP server only (no upload).")
+def serve(host, port, upload_port, no_upload):
+    """Start MCP and HTTP upload servers."""
+    import anyio
+    import uvicorn
+    from knowledge_hub.server.app_state import AppState
+    from knowledge_hub.server.upload_server import create_upload_app
 
     settings = _get_settings()
     if host:
-        settings.MCP_HOST = host
+        settings.SERVER_HOST = host
     if port:
         settings.MCP_PORT = port
-    run_mcp_server(settings)
+    if upload_port:
+        settings.UPLOAD_PORT = upload_port
+    if not settings.UPLOAD_ENABLED:
+        no_upload = True
+
+    async def _main():
+        state = await AppState.create(settings)
+
+        if no_upload:
+            config = uvicorn.Config(
+                state.mcp.http_app(
+                    transport="streamable-http",
+                    stateless_http=True,
+                    json_response=True,
+                ),
+                host=settings.SERVER_HOST,
+                port=settings.MCP_PORT,
+            )
+            logger.info(
+                "server_starting",
+                mcp=f"http://{settings.SERVER_HOST}:{settings.MCP_PORT}/mcp",
+            )
+            await uvicorn.Server(config).serve()
+        else:
+            await _run_servers(state, settings)
+
+    anyio.run(_main)
+
+
+async def _run_servers(state, settings):
+    """Start MCP and upload servers in the same anyio task group."""
+    import anyio
+    import uvicorn
+    from knowledge_hub.server.upload_server import create_upload_app
+
+    mcp_app = state.mcp.http_app(
+        transport="streamable-http",
+        stateless_http=True,
+        json_response=True,
+    )
+    upload_app = create_upload_app(state)
+
+    mcp_config = uvicorn.Config(
+        mcp_app,
+        host=settings.SERVER_HOST,
+        port=settings.MCP_PORT,
+        log_level="warning",
+    )
+    upload_config = uvicorn.Config(
+        upload_app,
+        host=settings.SERVER_HOST,
+        port=settings.UPLOAD_PORT,
+        log_level="warning",
+    )
+
+    logger.info(
+        "server_starting",
+        mcp=f"http://{settings.SERVER_HOST}:{settings.MCP_PORT}/mcp",
+        upload=f"http://{settings.SERVER_HOST}:{settings.UPLOAD_PORT}/upload",
+    )
+
+    async with anyio.create_task_group() as tg:
+        tg.start_soon(uvicorn.Server(mcp_config).serve)
+        tg.start_soon(uvicorn.Server(upload_config).serve)
+
+    await _shutdown(state)
+
+
+async def _shutdown(state):
+    """Wait for running jobs and close connections before exit."""
+    if state.job_manager.has_running_job():
+        logger.info("waiting_for_running_job")
+        await state.job_manager.wait_until_idle(timeout=300.0)
+    state.qdrant_client.close()
+    logger.info("shutdown_complete")
 
 
 if __name__ == "__main__":

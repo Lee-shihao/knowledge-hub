@@ -16,4 +16,4 @@ graphify-out/.graphify_*.json
 graphify-out/.graphify_python
 graphify-out/.graphify_root
 
-data/*_test.md
+data/*test.md

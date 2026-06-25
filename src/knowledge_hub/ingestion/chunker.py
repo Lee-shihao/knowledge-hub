@@ -45,7 +45,19 @@ class SemanticChunker:
         for doc in documents:
             if not doc.text or not doc.text.strip():
                 continue
-            sections = self._split_by_headings(doc.text)
+            if not isinstance(doc.text, str):
+                logger.warning(
+                    "non_string_doc_text_skipped",
+                    type=type(doc.text).__name__,
+                    file=source_file,
+                )
+                continue
+            # Sanitize: PDF math extraction can produce lone surrogates
+            # (e.g. \ud835 from broken UTF-16 math italic symbols).
+            # These are valid Python str but invalid UTF-8, causing
+            # TextEncodeInput in the Rust tokenizer.
+            text = doc.text.encode("utf-8", errors="replace").decode("utf-8")
+            sections = self._split_by_headings(text)
             for heading_chain, section_text in sections:
                 section_chunks = self._split_by_tokens(
                     section_text, heading_chain, source_file, source_hash

@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-24T09:40:08.021Z",
+  "generatedAt": "2026-06-25T03:19:59.039Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -209,7 +209,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/embedder.py": {
-      "mtime": 1782281809460.5037,
+      "mtime": 1782356151818.8745,
       "size": 7441,
       "symbols": {
         "purpose": null,
@@ -241,8 +241,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/chunker.py": {
-      "mtime": 1782293438028.4907,
-      "size": 9017,
+      "mtime": 1782356143373.1826,
+      "size": 9612,
       "symbols": {
         "purpose": "SemanticChunker — heading-aware document chunking for embedding.",
         "exports": [
@@ -270,8 +270,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/loaders.py": {
-      "mtime": 1782229950726.0007,
-      "size": 1931,
+      "mtime": 1782357595840.7944,
+      "size": 4146,
       "symbols": {
         "purpose": null,
         "exports": [

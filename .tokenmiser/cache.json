@@ -1,9 +1,9 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-25T09:58:24.159Z",
+  "generatedAt": "2026-06-25T10:04:35.145Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
-      "mtime": 1782381445611.5574,
+      "mtime": 1782381866194.69,
       "size": 191,
       "symbols": {
         "purpose": null,
@@ -14,7 +14,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/__init__.py": {
-      "mtime": 1782381445611.1333,
+      "mtime": 1782381866192.9219,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -23,7 +23,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/__init__.py": {
-      "mtime": 1782381445611.9858,
+      "mtime": 1782381866196.8232,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -32,7 +32,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/__init__.py": {
-      "mtime": 1782381445614.5234,
+      "mtime": 1782381866201.323,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -41,7 +41,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/__init__.py": {
-      "mtime": 1782381445612.2573,
+      "mtime": 1782381866197.637,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -50,7 +50,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/__init__.py": {
-      "mtime": 1782381445613.4587,
+      "mtime": 1782381866199.2986,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -59,7 +59,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/__init__.py": {
-      "mtime": 1782381445614.5234,
+      "mtime": 1782381866201.323,
       "size": 0,
       "symbols": {
         "purpose": null,
@@ -68,8 +68,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_config.py": {
-      "mtime": 1782381464206.442,
-      "size": 1303,
+      "mtime": 1782381866186.4578,
+      "size": 1300,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -80,8 +80,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/config.py": {
-      "mtime": 1782381445612.081,
-      "size": 1246,
+      "mtime": 1782381866197.1616,
+      "size": 1243,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -91,7 +91,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_schemas.py": {
-      "mtime": 1782381445607.2744,
+      "mtime": 1782381866185.1594,
       "size": 1864,
       "symbols": {
         "purpose": null,
@@ -106,7 +106,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/schemas.py": {
-      "mtime": 1782381445611.9858,
+      "mtime": 1782381866196.8232,
       "size": 891,
       "symbols": {
         "purpose": null,
@@ -121,7 +121,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_metadata.py": {
-      "mtime": 1782381445611.0654,
+      "mtime": 1782381866192.7869,
       "size": 3670,
       "symbols": {
         "purpose": null,
@@ -139,7 +139,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_vector_store.py": {
-      "mtime": 1782381445610.6907,
+      "mtime": 1782381866189.1824,
       "size": 8535,
       "symbols": {
         "purpose": null,
@@ -159,7 +159,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_embedder.py": {
-      "mtime": 1782381445609.8838,
+      "mtime": 1782381866185.85,
       "size": 10510,
       "symbols": {
         "purpose": null,
@@ -179,7 +179,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/embedder.py": {
-      "mtime": 1782381445613.4587,
+      "mtime": 1782381866199.2986,
       "size": 7441,
       "symbols": {
         "purpose": null,
@@ -191,7 +191,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_chunker.py": {
-      "mtime": 1782381445610.494,
+      "mtime": 1782381866188.26,
       "size": 7802,
       "symbols": {
         "purpose": "Tests for SemanticChunker — heading-aware document chunking.",
@@ -211,7 +211,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/chunker.py": {
-      "mtime": 1782381445613.9211,
+      "mtime": 1782381866199.42,
       "size": 9876,
       "symbols": {
         "purpose": "SemanticChunker — heading-aware document chunking for embedding.",
@@ -222,7 +222,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_loaders.py": {
-      "mtime": 1782381445611.9026,
+      "mtime": 1782381866195.4094,
       "size": 2093,
       "symbols": {
         "purpose": null,
@@ -240,7 +240,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/loaders.py": {
-      "mtime": 1782381445613.2476,
+      "mtime": 1782381866198.1746,
       "size": 4146,
       "symbols": {
         "purpose": null,
@@ -251,7 +251,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_pipeline.py": {
-      "mtime": 1782381445611.791,
+      "mtime": 1782381866195.1309,
       "size": 9865,
       "symbols": {
         "purpose": "Tests for IngestionPipeline — orchestrates load → chunk → embed → store.",
@@ -271,7 +271,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/ingestion/pipeline.py": {
-      "mtime": 1782381445612.7197,
+      "mtime": 1782381866197.9604,
       "size": 6117,
       "symbols": {
         "purpose": "IngestionPipeline — orchestrates the full ingestion flow: load → chunk → embed → store.",
@@ -283,7 +283,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_reranker.py": {
-      "mtime": 1782381445610.0173,
+      "mtime": 1782381866186.191,
       "size": 6418,
       "symbols": {
         "purpose": "Tests for Reranker using FlagReranker from FlagEmbedding.",
@@ -303,7 +303,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/reranker.py": {
-      "mtime": 1782381445612.201,
+      "mtime": 1782381866197.4023,
       "size": 5194,
       "symbols": {
         "purpose": "Reranker using FlagEmbedding's FlagReranker for cross-encoder re-ranking.",
@@ -314,7 +314,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_query_engine.py": {
-      "mtime": 1782381445610.5837,
+      "mtime": 1782381866188.838,
       "size": 9192,
       "symbols": {
         "purpose": "Tests for QueryEngine — orchestrates embed → hybrid search → rerank.",
@@ -334,7 +334,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/retrieval/query_engine.py": {
-      "mtime": 1782381445612.2573,
+      "mtime": 1782381866197.637,
       "size": 3430,
       "symbols": {
         "purpose": "QueryEngine — orchestrates the full query flow: embed → hybrid search → rerank.",
@@ -345,7 +345,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_health.py": {
-      "mtime": 1782381445610.9202,
+      "mtime": 1782381866191.3416,
       "size": 4098,
       "symbols": {
         "purpose": "Tests for HealthMonitor (no real Qdrant/GPU probing, mock-based only).",
@@ -357,7 +357,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/health.py": {
-      "mtime": 1782381445614.0037,
+      "mtime": 1782381866199.6013,
       "size": 4377,
       "symbols": {
         "purpose": "HealthMonitor — background health prober for Qdrant and GPU.",
@@ -369,7 +369,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_tools.py": {
-      "mtime": 1782381445610.3628,
+      "mtime": 1782381866187.8525,
       "size": 7382,
       "symbols": {
         "purpose": "Tests for MCP tools — query_knowledge_base health gates and QueryEngine calls.",
@@ -388,7 +388,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/tools.py": {
-      "mtime": 1782381445614.3728,
+      "mtime": 1782381866200.8203,
       "size": 4050,
       "symbols": {
         "purpose": "MCP tool wrappers around the QueryEngine.",
@@ -399,7 +399,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_mcp_server.py": {
-      "mtime": 1782381445611.6155,
+      "mtime": 1782381866194.8604,
       "size": 7992,
       "symbols": {
         "purpose": "Tests for MCP server creation — app wiring, auth, IP middleware.",
@@ -411,7 +411,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/mcp_server.py": {
-      "mtime": 1782381464204.174,
+      "mtime": 1782381866201.323,
       "size": 4161,
       "symbols": {
         "purpose": "MCP server — receives AppState and exposes query/list/status tools.",
@@ -422,8 +422,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_cli.py": {
-      "mtime": 1782381445610.8027,
-      "size": 14902,
+      "mtime": 1782381866190.627,
+      "size": 14887,
       "symbols": {
         "purpose": "Tests for the knowledge-hub CLI.",
         "exports": [
@@ -441,8 +441,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
-      "mtime": 1782381502309.3567,
-      "size": 9810,
+      "mtime": 1782381866202.137,
+      "size": 9795,
       "symbols": {
         "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",
         "exports": [
@@ -460,7 +460,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_integration.py": {
-      "mtime": 1782381445611.494,
+      "mtime": 1782381866193.2322,
       "size": 8265,
       "symbols": {
         "purpose": null,
@@ -480,7 +480,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_job_manager.py": {
-      "mtime": 1782381445611.1333,
+      "mtime": 1782381866192.9219,
       "size": 8497,
       "symbols": {
         "purpose": "Tests for JobManager — async job tracking with serialized pipeline execution.",
@@ -498,7 +498,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/job_manager.py": {
-      "mtime": 1782381445614.4236,
+      "mtime": 1782381866200.8826,
       "size": 4417,
       "symbols": {
         "purpose": "JobManager — async job tracking for ingestion pipeline execution.",
@@ -509,7 +509,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/app_state.py": {
-      "mtime": 1782381445614.467,
+      "mtime": 1782381866201.2588,
       "size": 3349,
       "symbols": {
         "purpose": "AppState — single-process shared state for MCP and HTTP servers.",
@@ -520,7 +520,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_upload_server.py": {
-      "mtime": 1782381445611.0073,
+      "mtime": 1782381866191.565,
       "size": 7303,
       "symbols": {
         "purpose": "Tests for HTTP upload server — upload, status, auth, validation.",
@@ -537,7 +537,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/upload_server.py": {
-      "mtime": 1782381464204.3706,
+      "mtime": 1782381866199.6978,
       "size": 4351,
       "symbols": {
         "purpose": "HTTP upload server — receives file uploads and queues ingestion jobs.",
@@ -548,7 +548,7 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_integration_upload.py": {
-      "mtime": 1782381445609.607,
+      "mtime": 1782381866185.6262,
       "size": 3951,
       "symbols": {
         "purpose": "Integration test — upload, status polling, query round-trip.",

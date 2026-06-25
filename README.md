@@ -154,7 +154,7 @@ All settings use `KH_` prefix and can be configured via:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `KH_SERVER_HOST` | `127.0.0.1` | Bind address for MCP and upload servers |
-| `KH_SERVER_PORT` | `8765` | MCP server port |
+| `KH_MCP_PORT` | `8765` | MCP server port |
 | `KH_UPLOAD_PORT` | `8766` | HTTP upload server port |
 | `KH_UPLOAD_ENABLED` | `true` | Enable HTTP upload server on `kh serve` |
 | `KH_SERVER_AUTH_TOKEN` | — | Auth token for MCP and upload (required if binding to non-localhost) |

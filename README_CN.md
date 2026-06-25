@@ -152,7 +152,7 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
 | `KH_SERVER_HOST` | `127.0.0.1` | MCP 和上传服务器的绑定地址 |
-| `KH_SERVER_PORT` | `8765` | MCP 服务器端口 |
+| `KH_MCP_PORT` | `8765` | MCP 服务器端口 |
 | `KH_UPLOAD_PORT` | `8766` | HTTP 上传服务器端口 |
 | `KH_UPLOAD_ENABLED` | `true` | 启用 HTTP 上传服务器 |
 | `KH_SERVER_AUTH_TOKEN` | — | MCP 和上传的认证令牌（绑定非本机地址时必填） |

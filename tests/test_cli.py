@@ -68,7 +68,7 @@ class TestConfigShow:
             mock_settings = MagicMock()
             mock_settings.model_dump.return_value = {
                 "SERVER_HOST": "127.0.0.1",
-                "SERVER_PORT": 8765,
+                "MCP_PORT": 8765,
                 "SERVER_AUTH_TOKEN": "secret-token-12345",
                 "SERVER_ALLOWED_IPS": ["192.168.1.1"],
                 "EMBED_MODEL": "BAAI/bge-m3",
@@ -338,13 +338,13 @@ class TestServe:
 
             mock_settings = MagicMock()
             mock_settings.SERVER_HOST = "127.0.0.1"
-            mock_settings.SERVER_PORT = 8765
+            mock_settings.MCP_PORT = 8765
             mock_get_settings.return_value = mock_settings
 
             result = runner.invoke(cli, ["serve", "--host", "0.0.0.0", "--port", "9999"])
             assert result.exit_code == 0
             assert mock_settings.SERVER_HOST == "0.0.0.0"
-            assert mock_settings.SERVER_PORT == 9999
+            assert mock_settings.MCP_PORT == 9999
             mock_anyio_run.assert_called_once()
 
     def test_serve_with_upload_port(self, runner):
@@ -354,7 +354,7 @@ class TestServe:
 
             mock_settings = MagicMock()
             mock_settings.SERVER_HOST = "127.0.0.1"
-            mock_settings.SERVER_PORT = 8765
+            mock_settings.MCP_PORT = 8765
             mock_settings.UPLOAD_PORT = 8766
             mock_get_settings.return_value = mock_settings
 
@@ -370,7 +370,7 @@ class TestServe:
 
             mock_settings = MagicMock()
             mock_settings.SERVER_HOST = "127.0.0.1"
-            mock_settings.SERVER_PORT = 8765
+            mock_settings.MCP_PORT = 8765
             mock_get_settings.return_value = mock_settings
 
             result = runner.invoke(cli, ["serve", "--no-upload"])

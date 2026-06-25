@@ -6,7 +6,7 @@ from knowledge_hub.config import Settings
 def test_settings_defaults():
     settings = Settings()
     assert settings.SERVER_HOST == "127.0.0.1"
-    assert settings.SERVER_PORT == 8765
+    assert settings.MCP_PORT == 8765
 
     assert settings.EMBED_MODEL == "BAAI/bge-m3"
     assert settings.RERANK_MODEL == "BAAI/bge-reranker-v2-m3"

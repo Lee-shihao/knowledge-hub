@@ -7,7 +7,7 @@ class Settings(BaseSettings):
 
     # Server — shared by MCP and HTTP upload
     SERVER_HOST: str = "127.0.0.1"
-    SERVER_PORT: int = 8765
+    MCP_PORT: int = 8765
     # Auth (required for LAN deployment)
     SERVER_AUTH_TOKEN: str | None = None
     SERVER_ALLOWED_IPS: list[str] = []

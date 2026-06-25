@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generatedAt": "2026-06-25T03:19:59.039Z",
+  "generatedAt": "2026-06-25T08:38:57.869Z",
   "entries": {
     "/home/leo/workspace/knowledge-hub/tests/conftest.py": {
       "mtime": 1782208331156.763,
@@ -77,8 +77,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_config.py": {
-      "mtime": 1782291664446.4697,
-      "size": 1327,
+      "mtime": 1782376717475.331,
+      "size": 1273,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -89,8 +89,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/config.py": {
-      "mtime": 1782289965630.7393,
-      "size": 1093,
+      "mtime": 1782376709027.2617,
+      "size": 1340,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -130,8 +130,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_metadata.py": {
-      "mtime": 1782273260645.2385,
-      "size": 2054,
+      "mtime": 1782371494771.6125,
+      "size": 3670,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -141,14 +141,15 @@
           "test_get_hash_missing",
           "test_list_sources",
           "test_remove",
-          "test_orphan_cleanup"
+          "test_orphan_cleanup",
+          "TestListSourceDetails"
         ],
         "language": "python"
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/metadata.py": {
-      "mtime": 1782286298419.273,
-      "size": 3415,
+      "mtime": 1782371512930.535,
+      "size": 4389,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -158,8 +159,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_vector_store.py": {
-      "mtime": 1782273106683.0374,
-      "size": 6947,
+      "mtime": 1782371309134.2664,
+      "size": 8535,
       "symbols": {
         "purpose": null,
         "exports": [
@@ -178,11 +179,12 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/storage/vector_store.py": {
-      "mtime": 1782286320077.2026,
-      "size": 5221,
+      "mtime": 1782371332370.0269,
+      "size": 5889,
       "symbols": {
         "purpose": null,
         "exports": [
+          "build_qdrant_client",
           "QdrantVectorStore"
         ],
         "language": "python"
@@ -399,19 +401,27 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_tools.py": {
-      "mtime": 1782235611164.216,
-      "size": 6017,
+      "mtime": 1782372701335.013,
+      "size": 7382,
       "symbols": {
         "purpose": "Tests for MCP tools — query_knowledge_base health gates and QueryEngine calls.",
         "exports": [
-          "TestCreateTools"
+          "settings",
+          "mock_health",
+          "mock_query_engine",
+          "mock_metadata_mgr",
+          "mock_vector_store",
+          "TestCreateTools",
+          "TestQueryKnowledgeBase",
+          "TestListKbSources",
+          "TestGetKbStatus"
         ],
         "language": "python"
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/tools.py": {
-      "mtime": 1782235683067.6616,
-      "size": 2113,
+      "mtime": 1782372684658.8684,
+      "size": 4050,
       "symbols": {
         "purpose": "MCP tool wrappers around the QueryEngine.",
         "exports": [
@@ -421,34 +431,31 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_mcp_server.py": {
-      "mtime": 1782291588450.9373,
-      "size": 14351,
+      "mtime": 1782372908624.8923,
+      "size": 7965,
       "symbols": {
         "purpose": "Tests for MCP server creation — app wiring, auth, IP middleware.",
         "exports": [
           "TestCreateMCPApp",
-          "TestIPMiddleware",
-          "TestRunMCPServer",
           "TestStreamableHTTPIntegration"
         ],
         "language": "python"
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/mcp_server.py": {
-      "mtime": 1782290047250.9363,
-      "size": 5410,
+      "mtime": 1782372880848.6438,
+      "size": 4134,
       "symbols": {
-        "purpose": "MCP server — wires together all components and exposes query_knowledge_base tool.",
+        "purpose": "MCP server — receives AppState and exposes query/list/status tools.",
         "exports": [
-          "create_mcp_app",
-          "run_mcp_server"
+          "create_mcp_app"
         ],
         "language": "python"
       }
     },
     "/home/leo/workspace/knowledge-hub/tests/test_cli.py": {
-      "mtime": 1782291161126.4802,
-      "size": 15029,
+      "mtime": 1782374546043.8,
+      "size": 14860,
       "symbols": {
         "purpose": "Tests for the knowledge-hub CLI.",
         "exports": [
@@ -466,8 +473,8 @@
       }
     },
     "/home/leo/workspace/knowledge-hub/src/knowledge_hub/cli/main.py": {
-      "mtime": 1782286888240.3464,
-      "size": 7335,
+      "mtime": 1782376703091.2012,
+      "size": 9440,
       "symbols": {
         "purpose": "CLI for knowledge-hub: index, query, manage, and serve.",
         "exports": [
@@ -500,6 +507,86 @@
           "test_orphan_cleanup",
           "test_query_with_source_filter",
           "test_multiple_file_ingestion"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_job_manager.py": {
+      "mtime": 1782376736226.6914,
+      "size": 8497,
+      "symbols": {
+        "purpose": "Tests for JobManager — async job tracking with serialized pipeline execution.",
+        "exports": [
+          "pipeline",
+          "job_manager",
+          "MockPipeline",
+          "TestJobManagerSubmit",
+          "TestJobManagerProcessing",
+          "TestJobManagerGet",
+          "TestJobManagerEviction",
+          "TestJobManagerShutdown"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/job_manager.py": {
+      "mtime": 1782376695370.4148,
+      "size": 4417,
+      "symbols": {
+        "purpose": "JobManager — async job tracking for ingestion pipeline execution.",
+        "exports": [
+          "JobManager"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/app_state.py": {
+      "mtime": 1782373060711.3728,
+      "size": 3349,
+      "symbols": {
+        "purpose": "AppState — single-process shared state for MCP and HTTP servers.",
+        "exports": [
+          "AppState"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_upload_server.py": {
+      "mtime": 1782373832677.294,
+      "size": 7297,
+      "symbols": {
+        "purpose": "Tests for HTTP upload server — upload, status, auth, validation.",
+        "exports": [
+          "settings",
+          "settings_with_auth",
+          "client",
+          "client_with_auth",
+          "TestUploadEndpoint",
+          "TestStatusEndpoint",
+          "TestFilenameSafety"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/src/knowledge_hub/server/upload_server.py": {
+      "mtime": 1782373635423.506,
+      "size": 4342,
+      "symbols": {
+        "purpose": "HTTP upload server — receives file uploads and queues ingestion jobs.",
+        "exports": [
+          "create_upload_app"
+        ],
+        "language": "python"
+      }
+    },
+    "/home/leo/workspace/knowledge-hub/tests/test_integration_upload.py": {
+      "mtime": 1782374823170.3208,
+      "size": 3948,
+      "symbols": {
+        "purpose": "Integration test — upload, status polling, query round-trip.",
+        "exports": [
+          "TestUploadQueryRoundTrip",
+          "TestUploadServerNoAuth"
         ],
         "language": "python"
       }

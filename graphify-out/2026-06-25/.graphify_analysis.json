@@ -1,0 +1,53 @@
+{
+  "communities": {
+    "0": [
+      "knowledge_hub_claude_apache_2_0",
+      "knowledge_hub_claude_claude_md",
+      "knowledge_hub_claude_graphify",
+      "knowledge_hub_claude_knowledge_hub_project"
+    ],
+    "1": [
+      "claude_md",
+      "codebase_index"
+    ]
+  },
+  "cohesion": {
+    "0": 0.5,
+    "1": 1.0
+  },
+  "gods": [
+    {
+      "id": "knowledge_hub_claude_claude_md",
+      "label": "CLAUDE.md Project Guidance File",
+      "degree": 3
+    },
+    {
+      "id": "knowledge_hub_claude_graphify",
+      "label": "graphify Knowledge Graph Tool",
+      "degree": 1
+    },
+    {
+      "id": "knowledge_hub_claude_apache_2_0",
+      "label": "Apache 2.0 License",
+      "degree": 1
+    },
+    {
+      "id": "knowledge_hub_claude_knowledge_hub_project",
+      "label": "knowledge-hub Knowledge Management System",
+      "degree": 1
+    },
+    {
+      "id": "claude_md",
+      "label": "CLAUDE.md",
+      "degree": 1
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `graphify Knowledge Graph Tool`, `Apache 2.0 License`, `knowledge-hub Knowledge Management System` to the rest of the system?",
+      "why": "4 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

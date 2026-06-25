@@ -215,10 +215,9 @@ class TestJobManagerShutdown:
 
     @pytest.mark.asyncio
     async def test_wait_until_idle_timeout(self):
-        """wait_until_idle() should raise TimeoutError after timeout while busy."""
+        """wait_until_idle() should return (not raise) after timeout while busy."""
         pipeline = MockPipeline(delay=0.3)  # Short delay, still longer than timeout
         jm = JobManager(pipeline)
         await jm.submit(Path("/tmp/test.md"), "test.md", [])
         await asyncio.sleep(0.02)  # Let it start
-        with pytest.raises(asyncio.TimeoutError):
-            await jm.wait_until_idle(timeout=0.05)
+        await jm.wait_until_idle(timeout=0.05)  # Should return, not raise

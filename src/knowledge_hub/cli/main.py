@@ -207,6 +207,8 @@ def serve(host, port, upload_port, no_upload):
         settings.MCP_PORT = port
     if upload_port:
         settings.UPLOAD_PORT = upload_port
+    if not settings.UPLOAD_ENABLED:
+        no_upload = True
 
     async def _main():
         state = await AppState.create(settings)

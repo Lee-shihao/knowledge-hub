@@ -73,11 +73,11 @@ class JobManager:
     async def wait_until_idle(self, timeout: float = 300.0):
         """Wait for any running job to complete.
 
-        Args:
-            timeout: Maximum seconds to wait before raising TimeoutError.
+        Logs a warning and returns if the timeout expires — the caller
+        should proceed with shutdown (close connections, exit).
 
-        Raises:
-            asyncio.TimeoutError: If the running job doesn't complete in time.
+        Args:
+            timeout: Maximum seconds to wait.
         """
         try:
             async with asyncio.timeout(timeout):
@@ -85,7 +85,6 @@ class JobManager:
                     pass  # Acquiring the lock means no job is running
         except asyncio.TimeoutError:
             logger.warning("shutdown_timeout_force_exit")
-            raise
 
     # ---- Internal ----
 

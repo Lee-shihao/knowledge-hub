@@ -8,8 +8,6 @@ class Settings(BaseSettings):
     # Network
     MCP_HOST: str = "127.0.0.1"
     MCP_PORT: int = 8765
-    MCP_TRANSPORT: Literal["sse", "streamable-http"] = "streamable-http"
-
     # Auth (required for LAN deployment)
     MCP_AUTH_TOKEN: str | None = None
     MCP_ALLOWED_IPS: list[str] = []

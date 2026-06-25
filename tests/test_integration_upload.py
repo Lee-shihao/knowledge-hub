@@ -98,7 +98,7 @@ class TestUploadServerNoAuth:
         return Settings()
 
     def test_unauthenticated_upload_works_when_no_token(self, settings):
-        """When MCP_AUTH_TOKEN is None, uploads should work without auth."""
+        """When SERVER_AUTH_TOKEN is None, uploads should work without auth."""
         from knowledge_hub.server.upload_server import create_upload_app
 
         state = _make_app_state(settings)

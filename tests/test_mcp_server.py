@@ -36,15 +36,15 @@ class TestCreateMCPApp:
 
     @pytest.fixture
     def settings_with_auth(self):
-        return Settings(MCP_AUTH_TOKEN="test-token-123")
+        return Settings(SERVER_AUTH_TOKEN="test-token-123")
 
     @pytest.fixture
     def settings_with_allowed_ips(self):
-        return Settings(MCP_ALLOWED_IPS=["192.168.1.1", "10.0.0.0/8"])
+        return Settings(SERVER_ALLOWED_IPS=["192.168.1.1", "10.0.0.0/8"])
 
     @pytest.fixture
     def settings_lan_no_auth(self):
-        return Settings(MCP_HOST="0.0.0.0", MCP_AUTH_TOKEN=None)
+        return Settings(SERVER_HOST="0.0.0.0", SERVER_AUTH_TOKEN=None)
 
     def test_create_mcp_app_returns_fastmcp_instance(self, settings):
         """create_mcp_app should return a FastMCP instance."""
@@ -67,7 +67,7 @@ class TestCreateMCPApp:
         assert mcp._health is state.health
 
     def test_create_mcp_app_with_auth_token(self, settings_with_auth):
-        """When MCP_AUTH_TOKEN is set, auth should be configured without error."""
+        """When SERVER_AUTH_TOKEN is set, auth should be configured without error."""
         from knowledge_hub.server.mcp_server import create_mcp_app
 
         state = _make_app_state(settings_with_auth)
@@ -75,15 +75,15 @@ class TestCreateMCPApp:
         assert mcp.name == "knowledge-hub"
 
     def test_create_mcp_app_raises_on_lan_no_auth(self, settings_lan_no_auth):
-        """When MCP_HOST is not 127.0.0.1 and no auth token, should raise ValueError."""
+        """When SERVER_HOST is not 127.0.0.1 and no auth token, should raise ValueError."""
         from knowledge_hub.server.mcp_server import create_mcp_app
 
         state = _make_app_state(settings_lan_no_auth)
-        with pytest.raises(ValueError, match="MCP_HOST must be 127.0.0.1"):
+        with pytest.raises(ValueError, match="SERVER_HOST must be 127.0.0.1"):
             create_mcp_app(state)
 
     def test_create_mcp_app_allows_localhost_no_auth(self, settings):
-        """When MCP_HOST is 127.0.0.1 and no auth token, should succeed."""
+        """When SERVER_HOST is 127.0.0.1 and no auth token, should succeed."""
         from knowledge_hub.server.mcp_server import create_mcp_app
 
         state = _make_app_state(settings)
@@ -91,7 +91,7 @@ class TestCreateMCPApp:
         assert mcp.name == "knowledge-hub"
 
     def test_create_mcp_app_with_allowed_ips(self, settings_with_allowed_ips):
-        """When MCP_ALLOWED_IPS is set, IP middleware should be added without error."""
+        """When SERVER_ALLOWED_IPS is set, IP middleware should be added without error."""
         from knowledge_hub.server.mcp_server import create_mcp_app
 
         state = _make_app_state(settings_with_allowed_ips)

@@ -37,7 +37,7 @@ def settings():
 
 @pytest.fixture
 def settings_with_auth():
-    return Settings(MCP_AUTH_TOKEN="test-token-123")
+    return Settings(SERVER_AUTH_TOKEN="test-token-123")
 
 
 @pytest.fixture
@@ -119,7 +119,7 @@ class TestUploadEndpoint:
             assert "exceeds max size" in response.json()["error"]
 
     def test_upload_requires_auth_when_token_set(self, client_with_auth):
-        """When MCP_AUTH_TOKEN is set, missing Bearer token should return 401."""
+        """When SERVER_AUTH_TOKEN is set, missing Bearer token should return 401."""
         response = client_with_auth.post(
             "/upload",
             files={"file": ("test.md", io.BytesIO(b"# Hello"), "text/markdown")},

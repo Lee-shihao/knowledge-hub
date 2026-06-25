@@ -5,12 +5,12 @@ from typing import Literal
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="KH_", env_file=".env")
 
-    # Network
-    MCP_HOST: str = "127.0.0.1"
-    MCP_PORT: int = 8765
+    # Server — shared by MCP and HTTP upload
+    SERVER_HOST: str = "127.0.0.1"
+    SERVER_PORT: int = 8765
     # Auth (required for LAN deployment)
-    MCP_AUTH_TOKEN: str | None = None
-    MCP_ALLOWED_IPS: list[str] = []
+    SERVER_AUTH_TOKEN: str | None = None
+    SERVER_ALLOWED_IPS: list[str] = []
 
     # Embedding models (FlagEmbedding HuggingFace IDs)
     EMBED_MODEL: str = "BAAI/bge-m3"
@@ -42,7 +42,3 @@ class Settings(BaseSettings):
     DATA_DIR: str = "./data"
     STORAGE_DIR: str = "./storage"
 
-    @property
-    def SERVER_HOST(self) -> str:
-        """Shared bind address for MCP and upload servers."""
-        return self.MCP_HOST

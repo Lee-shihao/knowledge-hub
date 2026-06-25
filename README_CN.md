@@ -151,12 +151,12 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `KH_MCP_HOST` | `127.0.0.1` | MCP 和上传服务器的绑定地址 |
-| `KH_MCP_PORT` | `8765` | MCP 服务器端口 |
+| `KH_SERVER_HOST` | `127.0.0.1` | MCP 和上传服务器的绑定地址 |
+| `KH_SERVER_PORT` | `8765` | MCP 服务器端口 |
 | `KH_UPLOAD_PORT` | `8766` | HTTP 上传服务器端口 |
 | `KH_UPLOAD_ENABLED` | `true` | 启用 HTTP 上传服务器 |
-| `KH_MCP_AUTH_TOKEN` | — | MCP 和上传的认证令牌（绑定非本机地址时必填） |
-| `KH_MCP_ALLOWED_IPS` | `[]` | MCP 服务器 IP 白名单 |
+| `KH_SERVER_AUTH_TOKEN` | — | MCP 和上传的认证令牌（绑定非本机地址时必填） |
+| `KH_SERVER_ALLOWED_IPS` | `[]` | MCP 服务器 IP 白名单 |
 | `KH_EMBED_MODEL` | `BAAI/bge-m3` | 嵌入模型 HuggingFace ID |
 | `KH_RERANK_MODEL` | `BAAI/bge-reranker-v2-m3` | 重排序模型 HuggingFace ID |
 | `KH_EMBED_DEVICE` | `auto` | `auto` / `cpu` / `cuda` |
@@ -208,7 +208,7 @@ curl -X POST http://127.0.0.1:8765/mcp \
 
 ```bash
 # 设置令牌并启动
-export KH_MCP_AUTH_TOKEN=your-secret-token
+export KH_SERVER_AUTH_TOKEN=your-secret-token
 kh serve --host 0.0.0.0
 ```
 
@@ -268,7 +268,7 @@ Content-Type: multipart/form    响应：
 | `done` | 成功索引 |
 | `failed` | 导入出错（见 `error` 字段） |
 
-上传和 MCP 共用 `KH_MCP_AUTH_TOKEN` 认证。本地访问无需认证。
+上传和 MCP 共用 `KH_SERVER_AUTH_TOKEN` 认证。本地访问无需认证。
 
 ## 项目结构
 

@@ -25,15 +25,15 @@ def create_mcp_app(state: AppState) -> FastMCP:
         Configured FastMCP instance.
 
     Raises:
-        ValueError: If MCP_HOST is not 127.0.0.1 and no auth token is set.
+        ValueError: If SERVER_HOST is not 127.0.0.1 and no auth token is set.
     """
     # Auth setup
-    if state.settings.MCP_AUTH_TOKEN:
+    if state.settings.SERVER_AUTH_TOKEN:
         from fastmcp.server.auth import StaticTokenVerifier
 
         verifier = StaticTokenVerifier(
             {
-                state.settings.MCP_AUTH_TOKEN: {
+                state.settings.SERVER_AUTH_TOKEN: {
                     "client_id": "knowledge-hub",
                     "scopes": [],
                 }
@@ -41,15 +41,15 @@ def create_mcp_app(state: AppState) -> FastMCP:
         )
         mcp = FastMCP("knowledge-hub", auth=verifier)
     else:
-        if state.settings.MCP_HOST != "127.0.0.1":
+        if state.settings.SERVER_HOST != "127.0.0.1":
             raise ValueError(
-                "MCP_HOST must be 127.0.0.1 when MCP_AUTH_TOKEN is not set. "
-                "Set KH_MCP_AUTH_TOKEN to enable LAN access."
+                "SERVER_HOST must be 127.0.0.1 when SERVER_AUTH_TOKEN is not set. "
+                "Set KH_SERVER_AUTH_TOKEN to enable LAN access."
             )
         mcp = FastMCP("knowledge-hub")
 
     # IP allowlist middleware — identical to original implementation
-    if state.settings.MCP_ALLOWED_IPS:
+    if state.settings.SERVER_ALLOWED_IPS:
         import ipaddress
 
         from starlette.middleware import Middleware
@@ -57,7 +57,7 @@ def create_mcp_app(state: AppState) -> FastMCP:
         from starlette.responses import JSONResponse
 
         allowed_networks = []
-        for ip_str in state.settings.MCP_ALLOWED_IPS:
+        for ip_str in state.settings.SERVER_ALLOWED_IPS:
             try:
                 if "/" in ip_str:
                     allowed_networks.append(

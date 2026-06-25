@@ -5,8 +5,8 @@ from knowledge_hub.config import Settings
 
 def test_settings_defaults():
     settings = Settings()
-    assert settings.MCP_HOST == "127.0.0.1"
-    assert settings.MCP_PORT == 8765
+    assert settings.SERVER_HOST == "127.0.0.1"
+    assert settings.SERVER_PORT == 8765
 
     assert settings.EMBED_MODEL == "BAAI/bge-m3"
     assert settings.RERANK_MODEL == "BAAI/bge-reranker-v2-m3"
@@ -20,17 +20,17 @@ def test_settings_defaults():
     assert settings.WARN_FILE_SIZE_MB == 50
     assert settings.HYBRID_CANDIDATE_K == 20
     assert settings.FINAL_TOP_K == 5
-    assert settings.MCP_AUTH_TOKEN is None
-    assert settings.MCP_ALLOWED_IPS == []
+    assert settings.SERVER_AUTH_TOKEN is None
+    assert settings.SERVER_ALLOWED_IPS == []
     assert settings.DATA_DIR == "./data"
     assert settings.STORAGE_DIR == "./storage"
 
 
 def test_settings_from_env():
-    os.environ["KH_MCP_HOST"] = "0.0.0.0"
-    os.environ["KH_MCP_AUTH_TOKEN"] = "test-token"
+    os.environ["KH_SERVER_HOST"] = "0.0.0.0"
+    os.environ["KH_SERVER_AUTH_TOKEN"] = "test-token"
     settings = Settings()
-    assert settings.MCP_HOST == "0.0.0.0"
-    assert settings.MCP_AUTH_TOKEN == "test-token"
-    del os.environ["KH_MCP_HOST"]
-    del os.environ["KH_MCP_AUTH_TOKEN"]
+    assert settings.SERVER_HOST == "0.0.0.0"
+    assert settings.SERVER_AUTH_TOKEN == "test-token"
+    del os.environ["KH_SERVER_HOST"]
+    del os.environ["KH_SERVER_AUTH_TOKEN"]

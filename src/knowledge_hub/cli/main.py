@@ -202,9 +202,9 @@ def serve(host, port, upload_port, no_upload):
 
     settings = _get_settings()
     if host:
-        settings.MCP_HOST = host
+        settings.SERVER_HOST = host
     if port:
-        settings.MCP_PORT = port
+        settings.SERVER_PORT = port
     if upload_port:
         settings.UPLOAD_PORT = upload_port
     if not settings.UPLOAD_ENABLED:
@@ -221,7 +221,11 @@ def serve(host, port, upload_port, no_upload):
                     json_response=True,
                 ),
                 host=settings.SERVER_HOST,
-                port=settings.MCP_PORT,
+                port=settings.SERVER_PORT,
+            )
+            logger.info(
+                "server_starting",
+                mcp=f"http://{settings.SERVER_HOST}:{settings.SERVER_PORT}/mcp",
             )
             await uvicorn.Server(config).serve()
         else:
@@ -246,7 +250,7 @@ async def _run_servers(state, settings):
     mcp_config = uvicorn.Config(
         mcp_app,
         host=settings.SERVER_HOST,
-        port=settings.MCP_PORT,
+        port=settings.SERVER_PORT,
         log_level="warning",
     )
     upload_config = uvicorn.Config(
@@ -254,6 +258,12 @@ async def _run_servers(state, settings):
         host=settings.SERVER_HOST,
         port=settings.UPLOAD_PORT,
         log_level="warning",
+    )
+
+    logger.info(
+        "server_starting",
+        mcp=f"http://{settings.SERVER_HOST}:{settings.SERVER_PORT}/mcp",
+        upload=f"http://{settings.SERVER_HOST}:{settings.UPLOAD_PORT}/upload",
     )
 
     async with anyio.create_task_group() as tg:

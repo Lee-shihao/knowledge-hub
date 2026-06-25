@@ -1,7 +1,7 @@
 """HTTP upload server — receives file uploads and queues ingestion jobs.
 
 Exposes POST /upload (multipart/form-data) and GET /upload/status/{job_id}.
-Auth reuses KH_MCP_AUTH_TOKEN (Bearer). Format validation reuses SUPPORTED_SUFFIXES
+Auth reuses KH_SERVER_AUTH_TOKEN (Bearer). Format validation reuses SUPPORTED_SUFFIXES
 from loaders to stay in sync with the pipeline.
 """
 import re
@@ -29,11 +29,11 @@ def _safe_filename(filename: str) -> str:
 
 
 def _check_auth(request: Request, state: AppState) -> bool:
-    """Check Bearer token if MCP_AUTH_TOKEN is configured.
+    """Check Bearer token if SERVER_AUTH_TOKEN is configured.
 
     Returns True if auth passes or is not required.
     """
-    token = state.settings.MCP_AUTH_TOKEN
+    token = state.settings.SERVER_AUTH_TOKEN
     if not token:
         return True  # No auth configured
 

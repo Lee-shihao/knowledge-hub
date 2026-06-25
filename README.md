@@ -153,12 +153,12 @@ All settings use `KH_` prefix and can be configured via:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `KH_MCP_HOST` | `127.0.0.1` | Bind address for MCP and upload servers |
-| `KH_MCP_PORT` | `8765` | MCP server port |
+| `KH_SERVER_HOST` | `127.0.0.1` | Bind address for MCP and upload servers |
+| `KH_SERVER_PORT` | `8765` | MCP server port |
 | `KH_UPLOAD_PORT` | `8766` | HTTP upload server port |
 | `KH_UPLOAD_ENABLED` | `true` | Enable HTTP upload server on `kh serve` |
-| `KH_MCP_AUTH_TOKEN` | — | Auth token for MCP and upload (required if binding to non-localhost) |
-| `KH_MCP_ALLOWED_IPS` | `[]` | IP allowlist for MCP server |
+| `KH_SERVER_AUTH_TOKEN` | — | Auth token for MCP and upload (required if binding to non-localhost) |
+| `KH_SERVER_ALLOWED_IPS` | `[]` | IP allowlist for MCP server |
 | `KH_EMBED_MODEL` | `BAAI/bge-m3` | Embedding model HuggingFace ID |
 | `KH_RERANK_MODEL` | `BAAI/bge-reranker-v2-m3` | Reranker model HuggingFace ID |
 | `KH_EMBED_DEVICE` | `auto` | `auto` / `cpu` / `cuda` |
@@ -210,7 +210,7 @@ Binding to non-localhost requires an auth token (shared by MCP and upload):
 
 ```bash
 # Set auth token and start
-export KH_MCP_AUTH_TOKEN=your-secret-token
+export KH_SERVER_AUTH_TOKEN=your-secret-token
 kh serve --host 0.0.0.0
 ```
 
@@ -270,7 +270,7 @@ Supported formats: .md .txt      "completed_at": "..."
 | `done` | Successfully indexed |
 | `failed` | Error during ingestion (see `error` field) |
 
-Upload and MCP share the same `KH_MCP_AUTH_TOKEN` for authentication. On localhost no auth is required.
+Upload and MCP share the same `KH_SERVER_AUTH_TOKEN` for authentication. On localhost no auth is required.
 
 ## Project Structure
 

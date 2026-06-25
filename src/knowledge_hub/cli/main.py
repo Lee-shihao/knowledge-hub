@@ -5,8 +5,8 @@ execution time so that `kh --help` and `kh config show` respond instantly.
 """
 
 import asyncio
+import logging
 import os
-import warnings
 from pathlib import Path
 
 import click
@@ -14,8 +14,12 @@ import structlog
 
 from knowledge_hub.config import Settings
 
-# Suppress transformers tokenizer warnings (non-actionable for end users)
-warnings.filterwarnings("ignore", message=".*XLMRobertaTokenizerFast.*")
+# Suppress transformers fast-tokenizer warnings (non-actionable for end users).
+# The "XLMRobertaTokenizerFast" warning is emitted via the transformers logger
+# (not Python warnings.warn), so both mechanisms are needed:
+# - The logging suppressor silences the logger.warning() from transformers' internals
+# - The warnings filter catches any Python-level warnings from the same code path
+logging.getLogger("transformers.tokenization_utils_base").setLevel(logging.ERROR)
 
 logger = structlog.get_logger()
 

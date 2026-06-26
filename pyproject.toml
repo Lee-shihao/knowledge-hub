@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "knowledge-hub"
 version = "0.1.0"
 description = "Local-first Vector RAG knowledge hub with MCP interface"
-readme = "CLAUDE.md"
+readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.10"
 dependencies = [

@@ -13,6 +13,8 @@ echo "==> Building wheel..."
 uv build --wheel
 
 echo "==> Building Docker image..."
-docker build -t knowledge-hub .
+docker build \
+    --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple \
+    -t knowledge-hub .
 
 echo "==> Done: knowledge-hub"

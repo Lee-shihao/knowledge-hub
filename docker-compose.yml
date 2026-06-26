@@ -8,12 +8,12 @@ services:
       - kh_data:/app
     environment:
       - KH_SERVER_HOST=0.0.0.0
-      - KH_QDRANT_PATH=/app/storage/qdrant
       - KH_DATA_DIR=/app/data
       - KH_STORAGE_DIR=/app/storage
-      - KH_SERVER_AUTH_TOKEN=${KH_SERVER_AUTH_TOKEN}
+      - KH_QDRANT_PATH=/app/storage/qdrant
       - HF_HOME=/app/models
       - HF_ENDPOINT=https://hf-mirror.com
+      - KH_SERVER_AUTH_TOKEN=${KH_SERVER_AUTH_TOKEN}
     env_file:
       - .env
     restart: unless-stopped

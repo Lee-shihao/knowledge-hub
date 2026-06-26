@@ -66,7 +66,7 @@ No external services required — Qdrant runs embedded by default.
 
 ```bash
 # Clone and install
-git clone <repo-url> && cd knowledge-hub
+git clone https://github.com/Lee-shihao/knowledge-hub.git && cd knowledge-hub
 uv sync
 
 # Activate the virtual environment (optional, for direct kh usage)
@@ -174,6 +174,103 @@ All settings use `KH_` prefix and can be configured via:
 | `KH_FINAL_TOP_K` | `5` | Final results after reranking |
 | `KH_DATA_DIR` | `./data` | Document source directory |
 | `KH_STORAGE_DIR` | `./storage` | Metadata storage directory |
+
+## Docker Deployment
+
+For users who prefer not to set up a Python environment.
+
+### Pull the Image
+
+```bash
+# Latest stable release
+docker pull saxiburry/knowledge-hub:latest
+
+# Or a specific version
+docker pull saxiburry/knowledge-hub:0.1.0
+```
+
+### Docker Compose (Recommended)
+
+Create a `docker-compose.yml`:
+
+```yaml
+services:
+  knowledge-hub:
+    image: saxiburry/knowledge-hub:latest
+    ports:
+      - "8765:8765"
+      - "8766:8766"
+    volumes:
+      - ./data:/app/data
+      - ./storage:/app/storage
+      - kh_models:/app/models
+    environment:
+      - KH_EMBED_DEVICE=cpu
+      - KH_SERVER_HOST=0.0.0.0
+      - KH_DATA_DIR=/app/data
+      - KH_STORAGE_DIR=/app/storage
+      - KH_QDRANT_PATH=/app/storage/qdrant
+      - HF_HOME=/app/models
+      - HF_ENDPOINT=https://hf-mirror.com
+    restart: unless-stopped
+
+volumes:
+  kh_models:
+```
+
+```bash
+# Start
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+> `kh_models` is a named volume for HuggingFace model cache (~2.2GB). Keeps models persisted across container restarts.
+
+### Usage
+
+```bash
+# Upload a file
+curl -X POST http://localhost:8766/upload -F "file=@my-doc.md"
+
+# Query
+curl -s -X POST http://localhost:8765/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"your question","top_k":5}}}'
+```
+
+### GPU Support
+
+```yaml
+environment:
+  - KH_EMBED_DEVICE=cuda
+deploy:
+  resources:
+    reservations:
+      devices:
+        - driver: nvidia
+          count: 1
+          capabilities: [gpu]
+```
+
+### Build Strategy
+
+| Trigger | Image Tags | Purpose |
+|---------|-----------|---------|
+| push to main | `sha-<short>` | CI verification, dev testing |
+| push tag `v*` | `0.1.0`, `latest`, `0.1` | Stable release |
+
+Versioning is managed via git tags. Stable releases are published only when a tag is pushed:
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
 
 ## MCP Server Usage
 

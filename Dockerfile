@@ -5,15 +5,17 @@
 # Uses python:3.12-slim for a small footprint.
 FROM python:3.12-slim
 
-# PyPI mirror for faster downloads in China (override with --build-arg)
-ARG PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+# PyPI index URL. Defaults to official PyPI.
+# For faster downloads in China, override with:
+#   --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+ARG PIP_INDEX_URL=
 
-# Copy pre-built wheel from local dist/
-COPY dist/knowledge_hub-0.1.0-py3-none-any.whl /tmp/
+# Copy pre-built wheel from local dist/ (glob matches any version)
+COPY dist/knowledge_hub-*.whl /tmp/
 
 # Install the package and its dependencies, then drop the wheel
-RUN pip install --no-cache-dir -i ${PIP_INDEX_URL} /tmp/knowledge_hub-0.1.0-py3-none-any.whl \
-    && rm -f /tmp/knowledge_hub-0.1.0-py3-none-any.whl
+RUN pip install --no-cache-dir ${PIP_INDEX_URL:+ -i ${PIP_INDEX_URL}} /tmp/knowledge_hub-*.whl \
+    && rm -f /tmp/knowledge_hub-*.whl
 
 # Non-root user
 RUN useradd -m -u 1000 kh

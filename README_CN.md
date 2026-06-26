@@ -64,7 +64,7 @@ GPU 服务器 — kh serve 单进程双服务
 
 ```bash
 # 克隆并安装
-git clone <repo-url> && cd knowledge-hub
+git clone https://github.com/Lee-shihao/knowledge-hub.git && cd knowledge-hub
 uv sync
 
 # 激活虚拟环境（可选，用于直接使用 kh 命令）
@@ -172,6 +172,103 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 | `KH_FINAL_TOP_K` | `5` | 重排序后返回的最终结果数 |
 | `KH_DATA_DIR` | `./data` | 文档源目录 |
 | `KH_STORAGE_DIR` | `./storage` | 元数据存储目录 |
+
+## Docker 部署
+
+不想折腾 Python 环境的用户可以直接用 Docker 运行。
+
+### 拉取镜像
+
+```bash
+# 最新稳定版
+docker pull saxiburry/knowledge-hub:latest
+
+# 或指定版本
+docker pull saxiburry/knowledge-hub:0.1.0
+```
+
+### Docker Compose（推荐）
+
+创建 `docker-compose.yml`：
+
+```yaml
+services:
+  knowledge-hub:
+    image: saxiburry/knowledge-hub:latest
+    ports:
+      - "8765:8765"
+      - "8766:8766"
+    volumes:
+      - ./data:/app/data
+      - ./storage:/app/storage
+      - kh_models:/app/models
+    environment:
+      - KH_EMBED_DEVICE=cpu
+      - KH_SERVER_HOST=0.0.0.0
+      - KH_DATA_DIR=/app/data
+      - KH_STORAGE_DIR=/app/storage
+      - KH_QDRANT_PATH=/app/storage/qdrant
+      - HF_HOME=/app/models
+      - HF_ENDPOINT=https://hf-mirror.com
+    restart: unless-stopped
+
+volumes:
+  kh_models:
+```
+
+```bash
+# 启动
+docker compose up -d
+
+# 查看日志
+docker compose logs -f
+
+# 停止
+docker compose down
+```
+
+> `kh_models` 是命名卷，保存 HuggingFace 模型缓存（约 2.2GB），避免每次重启重新下载。
+
+### 使用
+
+```bash
+# 上传文件
+curl -X POST http://localhost:8766/upload -F "file=@my-doc.md"
+
+# 查询
+curl -s -X POST http://localhost:8765/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"你的问题","top_k":5}}}'
+```
+
+### GPU 支持
+
+```yaml
+environment:
+  - KH_EMBED_DEVICE=cuda
+deploy:
+  resources:
+    reservations:
+      devices:
+        - driver: nvidia
+          count: 1
+          capabilities: [gpu]
+```
+
+### 构建策略
+
+| 触发条件 | 镜像标签 | 用途 |
+|---------|---------|------|
+| push 到 main | `sha-<短哈希>` | CI 验证，开发调试 |
+| push tag `v*` | `0.1.0`, `latest`, `0.1` | 正式发布 |
+
+版本号通过 git tag 管理，手动打 tag 时才发布稳定版：
+
+```bash
+git tag v0.2.0
+git push origin v0.2.0
+```
 
 ## MCP 服务器使用
 

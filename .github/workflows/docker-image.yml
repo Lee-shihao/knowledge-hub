@@ -3,6 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ "main" ]
+    tags: [ "v*" ]
 
 jobs:
 
@@ -10,38 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. 拉取代码
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 2. 安装 uv (用于编译 Python wheel 包)
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
 
-    # 3. 执行预编译步骤，生成 wheel 文件
-    # 这对应你仓库里的: uv build --wheel
     - name: Build Python wheel
       run: uv build --wheel
 
-    # 4. 登录 Docker Hub
+    - name: Docker metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: saxiburry/knowledge-hub
+        tags: |
+          # Branch push: only sha-<short>
+          type=sha,prefix=sha-,event=branch,priority=200
+          # Semver tag (v1.2.3): version + latest + minor alias
+          type=semver,pattern={{version}},event=tag,priority=300
+          type=semver,pattern={{major}}.{{minor}},event=tag,priority=200
+          type=raw,value=latest,event=tag,priority=100
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # 5. 构建 Docker 镜像
-    # 注意：如果 Dockerfile 默认从当前目录寻找编译好的包，这里不需要改 context
-    - name: Build the Docker image
-      run: |
-        docker build . --file Dockerfile \
-        --tag ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:latest \
-        --tag ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:${{ github.sha }}
-
-    # 6. 推送镜像到 Docker Hub
-    - name: Push the Docker image
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:latest
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:${{ github.sha }}
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}

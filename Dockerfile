@@ -19,22 +19,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
-# Point uv cache to a fixed path so BuildKit cache mount works
-# regardless of $HOME (which varies between root/non-root users)
-ENV UV_CACHE_DIR=/tmp/.uv-cache
-
 WORKDIR /app
 
 # Install dependencies (uv cache lives on a BuildKit mount — never enters the image)
 COPY pyproject.toml uv.lock ./
 COPY CLAUDE.md ./
-RUN --mount=type=cache,target=/tmp/.uv-cache \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project
 
 # Install project + reinstall CPU torch if requested
 COPY src/ ./src/
 ARG TORCH_INDEX
-RUN --mount=type=cache,target=/tmp/.uv-cache \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev \
     && if [ -n "$TORCH_INDEX" ]; then \
         uv pip install --index-url "$TORCH_INDEX" torch --reinstall \

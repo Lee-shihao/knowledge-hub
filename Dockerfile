@@ -8,34 +8,56 @@
 ARG BASE_IMAGE=nvidia/cuda:12.4.0-runtime-ubuntu22.04
 ARG TORCH_INDEX=""
 
-FROM ${BASE_IMAGE}
+# ============================================================
+# Stage 1: Builder — installs deps, compiler, uv cache here
+# ============================================================
+FROM ${BASE_IMAGE} AS builder
 
-# System deps
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl ca-certificates python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Point uv cache to a fixed path so BuildKit cache mount works
+# regardless of $HOME (which varies between root/non-root users)
+ENV UV_CACHE_DIR=/tmp/.uv-cache
 
 WORKDIR /app
 
-# Phase 1: Install dependencies only (cached layer, no project install yet)
+# Install dependencies (uv cache lives on a BuildKit mount — never enters the image)
 COPY pyproject.toml uv.lock ./
 COPY CLAUDE.md ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN --mount=type=cache,target=/tmp/.uv-cache \
+    uv sync --frozen --no-dev --no-install-project
 
-# Phase 2: Copy source and install the project itself
+# Install project + reinstall CPU torch if requested
 COPY src/ ./src/
-RUN uv sync --frozen --no-dev
-
-# Phase 3: CPU optimization — replace GPU torch with CPU-only torch
-# Saves ~3GB by dropping nvidia-cublas/cudnn/cufft/nccl/… and triton
 ARG TORCH_INDEX
-RUN if [ -n "$TORCH_INDEX" ]; then \
+RUN --mount=type=cache,target=/tmp/.uv-cache \
+    uv sync --frozen --no-dev \
+    && if [ -n "$TORCH_INDEX" ]; then \
         uv pip install --index-url "$TORCH_INDEX" torch --reinstall \
         && uv pip freeze | grep -E "^nvidia-|^triton" | cut -d= -f1 | xargs -r uv pip uninstall -y; \
     fi
+
+# ============================================================
+# Stage 2: Runtime — only .venv + src, no build artifacts
+# ============================================================
+FROM ${BASE_IMAGE} AS runtime
+
+# Minimal runtime deps (libgomp1 needed by torch CPU, ca-certificates for HTTPS)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only what's needed to run
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY --from=builder /app/.venv /app/.venv
+COPY --from=builder /app/src /app/src
+COPY --from=builder /app/pyproject.toml /app/pyproject.toml
+
+WORKDIR /app
 
 # Non-root user
 RUN useradd -m -u 1000 kh && chown -R kh:kh /app

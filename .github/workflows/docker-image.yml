@@ -2,7 +2,6 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ "main" ]
     tags: [ "v*" ]
 
 jobs:
@@ -28,12 +27,8 @@ jobs:
       with:
         images: saxiburry/knowledge-hub
         tags: |
-          # Branch push: only sha-<short>
-          type=sha,prefix=sha-,event=branch,priority=200
-          # Semver tag (v1.2.3): version + latest + minor alias
-          type=semver,pattern={{version}},event=tag,priority=300
-          type=semver,pattern={{major}}.{{minor}},event=tag,priority=200
-          type=raw,value=latest,event=tag,priority=100
+          type=semver,pattern={{version}}
+          type=raw,value=latest
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v3

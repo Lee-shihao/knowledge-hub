@@ -37,10 +37,9 @@ knowledge-hub is a functioning Local-first Vector RAG knowledge base with MCP + 
 
 When a `v*` tag is pushed to GitHub:
 
-| Trigger | Image Tags | Purpose |
-|---------|-----------|---------|
-| push to main | `sha-<short>` | CI verification, dev testing |
-| push tag `v*` | `0.2.0`, `0.2`, `latest` | Stable release |
+| Trigger | Image Tags |
+|---------|-----------|
+| push tag `v*` | `0.2.0`, `latest` |
 
 ### Rules
 

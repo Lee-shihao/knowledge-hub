@@ -260,10 +260,9 @@ deploy:
 
 ### Build Strategy
 
-| Trigger | Image Tags | Purpose |
-|---------|-----------|---------|
-| push to main | `sha-<short>` | CI verification, dev testing |
-| push tag `v*` | `0.1.0`, `latest`, `0.1` | Stable release |
+| Trigger | Image Tags |
+|---------|-----------|
+| push tag `v*` | `0.1.0`, `latest` |
 
 Versioning is managed via git tags. Stable releases are published only when a tag is pushed:
 

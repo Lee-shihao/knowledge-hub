@@ -21,4 +21,7 @@ data/*test.md
 # Token counting cache
 .tokenmiser/
 
-storage/
+/storage/
+
+# Environment
+.env

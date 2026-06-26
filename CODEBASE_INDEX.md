@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-25 · 108 files · ~0.4M tokens total
+> 2026-06-26 · 120 files · ~0.4M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -36,6 +36,11 @@
 - `tools.py` — MCP tool wrappers around the QueryEngine. · create_tools
 - `upload_server.py` — HTTP upload server — receives file uploads and queues ingestion jobs. · create_upload_app
 
+**src/knowledge_hub/storage/**
+- `__init__.py`
+- `metadata.py` — SourceMetadataManager
+- `vector_store.py` — build_qdrant_client, QdrantVectorStore
+
 **tests/**
 - `__init__.py`
 - `conftest.py` — temp_storage_dir
@@ -61,6 +66,7 @@
 ## Config
 - `.claude/settings.json`
 - `.claude/settings.local.json`
+- `docker-compose.yml`
 - `graphify-out/2026-06-23/.graphify_analysis.json`
 - `graphify-out/2026-06-23/.graphify_labels.json`
 - `graphify-out/2026-06-23/cost.json`

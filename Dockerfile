@@ -1,6 +1,13 @@
-# Build: docker build -t knowledge-hub:gpu .
-#        docker build --build-arg BASE_IMAGE=python:3.12-slim -t knowledge-hub:cpu .
+# Build GPU (default):
+#   docker build -t knowledge-hub:gpu .
+#
+# Build CPU (smaller, no CUDA bloat):
+#   docker build --build-arg BASE_IMAGE=python:3.12-slim \
+#                --build-arg TORCH_INDEX=https://download.pytorch.org/whl/cpu \
+#                -t knowledge-hub:cpu .
 ARG BASE_IMAGE=nvidia/cuda:12.4.0-runtime-ubuntu22.04
+ARG TORCH_INDEX=""
+
 FROM ${BASE_IMAGE}
 
 # System deps
@@ -21,6 +28,14 @@ RUN uv sync --frozen --no-dev --no-install-project
 # Phase 2: Copy source and install the project itself
 COPY src/ ./src/
 RUN uv sync --frozen --no-dev
+
+# Phase 3: CPU optimization — replace GPU torch with CPU-only torch
+# Saves ~3GB by dropping nvidia-cublas/cudnn/cufft/nccl/… and triton
+ARG TORCH_INDEX
+RUN if [ -n "$TORCH_INDEX" ]; then \
+        uv pip install --index-url "$TORCH_INDEX" torch --reinstall \
+        && uv pip freeze | grep -E "^nvidia-|^triton" | cut -d= -f1 | xargs -r uv pip uninstall -y; \
+    fi
 
 # Non-root user
 RUN useradd -m -u 1000 kh && chown -R kh:kh /app

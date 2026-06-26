@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import structlog
@@ -43,50 +44,42 @@ class FlagEmbeddingEmbedder:
             use_fp16=use_fp16,
         )
 
-        # Pre-download model with proper ignore_patterns to avoid 403 errors
-        # on .DS_Store and image files in mirror sites
-        self._ensure_model_cached(self._model_name)
+        # Pre-download model to local cache, excluding files that cause 403
+        # errors on hf-mirror.com (.DS_Store, imgs/, onnx/).
+        # Returns a local snapshot path so BGEM3FlagModel's internal
+        # snapshot_download hits the cache instead of re-fetching from remote.
+        local_path = self._ensure_model_cached(self._model_name)
 
         self._model = BGEM3FlagModel(
-            self._model_name,
+            local_path,
             use_fp16=use_fp16,
             device=device,
         )
 
     @staticmethod
-    def _ensure_model_cached(model_name: str):
-        """Ensure model is cached locally with proper ignore_patterns.
+    def _ensure_model_cached(model_name: str) -> str:
+        """Pre-download model to local cache, excluding problematic files.
 
-        This prevents 403 errors when downloading from mirror sites that
-        don't have .DS_Store or image files that exist in the original repo.
+        Returns the local snapshot path so that BGEM3FlagModel's internal
+        snapshot_download hits the cache and does not re-fetch files (like
+        imgs/.DS_Store) that cause 403 errors on hf-mirror.com.
+
+        The ignore list intentionally excludes:
+        - .DS_Store at any depth (macOS junk in repo)
+        - imgs/ directory (images accidentally committed, not needed for inference)
+        - onnx/ directory (ONNX format, not needed for PyTorch inference)
+        - Image files and non-PyTorch weight formats
         """
         from huggingface_hub import snapshot_download, constants
-        from pathlib import Path
 
-        # Use huggingface_hub's cache resolution (respects HF_HOME / HF_HUB_CACHE)
         hub_cache = Path(constants.HF_HUB_CACHE)
-        model_cache_name = f"models--{model_name.replace('/', '--')}"
-        model_cache_path = hub_cache / model_cache_name
 
-        # Check for essential model files (model.onnx_data is the main 2.2GB file)
-        essential_files = ["model.onnx_data", "model.onnx", "config.json"]
-        if model_cache_path.exists():
-            snapshots_dir = model_cache_path / "snapshots"
-            if snapshots_dir.exists():
-                # Find any snapshot directory
-                for snapshot in snapshots_dir.iterdir():
-                    if snapshot.is_dir():
-                        if all((snapshot / f).exists() for f in essential_files):
-                            logger.debug("Model already cached", model=model_name, path=str(model_cache_path))
-                            return
-                        else:
-                            logger.warning("Incomplete model cache, re-downloading", model=model_name)
-                            break
-
-        logger.info("Pre-downloading model with ignore_patterns", model=model_name)
         try:
+            # snapshot_download handles incremental caching internally —
+            # if all non-ignored files are already cached, it returns quickly.
             snapshot_download(
                 repo_id=model_name,
+                endpoint=os.environ.get("HF_ENDPOINT"),  # explicit: env var not picked up by global constants
                 ignore_patterns=[
                     "*.DS_Store",
                     "*/*.DS_Store",
@@ -94,10 +87,27 @@ class FlagEmbeddingEmbedder:
                     "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",
                     "*/*.jpg", "*/*.jpeg", "*/*.png", "*/*.gif", "*/*.webp",
                     "flax_model.msgpack", "rust_model.ot", "tf_model.h5",
+                    "imgs/*",  # image directory accidentally in repo — not needed
+                    "onnx/*",  # ONNX format — not needed for PyTorch inference
                 ],
             )
         except Exception:
             logger.warning("Model pre-download failed, will retry on next load", model=model_name, exc_info=True)
+            return model_name  # fallback: let BGEM3FlagModel try with the raw name
+
+        # Resolve the local snapshot path so BGEM3FlagModel reuses the cache
+        model_cache_name = f"models--{model_name.replace('/', '--')}"
+        model_cache_path = hub_cache / model_cache_name
+        snapshots_dir = model_cache_path / "snapshots"
+        if snapshots_dir.exists():
+            for snapshot in sorted(snapshots_dir.iterdir(), reverse=True):
+                if snapshot.is_dir() and (snapshot / "config.json").exists():
+                    logger.debug("Model cached at local path", model=model_name, path=str(snapshot))
+                    return str(snapshot)
+
+        # Fallback: return model name if path resolution fails
+        logger.warning("Could not resolve local snapshot path, falling back to model name", model=model_name)
+        return model_name
 
     @staticmethod
     def _resolve_device(embed_device: str) -> str:

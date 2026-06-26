@@ -7,12 +7,18 @@ execution time so that `kh --help` and `kh config show` respond instantly.
 import asyncio
 import logging
 import os
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 import click
 import structlog
 
 from knowledge_hub.config import Settings
+
+try:
+    __version__ = version("knowledge-hub")
+except PackageNotFoundError:
+    __version__ = "0.1.0"  # fallback for source checkouts without install
 
 # Suppress transformers fast-tokenizer warnings (non-actionable for end users).
 # The "XLMRobertaTokenizerFast" warning is emitted via the transformers logger
@@ -67,6 +73,7 @@ def _build_query_engine(settings):
 
 
 @click.group()
+@click.version_option(version=__version__, prog_name="kh")
 def cli():
     """knowledge-hub — Local Vector RAG knowledge base."""
     pass

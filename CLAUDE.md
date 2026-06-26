@@ -10,13 +10,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-knowledge-hub — a knowledge management system (early stage, no code yet).
+knowledge-hub — Local-first Vector RAG knowledge base with MCP + HTTP upload interface.
 
 License: Apache 2.0
 
 ## Current State
 
-The repository is in its initial setup phase with no source code, build system, or documentation beyond the LICENSE file. As the project takes shape, this file should be updated to reflect the real architecture, commands, and conventions.
+knowledge-hub is a functioning Local-first Vector RAG knowledge base with MCP + HTTP upload interface. See `README_CN.md` for full documentation.
+
+## Version Management
+
+**Single source of truth:** `version` field in `pyproject.toml`. Currently `0.1.0`.
+
+### How version is read at runtime
+
+`importlib.metadata.version("knowledge-hub")` — reads from installed package metadata. Falls back to `"0.1.0"` if the package is not installed (e.g., raw source checkout).
+
+### Release workflow
+
+```
+1. Bump version in pyproject.toml     (e.g., 0.1.0 → 0.2.0)
+2. git commit -m "release: v0.2.0"
+3. git tag v0.2.0                     (must be valid semver: v<major>.<minor>.<patch>)
+4. git push origin dev --tags
+```
+
+When a `v*` tag is pushed to GitHub:
+
+| Trigger | Image Tags | Purpose |
+|---------|-----------|---------|
+| push to main | `sha-<short>` | CI verification, dev testing |
+| push tag `v*` | `0.2.0`, `0.2`, `latest` | Stable release |
+
+### Rules
+
+- **Do NOT** create a separate `_version.py` or `VERSION` file. pyproject.toml is the only source.
+- **Do NOT** auto-increment versions in CI. Version bumps require human judgment (semver).
+- **Do** keep the Dockerfile's `COPY dist/knowledge_hub-*.whl` glob (no hardcoded version).
+- Docker image: `saxiburry/knowledge-hub` on Docker Hub.
+- CI workflow: `.github/workflows/docker-image.yml`.
 
 ## graphify
 

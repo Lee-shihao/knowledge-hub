@@ -1,6 +1,6 @@
 services:
   knowledge-hub:
-    image: knowledge-hub:gpu
+    image: knowledge-hub:latest
     ports:
       - "8765:8765"
       - "8766:8766"
@@ -16,11 +16,4 @@ services:
       - HF_HOME=/models
     env_file:
       - .env
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
     restart: unless-stopped

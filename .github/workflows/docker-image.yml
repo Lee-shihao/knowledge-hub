@@ -1,0 +1,47 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 拉取代码
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. 安装 uv (用于编译 Python wheel 包)
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    # 3. 执行预编译步骤，生成 wheel 文件
+    # 这对应你仓库里的: uv build --wheel
+    - name: Build Python wheel
+      run: uv build --wheel
+
+    # 4. 登录 Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 5. 构建 Docker 镜像
+    # 注意：如果 Dockerfile 默认从当前目录寻找编译好的包，这里不需要改 context
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile \
+        --tag ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:latest \
+        --tag ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:${{ github.sha }}
+
+    # 6. 推送镜像到 Docker Hub
+    - name: Push the Docker image
+      run: |
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/knowledge-hub:${{ github.sha }}

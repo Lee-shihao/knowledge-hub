@@ -22,3 +22,6 @@ data/*test.md
 .tokenmiser/
 
 storage/
+
+# Environment
+.env

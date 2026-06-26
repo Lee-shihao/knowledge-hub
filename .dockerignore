@@ -1,0 +1,35 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Git
+.git/
+
+# Tests
+tests/
+.pytest_cache/
+
+# Local data (mounted at runtime, not baked in)
+storage/
+data/
+models/
+
+# Dev artifacts
+.superpowers/
+.tokenmiser/
+graphify-out/
+docs/
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Markdown (except CLAUDE.md — required by hatchling build)
+*.md
+!CLAUDE.md
+
+# Misc
+LICENSE

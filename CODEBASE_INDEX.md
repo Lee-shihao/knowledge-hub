@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-25 · 108 files · ~0.4M tokens total
+> 2026-06-26 · 114 files · ~0.4M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
@@ -61,6 +61,7 @@
 ## Config
 - `.claude/settings.json`
 - `.claude/settings.local.json`
+- `docker-compose.yml`
 - `graphify-out/2026-06-23/.graphify_analysis.json`
 - `graphify-out/2026-06-23/.graphify_labels.json`
 - `graphify-out/2026-06-23/cost.json`

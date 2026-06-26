@@ -7,13 +7,15 @@ services:
     volumes:
       - ./storage:/app/storage
       - ./data:/app/data
-      - ./models/bge-m3:/models
+      - ${HOME}/.cache/huggingface:/models
     environment:
       - KH_SERVER_HOST=0.0.0.0
       - KH_QDRANT_PATH=/app/storage/qdrant
       - KH_DATA_DIR=/app/data
       - KH_SERVER_AUTH_TOKEN=${KH_SERVER_AUTH_TOKEN}
       - HF_HOME=/models
+      - HF_HUB_OFFLINE=1
+      - TRANSFORMERS_OFFLINE=1
     env_file:
       - .env
     restart: unless-stopped

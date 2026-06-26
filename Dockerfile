@@ -18,6 +18,6 @@ USER kh
 
 EXPOSE 8765 8766
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
-    CMD python3 -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/mcp', data=b'{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}', timeout=3)" || exit 1
+    CMD python3 -c "import urllib.request, os; token = os.environ.get('KH_SERVER_AUTH_TOKEN', ''); req = urllib.request.Request('http://127.0.0.1:8765/mcp', data=b'{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}', headers={'Content-Type': 'application/json', 'Accept': 'application/json'}); req.add_header('Authorization', f'Bearer {token}') if token else None; urllib.request.urlopen(req, timeout=3)" || exit 1
 
 ENTRYPOINT ["kh", "serve", "--host", "0.0.0.0"]

@@ -60,13 +60,13 @@ class FlagEmbeddingEmbedder:
         This prevents 403 errors when downloading from mirror sites that
         don't have .DS_Store or image files that exist in the original repo.
         """
-        from huggingface_hub import snapshot_download
+        from huggingface_hub import snapshot_download, constants
         from pathlib import Path
 
-        # Check if model is already cached with all essential files
-        cache_dir = Path.home() / ".cache" / "huggingface" / "hub"
+        # Use huggingface_hub's cache resolution (respects HF_HOME / HF_HUB_CACHE)
+        hub_cache = Path(constants.HF_HUB_CACHE)
         model_cache_name = f"models--{model_name.replace('/', '--')}"
-        model_cache_path = cache_dir / model_cache_name
+        model_cache_path = hub_cache / model_cache_name
 
         # Check for essential model files (model.onnx_data is the main 2.2GB file)
         essential_files = ["model.onnx_data", "model.onnx", "config.json"]

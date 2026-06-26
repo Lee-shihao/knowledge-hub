@@ -53,12 +53,13 @@ class Reranker:
         This prevents download failures when loading from mirror sites that
         don't have all files present in the original repository.
         """
-        from huggingface_hub import snapshot_download
+        from huggingface_hub import snapshot_download, constants
         from pathlib import Path
 
-        cache_dir = Path.home() / ".cache" / "huggingface" / "hub"
+        # Use huggingface_hub's cache resolution (respects HF_HOME / HF_HUB_CACHE)
+        hub_cache = Path(constants.HF_HUB_CACHE)
         model_cache_name = f"models--{model_name.replace('/', '--')}"
-        model_cache_path = cache_dir / model_cache_name
+        model_cache_path = hub_cache / model_cache_name
 
         # Check for essential model files (config.json is usually sufficient for reranker)
         if model_cache_path.exists():
@@ -69,14 +70,20 @@ class Reranker:
                         return
 
         logger.info("Pre-downloading model", model=model_name)
-        snapshot_download(
-            repo_id=model_name,
-            ignore_patterns=[
-                "*.DS_Store",
-                "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",
-                "flax_model.msgpack", "rust_model.ot", "tf_model.h5",
-            ],
-        )
+        try:
+            snapshot_download(
+                repo_id=model_name,
+                ignore_patterns=[
+                    "*.DS_Store",
+                    "*/*.DS_Store",
+                    "*/*/*.DS_Store",
+                    "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",
+                    "*/*.jpg", "*/*.jpeg", "*/*.png", "*/*.gif", "*/*.webp",
+                    "flax_model.msgpack", "rust_model.ot", "tf_model.h5",
+                ],
+            )
+        except Exception:
+            logger.warning("Model pre-download failed, will retry on next load", model=model_name, exc_info=True)
 
     @staticmethod
     def _resolve_device(embed_device: str) -> str:

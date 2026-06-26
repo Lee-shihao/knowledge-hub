@@ -84,14 +84,20 @@ class FlagEmbeddingEmbedder:
                             break
 
         logger.info("Pre-downloading model with ignore_patterns", model=model_name)
-        snapshot_download(
-            repo_id=model_name,
-            ignore_patterns=[
-                "*.DS_Store",  # macOS system files
-                "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",  # images
-                "flax_model.msgpack", "rust_model.ot", "tf_model.h5",  # unused model formats
-            ],
-        )
+        try:
+            snapshot_download(
+                repo_id=model_name,
+                ignore_patterns=[
+                    "*.DS_Store",
+                    "*/*.DS_Store",
+                    "*/*/*.DS_Store",  # macOS system files at any depth
+                    "*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp",
+                    "*/*.jpg", "*/*.jpeg", "*/*.png", "*/*.gif", "*/*.webp",
+                    "flax_model.msgpack", "rust_model.ot", "tf_model.h5",
+                ],
+            )
+        except Exception:
+            logger.warning("Model pre-download failed, will retry on next load", model=model_name, exc_info=True)
 
     @staticmethod
     def _resolve_device(embed_device: str) -> str:

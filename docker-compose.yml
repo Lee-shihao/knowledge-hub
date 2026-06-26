@@ -5,17 +5,18 @@ services:
       - "8765:8765"
       - "8766:8766"
     volumes:
-      - ./storage:/app/storage
-      - ./data:/app/data
-      - ${HOME}/.cache/huggingface:/models
+      - kh_data:/app
     environment:
       - KH_SERVER_HOST=0.0.0.0
       - KH_QDRANT_PATH=/app/storage/qdrant
       - KH_DATA_DIR=/app/data
+      - KH_STORAGE_DIR=/app/storage
       - KH_SERVER_AUTH_TOKEN=${KH_SERVER_AUTH_TOKEN}
-      - HF_HOME=/models
-      - HF_HUB_OFFLINE=1
-      - TRANSFORMERS_OFFLINE=1
+      - HF_HOME=/app/models
+      - HF_ENDPOINT=https://hf-mirror.com
     env_file:
       - .env
     restart: unless-stopped
+
+volumes:
+  kh_data:

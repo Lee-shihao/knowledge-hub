@@ -58,7 +58,7 @@ GPU Server — single process via kh serve
 
 ### Prerequisites
 
-- Python 3.12+
+- Python 3.12
 
 No external services required — Qdrant runs embedded by default.
 

@@ -56,7 +56,7 @@ GPU 服务器 — kh serve 单进程双服务
 
 ### 前置条件
 
-- Python 3.12+
+- Python 3.12
 
 无需外部服务 —— Qdrant 默认以嵌入式模式运行。
 

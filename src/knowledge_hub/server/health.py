@@ -107,24 +107,21 @@ class HealthMonitor:
             return False
 
     async def _probe_gpu(self) -> tuple[bool, int]:
-        """Probe GPU availability and free memory via nvidia-smi.
+        """Probe GPU availability and free memory via torch.cuda.
 
         Returns:
             Tuple of (gpu_available, gpu_memory_free_mb).
         """
         try:
-            # Use async subprocess to avoid blocking event loop
-            process = await asyncio.create_subprocess_exec(
-                "nvidia-smi",
-                "--query-gpu=memory.free",
-                "--format=csv,noheader,nounits",
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-            )
-            stdout, _stderr = await asyncio.wait_for(process.communicate(), timeout=5)
-            if process.returncode == 0:
-                mem_free = int(stdout.decode().strip().split("\n")[0])
-                return True, mem_free
+            import torch
+
+            def _check():
+                if not torch.cuda.is_available():
+                    return False, 0
+                free_bytes = torch.cuda.mem_get_info()[0]
+                return True, free_bytes // (1024 * 1024)
+
+            return await asyncio.to_thread(_check)
         except Exception:
             pass
         return False, 0

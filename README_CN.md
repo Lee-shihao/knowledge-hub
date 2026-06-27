@@ -187,9 +187,26 @@ docker pull saxiburry/knowledge-hub:latest
 docker pull saxiburry/knowledge-hub:0.1.0
 ```
 
-### Docker Compose（推荐）
+### Docker Run
 
-创建 `docker-compose.yml`：
+```bash
+docker run -d \
+  --name knowledge-hub \
+  --gpus all \
+  -p 8765:8765 \
+  -p 8766:8766 \
+  -v kh_data:/app \
+  -e KH_SERVER_HOST=0.0.0.0 \
+  -e KH_DATA_DIR=/app/data \
+  -e KH_STORAGE_DIR=/app/storage \
+  -e KH_QDRANT_PATH=/app/storage/qdrant \
+  -e HF_HOME=/app/models \
+  -e HF_ENDPOINT=https://hf-mirror.com \
+  -e KH_SERVER_AUTH_TOKEN=your-secret-token \
+  saxiburry/knowledge-hub:latest
+```
+
+### Docker Compose（推荐）
 
 ```yaml
 services:
@@ -199,24 +216,32 @@ services:
       - "8765:8765"
       - "8766:8766"
     volumes:
-      - ./data:/app/data
-      - ./storage:/app/storage
-      - kh_models:/app/models
+      - kh_data:/app
     environment:
-      - KH_EMBED_DEVICE=cpu
       - KH_SERVER_HOST=0.0.0.0
       - KH_DATA_DIR=/app/data
       - KH_STORAGE_DIR=/app/storage
       - KH_QDRANT_PATH=/app/storage/qdrant
       - HF_HOME=/app/models
       - HF_ENDPOINT=https://hf-mirror.com
+      - KH_SERVER_AUTH_TOKEN=${KH_SERVER_AUTH_TOKEN}
     restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
 
 volumes:
-  kh_models:
+  kh_data:
 ```
 
 ```bash
+# 设置认证令牌
+export KH_SERVER_AUTH_TOKEN=your-secret-token
+
 # 启动
 docker compose up -d
 
@@ -227,7 +252,7 @@ docker compose logs -f
 docker compose down
 ```
 
-> `kh_models` 是命名卷，保存 HuggingFace 模型缓存（约 2.2GB），避免每次重启重新下载。
+> `kh_data` 是命名卷，包含所有持久化数据（文档、Qdrant 索引、模型缓存约 2.2GB），避免重启丢失。
 
 ### 使用
 
@@ -240,20 +265,6 @@ curl -s -X POST http://localhost:8765/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"你的问题","top_k":5}}}'
-```
-
-### GPU 支持
-
-```yaml
-environment:
-  - KH_EMBED_DEVICE=cuda
-deploy:
-  resources:
-    reservations:
-      devices:
-        - driver: nvidia
-          count: 1
-          capabilities: [gpu]
 ```
 
 ### 构建策略

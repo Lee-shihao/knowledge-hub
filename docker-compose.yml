@@ -1,9 +1,11 @@
 services:
   knowledge-hub:
-    image: knowledge-hub:latest
+    image: saxiburry/knowledge-hub:latest
     ports:
       - "8765:8765"
       - "8766:8766"
+    devices:
+      - "nvidia.com/gpu=all"
     volumes:
       - kh_data:/app
     environment:

@@ -35,10 +35,11 @@ knowledge-hub is a functioning Local-first Vector RAG knowledge base with MCP + 
 4. git push origin dev --tags
 ```
 
-When a `v*` tag is pushed to GitHub:
+When code is pushed to GitHub:
 
 | Trigger | Image Tags |
 |---------|-----------|
+| push to main | `latest` |
 | push tag `v*` | `0.2.0`, `latest` |
 
 ### Rules

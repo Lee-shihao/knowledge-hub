@@ -1,5 +1,5 @@
 # Codebase Index
-> 2026-06-27 · 123 files · ~0.4M tokens total
+> 2026-06-27 · 121 files · ~0.4M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.

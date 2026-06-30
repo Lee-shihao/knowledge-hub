@@ -248,6 +248,15 @@ kh serve
 
 ### Configure in AI Clients
 
+**Claude Code** — use the CLI:
+
+```bash
+claude mcp add --transport http --scope user knowledge-hub http://<server-ip>:8765/mcp \
+  --header "Authorization: Bearer your-secret-token"
+```
+
+**Other clients** — add to `mcpServers` config:
+
 ```json
 {
   "mcpServers": {

@@ -246,6 +246,15 @@ kh serve
 
 ### 在 AI 客户端中配置
 
+**Claude Code** — 使用 CLI 命令：
+
+```bash
+claude mcp add --transport http --scope user knowledge-hub http://<服务器IP>:8765/mcp \
+  --header "Authorization: Bearer your-secret-token"
+```
+
+**其他客户端** — 在 `mcpServers` 中配置：
+
 ```json
 {
   "mcpServers": {

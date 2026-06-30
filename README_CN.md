@@ -4,41 +4,6 @@
 
 Knowledge Hub 可以导入文档（Markdown、PDF、纯文本、HTML），使用 BGE-M3 稠密+稀疏向量嵌入，存储到 Qdrant，并通过混合搜索 + 交叉编码器重排序进行查询 —— 全部本地运行，无需云端 API 调用。外部 Agent 可通过 HTTP 上传文件，通过 MCP 查询知识。
 
-## 架构
-
-```
-GPU 服务器 — kh serve 单进程双服务
-┌─────────────────────────────────────────────────────────┐
-│  anyio task group                                       │
-│                                                         │
-│  ┌───────────────────┐  ┌────────────────────────────┐  │
-│  │ uvicorn :8765     │  │ uvicorn :8766              │  │
-│  │ MCP 服务器         │  │ HTTP 上传服务器             │  │
-│  │                   │  │                            │  │
-│  │ query_kb          │  │ POST /upload               │  │
-│  │ list_sources      │  │ GET  /upload/status/{id}   │  │
-│  │ get_status        │  │                            │  │
-│  └────────┬──────────┘  └─────────────┬──────────────┘  │
-│           │                           │                 │
-│           └───────────┬───────────────┘                 │
-│                       ▼                                 │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │ AppState（共享状态）                               │   │
-│  │  - embedder（BGE-M3，GPU，只加载一份）             │   │
-│  │  - reranker（BGE-reranker-v2-m3）                 │   │
-│  │  - pipeline → 导入管道                            │   │
-│  │  - job_manager → 异步上传任务                      │   │
-│  │  - query_engine → 混合搜索 + 重排序               │   │
-│  │  - qdrant_client → 嵌入式 Qdrant                  │   │
-│  │    （默认 ./storage/qdrant/）                      │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-
-  外部 Agent（Claude Code / Herd / Hermes）
-    → 上传文件：HTTP POST :8766/upload
-    → 查询知识：MCP :8765
-```
-
 ## 功能特性
 
 - **混合搜索**：稠密向量（BGE-M3）+ 稀疏向量（词法权重）通过倒数排名融合（RRF）
@@ -63,11 +28,10 @@ GPU 服务器 — kh serve 单进程双服务
 ### 安装
 
 ```bash
-# 克隆并安装
 git clone https://github.com/Lee-shihao/knowledge-hub.git && cd knowledge-hub
 uv sync
 
-# 激活虚拟环境（可选，用于直接使用 kh 命令）
+# 激活虚拟环境（可选）
 source .venv/bin/activate
 
 # 或通过 uv run 运行（无需激活）
@@ -129,7 +93,6 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 
 2. **`.env` 文件**（推荐用于开发）：
    ```bash
-   # 在项目根目录创建 .env 文件
    cat > .env << 'EOF'
    KH_EMBED_DEVICE=cpu               # 强制使用 CPU（禁用 GPU，使用 fp32）
    KH_CHUNK_MAX_TOKENS=512
@@ -177,19 +140,11 @@ curl http://127.0.0.1:8766/upload/status/abc123def456
 
 不想折腾 Python 环境的用户可以直接用 Docker 运行。
 
-### 拉取镜像
-
 ```bash
-# 最新稳定版
+# 拉取镜像
 docker pull saxiburry/knowledge-hub:latest
 
-# 或指定版本
-docker pull saxiburry/knowledge-hub:0.1.0
-```
-
-### Docker Run
-
-```bash
+# 运行
 docker run -d \
   --name knowledge-hub \
   --gpus all \
@@ -206,7 +161,7 @@ docker run -d \
   saxiburry/knowledge-hub:latest
 ```
 
-### Docker Compose（推荐）
+或使用 Docker Compose：
 
 ```yaml
 services:
@@ -239,41 +194,17 @@ volumes:
 ```
 
 ```bash
-# 设置认证令牌
 export KH_SERVER_AUTH_TOKEN=your-secret-token
-
-# 启动
 docker compose up -d
-
-# 查看日志
-docker compose logs -f
-
-# 停止
-docker compose down
 ```
 
 > `kh_data` 是命名卷，包含所有持久化数据（文档、Qdrant 索引、模型缓存约 2.2GB），避免重启丢失。
-
-### 使用
-
-```bash
-# 上传文件
-curl -X POST http://localhost:8766/upload -F "file=@my-doc.md"
-
-# 查询
-curl -s -X POST http://localhost:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"你的问题","top_k":5}}}'
-```
 
 ### 构建策略
 
 | 触发条件 | 镜像标签 |
 |---------|---------|
 | push tag `v*` | `0.1.0`, `latest` |
-
-版本号通过 git tag 管理，手动打 tag 时才发布稳定版：
 
 ```bash
 git tag v0.2.0
@@ -282,9 +213,7 @@ git push origin v0.2.0
 
 ## MCP 服务器使用
 
-MCP 服务器通过 JSON-RPC（streamable-http 传输）暴露 3 个工具，可直接用 `curl` 调用。
-
-### MCP 工具
+MCP 服务器通过 JSON-RPC（streamable-http 传输）暴露 3 个工具。
 
 | 工具 | 说明 |
 |------|------|
@@ -294,68 +223,18 @@ MCP 服务器通过 JSON-RPC（streamable-http 传输）暴露 3 个工具，可
 
 ### 远程访问（局域网）
 
-绑定非 localhost 地址需要设置认证令牌（MCP 和上传共用）：
-
 ```bash
-# 启动服务
 export KH_SERVER_AUTH_TOKEN=test-token-123
 kh serve --host 0.0.0.0
-# [info] server_starting mcp=http://0.0.0.0:8765/mcp upload=http://0.0.0.0:8766/upload
 ```
 
-**列出可用工具：**
-
 ```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-
-# 返回 3 个工具：query_knowledge_base, list_kb_sources, get_kb_status
-```
-
-**查询知识库：**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI接口数量","top_k":3}}}'
-
-# 返回 3 条结果（查询耗时 743ms）：
-#   Top 1（score 7.19）：BCM2835 提供 2 个 SPI 接口：SPI0（标准，2 个片选）和 SPI1（辅助，3 个片选）
-#     — 来源 test-upload.md，章节 "SPI 接口数量"
-#   Top 2（score 5.29）：bcm2835-arm-peripherals.pdf 第 152 页 — 芯片数据手册
-#   Top 3（score 3.63）：test-upload.md 概述部分
-```
-
-**列出已索引源文件：**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_kb_sources"}}'
-
-# 返回：{"sources":[{"filename":"bcm2835-arm-peripherals.pdf","chunk_count":2560,...}],"count":1}
-```
-
-**检查系统状态：**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_kb_status"}}'
-
-# 返回：
-#   model_loaded: true        qdrant: true        gpu_available: true
-#   gpu_memory_free_mb: 14393 collection: knowledge_hub
-#   total_chunks: 2564        total_sources: 1
+# 查询
+curl -s -X POST http://192.168.30.125:8765/mcp \
+  -H "Authorization: Bearer test-token-123" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"你的问题","top_k":5}}}'
 ```
 
 ### 本地访问（无需认证）
@@ -381,52 +260,7 @@ kh serve
 
 ## HTTP 上传服务
 
-通过 HTTP 上传文件即可自动导入。服务端校验格式后保存到数据目录，异步索引。
-
-### 完整流程（在 GPU 服务器上已验证）
-
-**1. 上传文件：**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8766/upload \
-    -H "Authorization: Bearer test-token-123" \
-    -F "file=@test-upload.md" \
-    -F "tags=spi,bcm2835,test"
-
-{"job_id":"e3ce9f20b6fc","status":"pending"}
-```
-
-**2. 轮询任务状态（小文件约 1 秒完成）：**
-
-```bash
-$ curl -s http://192.168.30.125:8766/upload/status/e3ce9f20b6fc \
-    -H "Authorization: Bearer test-token-123"
-
-{
-  "job_id": "e3ce9f20b6fc",
-  "filename": "test-upload.md",
-  "status": "done",
-  "chunks": 1,
-  "error": null,
-  "created_at": "2026-06-25T10:38:36.562323+00:00",
-  "completed_at": "2026-06-25T10:38:37.563172+00:00",
-  "failed_files": []
-}
-```
-
-**3. 通过 MCP 查询刚上传的内容：**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI接口数量","top_k":3}}}'
-
-# 最高分结果（7.19）即为刚上传的文件内容
-```
-
-### API 参考
+通过 HTTP 上传文件即可自动导入。
 
 ```
 POST /upload                    GET /upload/status/{job_id}
@@ -437,10 +271,9 @@ Content-Type: multipart/form    响应：
 响应：                                "status": "done",
   {"job_id": "e3ce9f20b6fc",        "chunks": 1,
    "status": "pending"}             "error": null,
-                                    "created_at": "2026-06-25T10:38:36",
-支持格式：.md .txt .pdf             "completed_at": "2026-06-25T10:38:37",
-  .html .htm .docx .rst             "failed_files": []
-                                  }
+                                    ...}
+支持格式：.md .txt .pdf
+  .html .htm .docx .rst
 ```
 
 | 状态 | 含义 |
@@ -452,68 +285,38 @@ Content-Type: multipart/form    响应：
 
 上传和 MCP 共用 `KH_SERVER_AUTH_TOKEN`。本地访问（默认 127.0.0.1）无需认证。
 
-## 项目结构
+## Agent 技能集成
 
-```
-src/knowledge_hub/
-├── config.py              # 配置（pydantic-settings，KH_ 环境前缀）
-├── schemas.py             # 数据模式：ChunkMetadata, DocumentChunk, QueryInput, QueryResult
-├── cli/
-│   └── main.py            # Click CLI：index, query, status, cleanup-orphans, config, serve
-├── ingestion/
-│   ├── chunker.py         # SemanticChunker — 标题感知分块
-│   ├── embedder.py        # FlagEmbeddingEmbedder — BGE-M3 稠密+稀疏嵌入
-│   ├── loaders.py         # DocumentLoader — .md/.txt/.pdf 加载与哈希计算
-│   └── pipeline.py        # IngestionPipeline — 加载→分块→嵌入→存储
-├── retrieval/
-│   ├── query_engine.py    # QueryEngine — 嵌入→混合搜索→重排序
-│   └── reranker.py        # Reranker — FlagReranker 重排序，失败时优雅降级
-├── server/
-│   ├── app_state.py       # AppState — MCP + 上传服务共享组件注入
-│   ├── health.py          # HealthMonitor — Qdrant + GPU 后台健康探测
-│   ├── job_manager.py     # JobManager — 异步上传任务追踪与串行化
-│   ├── mcp_server.py      # FastMCP 应用组装，支持认证 + IP 过滤
-│   ├── tools.py           # MCP 工具：query_knowledge_base, list_kb_sources, get_kb_status
-│   └── upload_server.py   # HTTP 上传应用 — POST /upload, GET /upload/status/{id}
-└── storage/
-    ├── metadata.py        # SourceMetadataManager — 哈希追踪，孤儿清理
-    └── vector_store.py    # QdrantVectorStore — 混合搜索，插入，删除
-```
-
-## 测试
+为 AI Agent（Hermes、Claude Code、OpenClaw）安装 Knowledge Hub 技能。技能内置 Python 上传脚本，Agent 直接调用，无需手动写 curl。
 
 ```bash
-# 单元测试（无需外部服务）
-pytest -m "not integration"
+# 一行命令安装技能
+curl -fsSL https://raw.githubusercontent.com/Lee-shihao/knowledge-hub/main/install_skill.sh | bash -s -- hermes
 
-# 集成测试（需要 Qdrant，设置 KH_QDRANT_MODE=embedded 或 localhost:6333）
-pytest tests/test_integration.py -v -s
-
-# 所有测试
-pytest
+# 也支持：claude、openclaw
 ```
 
-| 测试套件 | 数量 | 依赖 |
-|---------|------|------|
-| 单元测试 | ~175 | 无（使用 mock） |
-| 集成测试 | ~7 | Qdrant + FlagEmbedding 模型（约 2.2GB 下载） |
+安装后的目录结构：
+```
+~/.hermes/skills/knowledge-hub/
+├── SKILL.md
+└── scripts/
+    └── upload.py
+```
 
-## 依赖
+然后配置所需的环境变量：
 
-| 包 | 版本 | 用途 |
-|---|------|------|
-| FlagEmbedding | 1.4.0 | BGE-M3 嵌入 + BGE-reranker-v2-m3 重排序 |
-| transformers | ≥4.40, <5.0 | FlagReranker 分词器（5.x 移除了 `prepare_for_model`） |
-| qdrant-client | ≥1.12.0 | 向量存储 + 混合搜索（支持嵌入式模式） |
-| fastmcp | ≥2.3.0 | MCP 服务器框架 |
-| llama-index | ≥0.12.0 | 文档读取器 |
-| click | ≥8.0 | CLI 框架 |
-| starlette | * | HTTP 上传服务器 |
-| uvicorn | * | MCP + 上传服务的 ASGI 服务器 |
-| anyio | * | 双服务启动的任务组 |
-| structlog | ≥24.0 | 结构化日志 |
-| pydantic | ≥2.0 | 模式验证 |
-| pydantic-settings | ≥2.0 | 环境变量配置 |
+```bash
+echo 'KNOWLEDGE_HUB_BASE_URL="http://<服务器IP>:8766"' >> ~/.hermes/.env
+echo 'KNOWLEDGE_HUB_TOKEN="your-token-here"' >> ~/.hermes/.env
+```
+
+| 变量 | 必填 | 说明 |
+|------|------|------|
+| `KNOWLEDGE_HUB_BASE_URL` | 是 | 上传服务器 HTTP 端点（8766 端口） |
+| `KNOWLEDGE_HUB_TOKEN` | 是 | 认证令牌，需与服务端的 `KH_SERVER_AUTH_TOKEN` 一致 |
+
+> 这些变量是给 Agent 技能使用的，而非服务器端。令牌值必须与服务端配置的 `KH_SERVER_AUTH_TOKEN` 一致。
 
 ## 许可证
 

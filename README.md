@@ -6,41 +6,6 @@
 
 Knowledge Hub lets you ingest documents (Markdown, PDF, plain text, HTML), embed them with BGE-M3 dense+sparse vectors, store in Qdrant, and query via hybrid search + cross-encoder reranking — all running locally with no cloud API calls. External agents can upload files via HTTP and query knowledge via MCP.
 
-## Architecture
-
-```
-GPU Server — single process via kh serve
-┌─────────────────────────────────────────────────────────┐
-│  anyio task group                                       │
-│                                                         │
-│  ┌───────────────────┐  ┌────────────────────────────┐  │
-│  │ uvicorn :8765     │  │ uvicorn :8766              │  │
-│  │ MCP Server        │  │ HTTP Upload Server         │  │
-│  │                   │  │                            │  │
-│  │ query_kb          │  │ POST /upload               │  │
-│  │ list_sources      │  │ GET  /upload/status/{id}   │  │
-│  │ get_status        │  │                            │  │
-│  └────────┬──────────┘  └─────────────┬──────────────┘  │
-│           │                           │                 │
-│           └───────────┬───────────────┘                 │
-│                       ▼                                 │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │ AppState (shared)                                │   │
-│  │  - embedder (BGE-M3, GPU, single copy)           │   │
-│  │  - reranker (BGE-reranker-v2-m3)                 │   │
-│  │  - pipeline → IngestionPipeline                  │   │
-│  │  - job_manager → async upload jobs               │   │
-│  │  - query_engine → hybrid search + rerank         │   │
-│  │  - qdrant_client → embedded Qdrant               │   │
-│  │    (./storage/qdrant/ by default)                │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-
-  External Agent (Claude Code / Herd / Hermes)
-    → Upload files: HTTP POST :8766/upload
-    → Query knowledge: MCP :8765
-```
-
 ## Features
 
 - **Hybrid search**: Dense vectors (BGE-M3) + sparse vectors (lexical weights) fused via Reciprocal Rank Fusion
@@ -65,11 +30,10 @@ No external services required — Qdrant runs embedded by default.
 ### Install
 
 ```bash
-# Clone and install
 git clone https://github.com/Lee-shihao/knowledge-hub.git && cd knowledge-hub
 uv sync
 
-# Activate the virtual environment (optional, for direct kh usage)
+# Activate the virtual environment (optional)
 source .venv/bin/activate
 
 # Or use via uv run (no activation needed)
@@ -131,7 +95,6 @@ All settings use `KH_` prefix and can be configured via:
 
 2. **`.env` file** (recommended for development):
    ```bash
-   # Create .env file in project root
    cat > .env << 'EOF'
    KH_EMBED_DEVICE=cpu               # Force CPU (disable GPU, use fp32)
    KH_CHUNK_MAX_TOKENS=512
@@ -179,19 +142,11 @@ All settings use `KH_` prefix and can be configured via:
 
 For users who prefer not to set up a Python environment.
 
-### Pull the Image
-
 ```bash
-# Latest stable release
+# Pull the image
 docker pull saxiburry/knowledge-hub:latest
 
-# Or a specific version
-docker pull saxiburry/knowledge-hub:0.1.0
-```
-
-### Docker Run
-
-```bash
+# Run
 docker run -d \
   --name knowledge-hub \
   --gpus all \
@@ -208,7 +163,7 @@ docker run -d \
   saxiburry/knowledge-hub:latest
 ```
 
-### Docker Compose (Recommended)
+Or use Docker Compose:
 
 ```yaml
 services:
@@ -241,41 +196,17 @@ volumes:
 ```
 
 ```bash
-# Set auth token
 export KH_SERVER_AUTH_TOKEN=your-secret-token
-
-# Start
 docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Stop
-docker compose down
 ```
 
 > `kh_data` named volume persists all data (documents, Qdrant index, model cache ~2.2GB) across container restarts.
-
-### Usage
-
-```bash
-# Upload a file
-curl -X POST http://localhost:8766/upload -F "file=@my-doc.md"
-
-# Query
-curl -s -X POST http://localhost:8765/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"your question","top_k":5}}}'
-```
 
 ### Build Strategy
 
 | Trigger | Image Tags |
 |---------|-----------|
 | push tag `v*` | `0.1.0`, `latest` |
-
-Versioning is managed via git tags. Stable releases are published only when a tag is pushed:
 
 ```bash
 git tag v0.2.0
@@ -284,9 +215,7 @@ git push origin v0.2.0
 
 ## MCP Server Usage
 
-The MCP server exposes 3 tools over JSON-RPC (streamable-http transport). All examples use `curl` — no special client needed.
-
-### MCP Tools
+The MCP server exposes 3 tools over JSON-RPC (streamable-http transport).
 
 | Tool | Description |
 |------|-------------|
@@ -296,68 +225,18 @@ The MCP server exposes 3 tools over JSON-RPC (streamable-http transport). All ex
 
 ### Remote Access (LAN)
 
-Bind to non-localhost with an auth token (shared by MCP and upload):
-
 ```bash
-# Start server
 export KH_SERVER_AUTH_TOKEN=test-token-123
 kh serve --host 0.0.0.0
-# [info] server_starting mcp=http://0.0.0.0:8765/mcp upload=http://0.0.0.0:8766/upload
 ```
 
-**List available tools:**
-
 ```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
-
-# Response includes 3 tools: query_knowledge_base, list_kb_sources, get_kb_status
-```
-
-**Query the knowledge base:**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI interface count","top_k":3}}}'
-
-# Response (3 results, 743ms query time):
-#   Top hit (score 7.19): "BCM2835 provides 2 SPI interfaces: SPI0 (standard, 2 CS)
-#     and SPI1 (auxiliary, 3 CS)" — source: test-upload.md, section: "SPI Interface Count"
-#   Second (score 5.29): bcm2835-arm-peripherals.pdf page 152 — chip datasheet
-#   Third (score 3.63): test-upload.md overview section
-```
-
-**List indexed sources:**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"list_kb_sources"}}'
-
-# Response: {"sources":[{"filename":"bcm2835-arm-peripherals.pdf","chunk_count":2560,...}],"count":1}
-```
-
-**Check system status:**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_kb_status"}}'
-
-# Response:
-#   model_loaded: true        qdrant: true        gpu_available: true
-#   gpu_memory_free_mb: 14393 collection: knowledge_hub
-#   total_chunks: 2564        total_sources: 1
+# Query
+curl -s -X POST http://192.168.30.125:8765/mcp \
+  -H "Authorization: Bearer test-token-123" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"your question","top_k":5}}}'
 ```
 
 ### Local Access (no auth)
@@ -383,52 +262,7 @@ kh serve
 
 ## HTTP Upload Server
 
-Upload files via HTTP for automatic ingestion. The server validates formats, saves to the data directory, and indexes asynchronously.
-
-### End-to-End Flow (verified on GPU server)
-
-**1. Upload a file:**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8766/upload \
-    -H "Authorization: Bearer test-token-123" \
-    -F "file=@test-upload.md" \
-    -F "tags=spi,bcm2835,test"
-
-{"job_id":"e3ce9f20b6fc","status":"pending"}
-```
-
-**2. Poll job status until complete (~1 second for small files):**
-
-```bash
-$ curl -s http://192.168.30.125:8766/upload/status/e3ce9f20b6fc \
-    -H "Authorization: Bearer test-token-123"
-
-{
-  "job_id": "e3ce9f20b6fc",
-  "filename": "test-upload.md",
-  "status": "done",
-  "chunks": 1,
-  "error": null,
-  "created_at": "2026-06-25T10:38:36.562323+00:00",
-  "completed_at": "2026-06-25T10:38:37.563172+00:00",
-  "failed_files": []
-}
-```
-
-**3. Query the uploaded content via MCP:**
-
-```bash
-$ curl -s -X POST http://192.168.30.125:8765/mcp \
-    -H "Authorization: Bearer test-token-123" \
-    -H "Content-Type: application/json" \
-    -H "Accept: application/json" \
-    -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"query_knowledge_base","arguments":{"query":"BCM2835 SPI interface count","top_k":3}}}'
-
-# Top result (score 7.19) is the newly uploaded file
-```
-
-### API Reference
+Upload files via HTTP for automatic ingestion.
 
 ```
 POST /upload                    GET /upload/status/{job_id}
@@ -439,10 +273,9 @@ Content-Type: multipart/form    Response:
 Response:                         "status": "done",
   {"job_id": "e3ce9f20b6fc",      "chunks": 1,
    "status": "pending"}           "error": null,
-                                  "created_at": "2026-06-25T10:38:36",
-Supported formats: .md .txt      "completed_at": "2026-06-25T10:38:37",
-  .pdf .html .htm .docx .rst      "failed_files": []
-                                }
+                                  ...}
+Supported formats: .md .txt
+  .pdf .html .htm .docx .rst
 ```
 
 | Status | Meaning |
@@ -454,68 +287,38 @@ Supported formats: .md .txt      "completed_at": "2026-06-25T10:38:37",
 
 Upload and MCP share the same `KH_SERVER_AUTH_TOKEN`. On localhost (default) no auth is required.
 
-## Project Structure
+## Agent Skill Integration
 
-```
-src/knowledge_hub/
-├── config.py              # Settings (pydantic-settings, KH_ env prefix)
-├── schemas.py             # ChunkMetadata, DocumentChunk, QueryInput, QueryResult
-├── cli/
-│   └── main.py            # Click CLI: index, query, status, cleanup-orphans, config, serve
-├── ingestion/
-│   ├── chunker.py         # SemanticChunker — heading-aware splitting
-│   ├── embedder.py        # FlagEmbeddingEmbedder — BGE-M3 dense+sparse
-│   ├── loaders.py         # DocumentLoader — .md/.txt/.pdf with hash computation
-│   └── pipeline.py        # IngestionPipeline — load→chunk→embed→store
-├── retrieval/
-│   ├── query_engine.py    # QueryEngine — embed→hybrid search→rerank
-│   └── reranker.py        # Reranker — FlagReranker with graceful degradation
-├── server/
-│   ├── app_state.py       # AppState — shared component injection for MCP + upload
-│   ├── health.py          # HealthMonitor — Qdrant + GPU background probing
-│   ├── job_manager.py     # JobManager — async upload job tracking with serialization
-│   ├── mcp_server.py      # FastMCP app wiring with auth + IP filtering
-│   ├── tools.py           # MCP tools: query_knowledge_base, list_kb_sources, get_kb_status
-│   └── upload_server.py   # HTTP upload app — POST /upload, GET /upload/status/{id}
-└── storage/
-    ├── metadata.py        # SourceMetadataManager — hash tracking, orphan cleanup
-    └── vector_store.py    # QdrantVectorStore — hybrid search, upsert, delete
-```
-
-## Testing
+Install the Knowledge Hub skill for AI agents (Hermes, Claude Code, OpenClaw). The skill bundles a Python upload script — agents call it directly; no manual curl needed.
 
 ```bash
-# Unit tests (no external services needed)
-pytest -m "not integration"
+# Install the skill (one-liner)
+curl -fsSL https://raw.githubusercontent.com/Lee-shihao/knowledge-hub/main/install_skill.sh | bash -s -- hermes
 
-# Integration tests (requires Qdrant on localhost:6333, or set KH_QDRANT_MODE=embedded)
-pytest tests/test_integration.py -v -s
-
-# All tests
-pytest
+# Also supports: claude, openclaw
 ```
 
-| Suite | Count | Requires |
-|-------|-------|----------|
-| Unit | ~175 | Nothing (mocked) |
-| Integration | ~7 | Qdrant + FlagEmbedding models (~2.2GB download) |
+Installed structure:
+```
+~/.hermes/skills/knowledge-hub/
+├── SKILL.md
+└── scripts/
+    └── upload.py
+```
 
-## Dependencies
+Then configure the required environment variables:
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| FlagEmbedding | 1.4.0 | BGE-M3 embedding + BGE-reranker-v2-m3 |
-| transformers | ≥4.40, <5.0 | Tokenizer for FlagReranker (5.x removed `prepare_for_model`) |
-| qdrant-client | ≥1.12.0 | Vector storage + hybrid search (embedded mode) |
-| fastmcp | ≥2.3.0 | MCP server framework |
-| llama-index | ≥0.12.0 | Document readers |
-| click | ≥8.0 | CLI framework |
-| starlette | * | HTTP upload server |
-| uvicorn | * | ASGI server for MCP + upload |
-| anyio | * | Task group for dual-server startup |
-| structlog | ≥24.0 | Structured logging |
-| pydantic | ≥2.0 | Schema validation |
-| pydantic-settings | ≥2.0 | Environment-based config |
+```bash
+echo 'KNOWLEDGE_HUB_BASE_URL="http://<server-ip>:8766"' >> ~/.hermes/.env
+echo 'KNOWLEDGE_HUB_TOKEN="your-token-here"' >> ~/.hermes/.env
+```
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `KNOWLEDGE_HUB_BASE_URL` | Yes | Upload server HTTP endpoint (port 8766) |
+| `KNOWLEDGE_HUB_TOKEN` | Yes | Auth token matching `KH_SERVER_AUTH_TOKEN` on the server |
+
+> These variables are for the agent skill, not the server. The token value must match `KH_SERVER_AUTH_TOKEN` configured on the server side.
 
 ## License
 

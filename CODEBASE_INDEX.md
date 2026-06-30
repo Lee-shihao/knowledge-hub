@@ -1,10 +1,13 @@
 # Codebase Index
-> 2026-06-27 · 121 files · ~0.4M tokens total
+> 2026-06-30 · 125 files · ~0.4M tokens total
 >
 > **How to use:** Read this file first. Navigate to the exact file you need,
 > then read only that file. Do not read entire directories.
 
 ## Source
+
+**skill/scripts/**
+- `upload.py` — build_multipart, upload_file, poll_status, main
 
 **src/knowledge_hub/**
 - `__init__.py`
@@ -86,7 +89,6 @@
 - `pyproject.toml`
 
 ## Docs
-- `.superpowers/sdd/task-7-brief.md`
 - `.superpowers/sdd/task-7-report.md`
 - `.superpowers/sdd/task-8-brief.md`
 - `.superpowers/sdd/task-8-report.md`
@@ -101,6 +103,7 @@
 - `graphify-out/2026-06-25/GRAPH_REPORT.md`
 - `README_CN.md`
 - `README.md`
+- `skill/SKILL.md`
 
 ---
-*Index: ~2.0k tokens · Full codebase: ~0.4M tokens · Saves ~100%*
+*Index: ~2.1k tokens · Full codebase: ~0.4M tokens · Saves ~100%*

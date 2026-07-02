@@ -71,55 +71,115 @@ class SourceMetadataManager:
         )
 
     async def list_sources(self) -> list[str]:
+        """List all distinct source filenames from the main vector collection.
+
+        Queries the main collection directly instead of the metadata collection
+        to ensure an always-accurate view of what is actually stored.
+        """
+        main_collection = self.settings.QDRANT_COLLECTION
+        collections = [c.name for c in self._client.get_collections().collections]
+        if main_collection not in collections:
+            return []
+
+        sources: set[str] = set()
         points, next_offset = self._client.scroll(
-            collection_name=self._collection, limit=100
+            collection_name=main_collection,
+            limit=1000,
+            with_payload=["source_file"],
+            with_vectors=False,
         )
-        sources = [p.payload["source_file"] for p in points]
+        for p in points:
+            if p.payload and "source_file" in p.payload:
+                sources.add(p.payload["source_file"])
+
         while next_offset:
             points, next_offset = self._client.scroll(
-                collection_name=self._collection, offset=next_offset, limit=100
+                collection_name=main_collection,
+                offset=next_offset,
+                limit=1000,
+                with_payload=["source_file"],
+                with_vectors=False,
             )
-            sources.extend(p.payload["source_file"] for p in points)
-        return sources
+            for p in points:
+                if p.payload and "source_file" in p.payload:
+                    sources.add(p.payload["source_file"])
+
+        return sorted(sources)
 
     async def list_source_details(self) -> list[dict]:
-        """Return full payload for all sources.
+        """Return aggregated source details from the main vector collection.
 
-        Unlike list_sources() which returns only filenames, this returns
-        the complete payload dict for each source (source_file, source_hash,
-        chunk_count).
+        Scrolls the main collection and aggregates by source_file to produce
+        an always-accurate list, independent of the _source_meta metadata
+        collection.  The metadata collection is only used for fast hash
+        lookups during incremental ingestion.
 
         Returns:
-            List of payload dicts from the source metadata collection.
+            List of dicts with source_file, source_hash, and chunk_count.
         """
+        main_collection = self.settings.QDRANT_COLLECTION
+        collections = [c.name for c in self._client.get_collections().collections]
+        if main_collection not in collections:
+            return []
+
+        source_map: dict[str, dict] = {}
         points, next_offset = self._client.scroll(
-            collection_name=self._collection,
-            limit=100,
+            collection_name=main_collection,
+            limit=1000,
             with_payload=True,
             with_vectors=False,
         )
-        results = [p.payload for p in points]
+        for p in points:
+            sf = (p.payload or {}).get("source_file", "unknown")
+            if sf not in source_map:
+                source_map[sf] = {
+                    "source_file": sf,
+                    "source_hash": (p.payload or {}).get("source_hash", ""),
+                    "chunk_count": 0,
+                }
+            source_map[sf]["chunk_count"] += 1
+
         while next_offset:
             points, next_offset = self._client.scroll(
-                collection_name=self._collection,
+                collection_name=main_collection,
                 offset=next_offset,
-                limit=100,
+                limit=1000,
                 with_payload=True,
                 with_vectors=False,
             )
-            results.extend(p.payload for p in points)
-        return results
+            for p in points:
+                sf = (p.payload or {}).get("source_file", "unknown")
+                if sf not in source_map:
+                    source_map[sf] = {
+                        "source_file": sf,
+                        "source_hash": (p.payload or {}).get("source_hash", ""),
+                        "chunk_count": 0,
+                    }
+                source_map[sf]["chunk_count"] += 1
+
+        return list(source_map.values())
 
     async def orphan_cleanup(self, local_source_files: set[str]) -> int:
-        """Remove vectors for files no longer on disk.
+        """Remove vectors and metadata for files no longer on disk.
 
-        Returns 0 if the metadata collection doesn't exist (clean Qdrant).
+        Deletes from both the main vector collection and the _source_meta
+        metadata collection.  Returns the number of orphaned sources removed.
         """
-        # Ensure collection exists before querying
-        await self.ensure_collection()
+        main_collection = self.settings.QDRANT_COLLECTION
+        collections = [c.name for c in self._client.get_collections().collections]
 
         db_sources = set(await self.list_sources())
         orphans = db_sources - local_source_files
         for orphan in orphans:
-            await self.remove(orphan)
+            # Delete from main vector collection
+            if main_collection in collections:
+                self._client.delete(
+                    collection_name=main_collection,
+                    points_selector=Filter(
+                        must=[FieldCondition(key="source_file", match=MatchValue(value=orphan))]
+                    ),
+                )
+            # Delete from metadata collection
+            if self._collection in collections:
+                await self.remove(orphan)
         return len(orphans)

@@ -1,8 +1,9 @@
 """MCP tool wrappers around the QueryEngine.
 
-Provides 3 tools:
+Provides 4 tools:
 - query_knowledge_base: semantic search with health-gated access
 - list_kb_sources: list all indexed source files with metadata
+- delete_kb_source: delete all chunks and metadata for a source file
 - get_kb_status: system health and collection statistics
 """
 import structlog
@@ -94,6 +95,43 @@ def create_tools(
         ]
         return {"sources": sources, "count": len(sources)}
 
+    async def delete_kb_source(source_file: str) -> dict:
+        """Delete all chunks and metadata for a source file.
+
+        Removes the source from both the main vector collection and the
+        metadata collection.  Returns the number of chunks deleted.
+
+        Args:
+            source_file: Exact filename to delete (e.g., "my-doc.pdf").
+
+        Returns:
+            Dictionary with 'deleted' bool, 'source_file' str, and 'message' str.
+        """
+        status = await health.get_status()
+        if not status.qdrant:
+            return {
+                "deleted": False,
+                "source_file": source_file,
+                "message": "Knowledge base is not available",
+            }
+
+        try:
+            await vector_store.delete_by_source(source_file)
+            await metadata_mgr.remove(source_file)
+            logger.info("source_deleted", source_file=source_file)
+            return {
+                "deleted": True,
+                "source_file": source_file,
+                "message": f"Source '{source_file}' deleted successfully",
+            }
+        except Exception as e:
+            logger.error("delete_source_failed", source_file=source_file, error=str(e))
+            return {
+                "deleted": False,
+                "source_file": source_file,
+                "message": f"Failed to delete source: {e}",
+            }
+
     async def get_kb_status() -> dict:
         """Get knowledge base system status and statistics.
 
@@ -122,5 +160,6 @@ def create_tools(
     return {
         "query_knowledge_base": query_knowledge_base,
         "list_kb_sources": list_kb_sources,
+        "delete_kb_source": delete_kb_source,
         "get_kb_status": get_kb_status,
     }
